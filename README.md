@@ -8,6 +8,12 @@ Trabajo práctico cuatrimestral de la materia Programación Avanzada.
 
 ## 🫧 Características
 
+---
+
+## 🔮 Funcionalidades
+
+---
+
 ampliaremos
 
 
