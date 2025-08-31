@@ -1,8 +1,8 @@
-# 📝 Sistema de administración hotelera | 3er cuatrimestre
+# 🏢 Sistema de administración hotelera 
 
 Alumnos: Victoria Cossi Mazza, Caterina Marquez y Nicolas Nevach.
 
-Trabajo práctico cuatrimestral de la materia Programación Avanzada.
+Trabajo práctico cuatrimestral de la materia Programación Avanzada. Tercer cuatrimestre.
 
 ---
 
