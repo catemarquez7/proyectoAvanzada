@@ -6,15 +6,17 @@ Trabajo práctico cuatrimestral de la materia Programación Avanzada. Tercer cua
 
 ---
 
-## 🫧 Características
+## 🫧 Diagrama de clases
 
 ---
 
-## 🔮 Funcionalidades
+## Diagrama de casos de uso
 
 ---
 
-ampliaremos
+## Diagrama DER
+
+
 
 
 
