@@ -6,17 +6,17 @@ Trabajo práctico cuatrimestral de la materia Programación Avanzada. Tercer cua
 
 ---
 
-## 🫧 Diagrama de clases
-
+## Diagrama de clases
+!(img/clases.png)
 ---
 
 ## Diagrama de casos de uso
-
+!(img/casos.png)
 ---
 
 ## Diagrama DER
-
-
+!(img/sql.png)
+---
 
 
 
