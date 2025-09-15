@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0;
+		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0, eleccion7, eleccion8, eleccion9, eleccion10, eleccion11, eleccion12;
 
 		String[] iniciosesion = { "Iniciar Sesión", "Registrarse", "Salir" };
 
@@ -35,15 +35,163 @@ public class Main {
 							if (contraenia.equalsIgnoreCase("Admin1")) {
 
 								// PROGRAMA ADMIN
+								
+								String[] acciones = {"Ver hoteles", "Gestionar cuentas", "Atras"};
+								
+								do {
+									
+									eleccion7 = JOptionPane.showInternalOptionDialog(null,
+											"Bienvenido Administrador!\nSeleccione una opción: ", null, 0, 0, null,
+											acciones, acciones[0]);
+									
+									switch (eleccion7) {
+									case 0: // Hoteles
+										
+										String[] hoteles = {"Ver hoteles", "Modificar hoteles", "Reservas", "Actividades","Habitaciones" ,"Atras"};
+										
+										do {
+											eleccion8 = JOptionPane.showInternalOptionDialog(null,
+													"Seleccione una opción: ", null, 0, 0, null,
+													hoteles, hoteles[0]);
+											
+											switch (eleccion8) {
+											case 0:
+												JOptionPane.showMessageDialog(null,
+														"Acá se visualizarán los hoteles");
+												break;
+											case 1:
+												JOptionPane.showMessageDialog(null,
+														"Acá se podrán modificar los hoteles");
+												break;
+											case 2:
+												String[] reservas = {"Ver reservas", "Modificar reservas", "Atras"};
+												do {
+													eleccion9 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null,
+															reservas, reservas[0]);
+													switch (eleccion9) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán las reservas");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se podrán modificar las reservas");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null,
+																"Volver al menú");
+														break;
+
+													}
+													
+												} while (eleccion9 != 2);
+												
+												break;
+											case 3:
+												String[] actividades = {"Ver actividades", "Modificar actividades", "Atras"};
+												do {
+													eleccion10 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null,
+															actividades, actividades[0]);
+													switch (eleccion10) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán las actividades");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se podrán modificar las actividades");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null,
+																"Volver al menú");
+														break;
+
+													}
+													
+												} while (eleccion10 != 2);
+												break;
+											case 4:
+												String[] habitaciones = {"Ver habitaciones", "Modificar habitaciones", "Atras"};
+												do {
+													eleccion11 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null,
+															habitaciones, habitaciones[0]);
+													switch (eleccion11) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán las habitaciones");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se podrán modificar las habitaciones");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null,
+																"Volver al menú");
+														break;
+
+													}
+													
+												} while (eleccion11 != 2);
+												break;
+											case 5:
+												JOptionPane.showMessageDialog(null, "Volver al menú");
+												break;
+
+											}
+											
+										} while (eleccion8 != 5);
+										
+										break;
+										
+									case 1: // Cuentas
+										String[] cuentas = {"Crear cuenta", "Restringir usuario", "Atras"};
+										
+										do {
+											eleccion12 = JOptionPane.showInternalOptionDialog(null,
+													"Seleccione una opción: ", null, 0, 0, null,
+													cuentas, cuentas[0]);
+											
+											switch (eleccion12) {
+											case 0:
+												JOptionPane.showMessageDialog(null,
+														"Aca se podrá crear una cuenta");
+												break;
+											case 1:
+												JOptionPane.showMessageDialog(null,
+														"Aca se podrá restringir una cuenta");
+												break;
+											case 2:
+												JOptionPane.showMessageDialog(null,
+														"Volver al menú");
+												break;
+
+											}
+											
+										} while (eleccion12 != 2);
+										
+										break;
+										
+									case 2: // Salir
+										JOptionPane.showMessageDialog(null, "Volver al menú");
+										break;
+
+									}
+									
+									
+								} while (eleccion7 != 2);
+								
 
 							} else {
 								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente 						nuevamente");
+										"La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
 							JOptionPane.showMessageDialog(null,
-									"El nombre de usuario no es correcto, intente 						nuevamente");
+									"El nombre de usuario no es correcto, intente nuevamente");
 							break;
 						}
 						break;
@@ -62,12 +210,12 @@ public class Main {
 
 							} else {
 								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente 						nuevamente");
+										"La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
 							JOptionPane.showMessageDialog(null,
-									"El nombre de usuario no es correcto, intente 						nuevamente");
+									"El nombre de usuario no es correcto, intente nuevamente");
 							break;
 						}
 						break;
@@ -205,12 +353,12 @@ public class Main {
 
 							} else {
 								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente 						nuevamente");
+										"La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
 							JOptionPane.showMessageDialog(null,
-									"El nombre de usuario no es correcto, intente 						nuevamente");
+									"El nombre de usuario no es correcto, intente nuevamente");
 							break;
 						}
 						break;
@@ -226,7 +374,7 @@ public class Main {
 
 			case 1: // registrarse
 
-				JOptionPane.showMessageDialog(null, "Aca se pedirán todos los datos de registro.");
+				JOptionPane.showMessageDialog(null, "Aca se pedirán todos los datos necesarios para el registro de usuarios.");
 				break;
 
 			case 2:
