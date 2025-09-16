@@ -1,11 +1,11 @@
 package user;
 
+import javax.swing.JOptionPane;
+
 public class Main {
 
 	public static void main(String[] args) {
-<<<<<<< Updated upstream
-		// TODO Auto-generated method stub
-=======
+
 
 		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0, eleccion7, eleccion8, eleccion9, eleccion10, eleccion11, eleccion12;
 
@@ -518,7 +518,7 @@ public class Main {
 			}// fin 1er switch
 
 		} while (eleccion1 != 2);
->>>>>>> Stashed changes
+
 
 	}
 
