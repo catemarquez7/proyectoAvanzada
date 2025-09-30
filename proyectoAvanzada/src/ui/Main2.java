@@ -1,12 +1,12 @@
-package user;
+package ui;
 
 import javax.swing.JOptionPane;
 
-public class Main {
-
+public class Main2 {
 	public static void main(String[] args) {
 
-		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0, eleccion7, eleccion8, eleccion9, eleccion10, eleccion11, eleccion12;
+		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0, eleccion7, eleccion8, eleccion9,
+				eleccion10, eleccion11, eleccion12;
 
 		String[] iniciosesion = { "Iniciar Sesión", "Registrarse", "Salir" };
 
@@ -35,40 +35,39 @@ public class Main {
 							if (contraenia.equalsIgnoreCase("Admin1")) {
 
 								// PROGRAMA ADMIN
-								
-								String[] acciones = {"Ver hoteles", "Gestionar cuentas", "Atras"};
-								
+
+								String[] acciones = { "Ver hoteles", "Gestionar cuentas", "Atras" };
+
 								do {
-									
+
 									eleccion7 = JOptionPane.showInternalOptionDialog(null,
 											"Bienvenido Administrador!\nSeleccione una opción: ", null, 0, 0, null,
 											acciones, acciones[0]);
-									
+
 									switch (eleccion7) {
 									case 0: // Hoteles
-										
-										String[] hoteles = {"Ver hoteles", "Modificar hoteles", "Reservas", "Actividades","Habitaciones" ,"Atras"};
-										
+
+										String[] hoteles = { "Ver hoteles", "Modificar hoteles", "Reservas",
+												"Actividades", "Habitaciones", "Atras" };
+
 										do {
 											eleccion8 = JOptionPane.showInternalOptionDialog(null,
-													"Seleccione una opción: ", null, 0, 0, null,
-													hoteles, hoteles[0]);
-											
+													"Seleccione una opción: ", null, 0, 0, null, hoteles, hoteles[0]);
+
 											switch (eleccion8) {
 											case 0:
-												JOptionPane.showMessageDialog(null,
-														"Acá se visualizarán los hoteles");
+												JOptionPane.showMessageDialog(null, "Acá se visualizarán los hoteles");
 												break;
 											case 1:
 												JOptionPane.showMessageDialog(null,
 														"Acá se podrán modificar los hoteles");
 												break;
 											case 2:
-												String[] reservas = {"Ver reservas", "Modificar reservas", "Atras"};
+												String[] reservas = { "Ver reservas", "Modificar reservas", "Atras" };
 												do {
 													eleccion9 = JOptionPane.showInternalOptionDialog(null,
-															"Seleccione una opción: ", null, 0, 0, null,
-															reservas, reservas[0]);
+															"Seleccione una opción: ", null, 0, 0, null, reservas,
+															reservas[0]);
 													switch (eleccion9) {
 													case 0:
 														JOptionPane.showMessageDialog(null,
@@ -79,21 +78,21 @@ public class Main {
 																"Acá se podrán modificar las reservas");
 														break;
 													case 2:
-														JOptionPane.showMessageDialog(null,
-																"Volver al menú");
+														JOptionPane.showMessageDialog(null, "Volver al menú");
 														break;
 
 													}
-													
+
 												} while (eleccion9 != 2);
-												
+
 												break;
 											case 3:
-												String[] actividades = {"Ver actividades", "Modificar actividades", "Atras"};
+												String[] actividades = { "Ver actividades", "Modificar actividades",
+														"Atras" };
 												do {
 													eleccion10 = JOptionPane.showInternalOptionDialog(null,
-															"Seleccione una opción: ", null, 0, 0, null,
-															actividades, actividades[0]);
+															"Seleccione una opción: ", null, 0, 0, null, actividades,
+															actividades[0]);
 													switch (eleccion10) {
 													case 0:
 														JOptionPane.showMessageDialog(null,
@@ -104,20 +103,20 @@ public class Main {
 																"Acá se podrán modificar las actividades");
 														break;
 													case 2:
-														JOptionPane.showMessageDialog(null,
-																"Volver al menú");
+														JOptionPane.showMessageDialog(null, "Volver al menú");
 														break;
 
 													}
-													
+
 												} while (eleccion10 != 2);
 												break;
 											case 4:
-												String[] habitaciones = {"Ver habitaciones", "Modificar habitaciones", "Atras"};
+												String[] habitaciones = { "Ver habitaciones", "Modificar habitaciones",
+														"Atras" };
 												do {
 													eleccion11 = JOptionPane.showInternalOptionDialog(null,
-															"Seleccione una opción: ", null, 0, 0, null,
-															habitaciones, habitaciones[0]);
+															"Seleccione una opción: ", null, 0, 0, null, habitaciones,
+															habitaciones[0]);
 													switch (eleccion11) {
 													case 0:
 														JOptionPane.showMessageDialog(null,
@@ -128,12 +127,11 @@ public class Main {
 																"Acá se podrán modificar las habitaciones");
 														break;
 													case 2:
-														JOptionPane.showMessageDialog(null,
-																"Volver al menú");
+														JOptionPane.showMessageDialog(null, "Volver al menú");
 														break;
 
 													}
-													
+
 												} while (eleccion11 != 2);
 												break;
 											case 5:
@@ -141,52 +139,46 @@ public class Main {
 												break;
 
 											}
-											
+
 										} while (eleccion8 != 5);
-										
+
 										break;
-										
+
 									case 1: // Cuentas
-										String[] cuentas = {"Crear cuenta", "Restringir usuario", "Atras"};
-										
+										String[] cuentas = { "Crear cuenta", "Restringir usuario", "Atras" };
+
 										do {
 											eleccion12 = JOptionPane.showInternalOptionDialog(null,
-													"Seleccione una opción: ", null, 0, 0, null,
-													cuentas, cuentas[0]);
-											
+													"Seleccione una opción: ", null, 0, 0, null, cuentas, cuentas[0]);
+
 											switch (eleccion12) {
 											case 0:
-												JOptionPane.showMessageDialog(null,
-														"Aca se podrá crear una cuenta");
+												JOptionPane.showMessageDialog(null, "Aca se podrá crear una cuenta");
 												break;
 											case 1:
 												JOptionPane.showMessageDialog(null,
 														"Aca se podrá restringir una cuenta");
 												break;
 											case 2:
-												JOptionPane.showMessageDialog(null,
-														"Volver al menú");
+												JOptionPane.showMessageDialog(null, "Volver al menú");
 												break;
 
 											}
-											
+
 										} while (eleccion12 != 2);
-										
+
 										break;
-										
+
 									case 2: // Salir
 										JOptionPane.showMessageDialog(null, "Volver al menú");
 										break;
 
 									}
-									
-									
+
 								} while (eleccion7 != 2);
-								
 
 							} else {
-								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente nuevamente");
+								JOptionPane.showMessageDialog(null, "La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
@@ -206,11 +198,132 @@ public class Main {
 									"Ingrese su contraseña:\nEn caso de querer ingresar, especificar: Cliente1");
 							if (contraenia2.equalsIgnoreCase("Cliente1")) {
 
-								// PROGRAMA CLIENTE
+//PROGRAMA CLIENTE
+								String[] acciones = { "Reservas", "Realizar una reseña", "Preferencias", "Historial",
+										"Atrás" };
+								do {
+									eleccion3 = JOptionPane.showInternalOptionDialog(null,
+											"Bienvenido Cliente!\nSeleccione una opción: ", null, 0, 0, null, acciones,
+											acciones[0]);
+
+									switch (eleccion3) {
+									case 0: // Reservas
+
+										String[] reservas = { "Ver hoteles", "Ver paquetes", "Ver actividades",
+												"Atrás" };
+										do {
+											eleccion4 = JOptionPane.showInternalOptionDialog(null,
+													"Seleccione una opción: ", null, 0, 0, null, reservas, reservas[0]);
+											switch (eleccion4) {
+											case 0:
+												String[] hoteles = { "Ver hoteles", "Comprar hoteles", "Atrás" };
+												do {
+													eleccion5 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null, hoteles,
+															hoteles[0]);
+													switch (eleccion5) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán los hoteles");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se modificarán los hoteles");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
+														break;
+													}
+												} while (eleccion5 != 2);
+												break;
+											case 1:
+												String[] paquetes = { "Ver paquetes", "Comprar paquetes", "Atrás" };
+												do {
+													eleccion5 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null, paquetes,
+															paquetes[0]);
+													switch (eleccion5) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán los paquetes");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se modificarán los paquetes");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
+														break;
+													}
+												} while (eleccion5 != 2);
+												break;
+											case 2:
+												String[] actividades = { "Ver actividades", "Comprar actividades",
+														"Atrás" };
+												do {
+													eleccion5 = JOptionPane.showInternalOptionDialog(null,
+															"Seleccione una opción: ", null, 0, 0, null, actividades,
+															actividades[0]);
+													switch (eleccion5) {
+													case 0:
+														JOptionPane.showMessageDialog(null,
+																"Acá se visualizarán los actividades");
+														break;
+													case 1:
+														JOptionPane.showMessageDialog(null,
+																"Acá se modificarán los actividades");
+														break;
+													case 2:
+														JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
+														break;
+													}
+												} while (eleccion5 != 2);
+												break;
+											case 3:
+												JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
+												break;
+											}
+
+										} while (eleccion4 != 3);
+										break;
+									case 1: // Reseñas
+
+										JOptionPane.showMessageDialog(null, "Acá se realizarán las reseñas");
+										break;
+									case 2: // Preferencias
+										String[] preferencias = { "Ver preferencias", "Modificar preferencias",
+												"Atrás" };
+										do {
+											eleccion5 = JOptionPane.showInternalOptionDialog(null,
+													"Seleccione una opción: ", null, 0, 0, null, preferencias,
+													preferencias[0]);
+											switch (eleccion5) {
+											case 0:
+												JOptionPane.showMessageDialog(null,
+														"Acá se visualizarán las preferencias");
+												break;
+											case 1:
+												JOptionPane.showMessageDialog(null,
+														"Acá se modificarán las preferencias");
+												break;
+											case 2:
+												JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
+												break;
+											}
+										} while (eleccion5 != 2);
+										break;
+									case 3: // Historial
+										JOptionPane.showMessageDialog(null, "Acá se mostrará el historial");
+										break;
+
+									case 4:
+										JOptionPane.showMessageDialog(null, "Volver al menú");
+										break;
+									}
+								} while (eleccion3 != 4);
 
 							} else {
-								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente nuevamente");
+								JOptionPane.showMessageDialog(null, "La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
@@ -247,16 +360,13 @@ public class Main {
 													"Seleccione una opción: ", null, 0, 0, null, reservas, reservas[0]);
 											switch (eleccion4) {
 											case 0:
-												JOptionPane.showMessageDialog(null,
-														"Acá se visualizarán las reservas");
+												JOptionPane.showMessageDialog(null, "Acá se visualizarán las reservas");
 												break;
 											case 1:
-												JOptionPane.showMessageDialog(null,
-														"Acá se modificarán las reservas");
+												JOptionPane.showMessageDialog(null, "Acá se modificarán las reservas");
 												break;
 											case 2:
-												JOptionPane.showMessageDialog(null,
-														"Vuelve al menú anterior");
+												JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
 												break;
 
 											}
@@ -270,7 +380,8 @@ public class Main {
 												"Atrás" };
 										do {
 											eleccion5 = JOptionPane.showInternalOptionDialog(null,
-													"Seleccione una opción: ", null, 0, 0, null, habitaciones,habitaciones[0]);
+													"Seleccione una opción: ", null, 0, 0, null, habitaciones,
+													habitaciones[0]);
 											switch (eleccion5) {
 											case 0:
 												JOptionPane.showMessageDialog(null,
@@ -281,8 +392,7 @@ public class Main {
 														"Acá se modificarán las habitaciones");
 												break;
 											case 2:
-												JOptionPane.showMessageDialog(null,
-														"Vuelve al menú anterior");
+												JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
 												break;
 
 											}
@@ -294,7 +404,8 @@ public class Main {
 										String[] actividades = { "Ver actividades", "Modificar actividades", "Atrás" };
 										do {
 											eleccion6 = JOptionPane.showInternalOptionDialog(null,
-													"Seleccione una opción: ", null, 0, 0, null, actividades,actividades[0]);
+													"Seleccione una opción: ", null, 0, 0, null, actividades,
+													actividades[0]);
 											switch (eleccion6) {
 											case 0:
 												JOptionPane.showMessageDialog(null,
@@ -305,8 +416,7 @@ public class Main {
 														"Acá se modificarán las actividades");
 												break;
 											case 2:
-												JOptionPane.showMessageDialog(null,
-														"Vuelve al menú anterior");
+												JOptionPane.showMessageDialog(null, "Vuelve al menú anterior");
 												break;
 
 											}
@@ -352,8 +462,7 @@ public class Main {
 								} while (eleccion3 != 8);
 
 							} else {
-								JOptionPane.showMessageDialog(null,
-										"La contraseña no es correcta, intente nuevamente");
+								JOptionPane.showMessageDialog(null, "La contraseña no es correcta, intente nuevamente");
 								break;
 							}
 						} else {
@@ -374,7 +483,8 @@ public class Main {
 
 			case 1: // registrarse
 
-				JOptionPane.showMessageDialog(null, "Aca se pedirán todos los datos necesarios para el registro de usuarios.");
+				JOptionPane.showMessageDialog(null,
+						"Aca se pedirán todos los datos necesarios para el registro de usuarios.");
 				break;
 
 			case 2:
@@ -387,5 +497,4 @@ public class Main {
 		} while (eleccion1 != 2);
 
 	}
-
 }
