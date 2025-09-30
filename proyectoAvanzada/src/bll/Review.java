@@ -1,4 +1,4 @@
-package logica;
+package bll;
 
 public class Review {
 
