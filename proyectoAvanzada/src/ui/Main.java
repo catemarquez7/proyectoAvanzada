@@ -21,6 +21,8 @@ public class Main {
 		switch (eleccion) {
 		case 0: //iniciar sesion
 			
+			Usuario encontrado = Usuario.login();
+			
 			break;
 		case 1: //registrarse
 			
@@ -28,7 +30,9 @@ public class Main {
 			
 			break;
 		case 2: //salir
+			
 			JOptionPane.showMessageDialog(null, "Hasta luego! ", "ADIOS!", 0);
+			
 			break;
 			
 		}//fin switch
