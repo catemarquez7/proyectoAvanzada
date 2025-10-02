@@ -7,26 +7,21 @@ public abstract class Persona {
 	//atributos
 	protected String nombre;
 	protected String apellido;
-	protected int edad;
 	protected LocalDate fecha_nac;
 	protected String mail;
 	protected int dni;
-	protected int direccion;
-	protected int nacionalidad;
+	protected String direccion;
 	
 	
 	//constructores
-	public Persona(String nombre, String apellido, int edad, LocalDate fecha_nac, String mail, int dni, int direccion,
-			int nacionalidad) {
+	public Persona(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion) {
 		super();
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.edad = edad;
 		this.fecha_nac = fecha_nac;
 		this.mail = mail;
 		this.dni = dni;
 		this.direccion = direccion;
-		this.nacionalidad = nacionalidad;
 	}
 	
 	public Persona() {
@@ -47,12 +42,6 @@ public abstract class Persona {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public int getEdad() {
-		return edad;
-	}
-	public void setEdad(int edad) {
-		this.edad = edad;
-	}
 	public LocalDate getFecha_nac() {
 		return fecha_nac;
 	}
@@ -71,26 +60,19 @@ public abstract class Persona {
 	public void setDni(int dni) {
 		this.dni = dni;
 	}
-	public int getDireccion() {
+	public String getDireccion() {
 		return direccion;
 	}
-	public void setDireccion(int direccion) {
+	public void setDireccion(String direccion) {
 		this.direccion = direccion;
-	}
-	public int getNacionalidad() {
-		return nacionalidad;
-	}
-	public void setNacionalidad(int nacionalidad) {
-		this.nacionalidad = nacionalidad;
 	}
 
 
 	//toString
 	@Override
 	public String toString() {
-		return "Persona [nombre=" + nombre + ", apellido=" + apellido + ", edad=" + edad + ", fecha_nac=" + fecha_nac
-				+ ", mail=" + mail + ", dni=" + dni + ", direccion=" + direccion + ", nacionalidad=" + nacionalidad
-				+ "]";
+		return "Persona [nombre=" + nombre + ", apellido=" + apellido + ", fecha_nac=" + fecha_nac
+				+ ", mail=" + mail + ", dni=" + dni + ", direccion=" + direccion + "]";
 	}
 	
 	

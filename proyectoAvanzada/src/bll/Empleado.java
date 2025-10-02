@@ -9,11 +9,10 @@ public class Empleado extends Usuario{
 
 	
 	//constructores
-	public Empleado(String nombre, String apellido, int edad, LocalDate fecha_nac, String mail, int dni, int direccion,
-			int nacionalidad, int id, String user, String pass, String pregunta, String respuesta,
-			LocalDate fecha_creacion, Hotel sucursal) {
-		super(nombre, apellido, edad, fecha_nac, mail, dni, direccion, nacionalidad, id, user, pass, pregunta,
-				respuesta, fecha_creacion);
+	
+	public Empleado(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion, int id,
+			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion, Hotel sucursal) {
+		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion);
 		this.sucursal = sucursal;
 	}
 	
@@ -21,7 +20,7 @@ public class Empleado extends Usuario{
 		
 	}
 	
-	
+
 	//getters y setters
 	public Hotel getSucursal() {
 		return sucursal;

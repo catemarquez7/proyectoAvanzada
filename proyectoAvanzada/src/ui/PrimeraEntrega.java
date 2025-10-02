@@ -2,7 +2,7 @@ package ui;
 
 import javax.swing.JOptionPane;
 
-public class Main2 {
+public class PrimeraEntrega {
 	public static void main(String[] args) {
 
 		int eleccion1, eleccion2, eleccion3, eleccion4, eleccion5, eleccion6 = 0, eleccion7, eleccion8, eleccion9,

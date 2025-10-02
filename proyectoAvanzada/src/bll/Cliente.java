@@ -10,11 +10,11 @@ public class Cliente extends Usuario{
 
 	
 	//constructores
-	public Cliente(String nombre, String apellido, int edad, LocalDate fecha_nac, String mail, int dni, int direccion,
-			int nacionalidad, int id, String user, String pass, String pregunta, String respuesta,
-			LocalDate fecha_creacion, LinkedList<Reserva> reservas) {
-		super(nombre, apellido, edad, fecha_nac, mail, dni, direccion, nacionalidad, id, user, pass, pregunta,
-				respuesta, fecha_creacion);
+	
+	public Cliente(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion, int id,
+			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion,
+			LinkedList<Reserva> reservas) {
+		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion);
 		this.reservas = reservas;
 	}
 	
@@ -22,7 +22,6 @@ public class Cliente extends Usuario{
 		
 	}
 
-	
 	//getters y setters
 	public LinkedList<Reserva> getReservas() {
 		return reservas;
