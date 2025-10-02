@@ -109,9 +109,9 @@ public interface Validaciones {
 	    
 	    while (!valido) {
 	        try {
-	            String dia = JOptionPane.showInputDialog(mensaje + " - Día (1-31):");
-	            String mes = JOptionPane.showInputDialog(mensaje + " - Mes (1-12):");
-	            String anio = JOptionPane.showInputDialog(mensaje + " - Año:");
+	            String dia = JOptionPane.showInputDialog(mensaje + "\nDía (1-31):");
+	            String mes = JOptionPane.showInputDialog(mensaje + "\nMes (1-12):");
+	            String anio = JOptionPane.showInputDialog(mensaje + "\nAño:");
 	            
 	            fecha = LocalDate.of(
 	                Integer.parseInt(anio),

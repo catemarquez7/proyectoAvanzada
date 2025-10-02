@@ -35,6 +35,17 @@ public class Usuario extends Persona {
 		this.pass = pass;
 	}
 
+	public Usuario(int id, String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
+			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion) {
+		super(nombre, apellido, fecha_nac, mail, dni, direccion);
+		this.id = id;
+		this.user = user;
+		this.pass = pass;
+		this.pregunta = pregunta;
+		this.respuesta = respuesta;
+		this.fecha_creacion = fecha_creacion;
+	}
+
 	public Usuario(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
 			String user, String pass, String pregunta, String respuesta) {
 		super(nombre, apellido, fecha_nac, mail, dni, direccion);
@@ -42,7 +53,7 @@ public class Usuario extends Persona {
 		this.pass = pass;
 		this.pregunta = pregunta;
 		this.respuesta = respuesta;
-		this.fecha_creacion = LocalDate.now(); 
+		this.fecha_creacion = LocalDate.now();
 	}
 
 	public Usuario() {
@@ -107,6 +118,25 @@ public class Usuario extends Persona {
 
 	// metodos
 
+	public static Usuario login() {
+		String user, pass;
+
+		user = JOptionPane.showInputDialog("Ingrese su nombre de usuario:");
+		pass = JOptionPane.showInputDialog("Ingrese su contraseña:");
+
+		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
+
+		if (usuarioEncontrado != null) {
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "LOGIN EXITOSO",
+					JOptionPane.INFORMATION_MESSAGE);
+			return usuarioEncontrado;
+		} else {
+			JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+	}
+
 	public static boolean registrarse() {
 
 		String nombre, apellido, direccion, mail, user, pass, pregunta, respuesta;
@@ -138,18 +168,19 @@ public class Usuario extends Persona {
 	public static int ingresoDni() {
 
 		int dni;
-	    String documento;
+		String documento;
 
-	    do {
-	        dni = repository.Validaciones.ValidarNum("Ingrese su número de documento: ");
-	        documento = Integer.toString(dni);
+		do {
+			dni = repository.Validaciones.ValidarNum("Ingrese su número de documento: ");
+			documento = Integer.toString(dni);
 
-	        if (documento.length() < 8) {
-	            JOptionPane.showMessageDialog(null, "Su número de documento debe tener al menos 8 dígitos.", "ERROR!", 0);
-	        }
-	    } while (documento.length() < 8);
+			if (documento.length() < 8) {
+				JOptionPane.showMessageDialog(null, "Su número de documento debe tener al menos 8 dígitos.", "ERROR!",
+						0);
+			}
+		} while (documento.length() < 8);
 
-	    return dni;
+		return dni;
 
 	}// fin
 
