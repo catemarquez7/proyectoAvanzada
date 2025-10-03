@@ -47,7 +47,7 @@ public class PrimeraEntrega {
 									switch (eleccion7) {
 									case 0: // Hoteles
 
-										String[] hoteles = { "Ver hoteles", "Modificar hoteles", "Reservas",
+										String[] hoteles = { "Ver hoteles", "Modificar hsoteles", "Reservas",
 												"Actividades", "Habitaciones", "Atras" };
 
 										do {
@@ -216,7 +216,7 @@ public class PrimeraEntrega {
 													"Seleccione una opción: ", null, 0, 0, null, reservas, reservas[0]);
 											switch (eleccion4) {
 											case 0:
-												String[] hoteles = { "Ver hoteles", "Comprar hoteles", "Atrás" };
+												String[] hoteles = { "Reservar hotel", "Atrás" };
 												do {
 													eleccion5 = JOptionPane.showInternalOptionDialog(null,
 															"Seleccione una opción: ", null, 0, 0, null, hoteles,
@@ -237,7 +237,7 @@ public class PrimeraEntrega {
 												} while (eleccion5 != 2);
 												break;
 											case 1:
-												String[] paquetes = { "Ver paquetes", "Comprar paquetes", "Atrás" };
+												String[] paquetes = { "Comprar paquetes", "Atrás" };
 												do {
 													eleccion5 = JOptionPane.showInternalOptionDialog(null,
 															"Seleccione una opción: ", null, 0, 0, null, paquetes,
@@ -258,7 +258,7 @@ public class PrimeraEntrega {
 												} while (eleccion5 != 2);
 												break;
 											case 2:
-												String[] actividades = { "Ver actividades", "Comprar actividades",
+												String[] actividades = {"Comprar actividades",
 														"Atrás" };
 												do {
 													eleccion5 = JOptionPane.showInternalOptionDialog(null,

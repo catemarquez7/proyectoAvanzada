@@ -11,6 +11,7 @@ public class Main {
 		
 		Conexion.getInstance();
 		int eleccion;
+		Usuario Inicio = new Usuario();
 		
 		JOptionPane.showMessageDialog(null, "Bienvenido al Sistema de House Hunter!", "BIENVENIDO!", 0);
 		
@@ -21,7 +22,7 @@ public class Main {
 		switch (eleccion) {
 		case 0: //iniciar sesion
 			
-			Usuario encontrado = Usuario.login();
+			Inicio = Usuario.login();
 			
 			break;
 		case 1: //registrarse
