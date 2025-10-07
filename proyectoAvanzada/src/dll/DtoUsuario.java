@@ -39,9 +39,10 @@ public class DtoUsuario {
 				String pregunta = rs.getString("pregunta");
 				String respuesta = rs.getString("respuesta");
 				LocalDate fecha_creacion = rs.getDate("fecha_creacion").toLocalDate();
+				String tipo_usuario = rs.getString("tipo_usuario");
 
-				usuario = new Usuario(id, nombre, apellido, fecha_nac, mail, dni, direccion, userDB, pass, pregunta,
-						respuesta, fecha_creacion);
+				usuario = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, userDB, pass, pregunta,
+						respuesta);
 			}
 
 		} catch (Exception e) {
@@ -54,7 +55,7 @@ public class DtoUsuario {
 	public static boolean agregarUsuario(Usuario usuario) {
 		try {
 			PreparedStatement statement = conx.prepareStatement(
-					"INSERT INTO usuario (nombre, apellido, fecha_nac, mail, dni, direccion, user, pass, pregunta, respuesta, fecha_creacion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					"INSERT INTO usuario (nombre, apellido, fecha_nac, mail, dni, direccion, user, pass, pregunta, respuesta, fecha_creacion, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 			statement.setString(1, usuario.getNombre());
 			statement.setString(2, usuario.getApellido());
@@ -67,6 +68,7 @@ public class DtoUsuario {
 			statement.setString(9, usuario.getPregunta());
 			statement.setString(10, usuario.getRespuesta());
 			statement.setDate(11, java.sql.Date.valueOf(usuario.getFecha_creacion()));
+			statement.setString(12, usuario.getTipo_usuario());
 
 			int filas = statement.executeUpdate();
 			if (filas > 0) {

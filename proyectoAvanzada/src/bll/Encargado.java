@@ -2,27 +2,40 @@ package bll;
 
 import java.time.LocalDate;
 
-public class Encargado extends Empleado{
+public class Encargado extends Usuario{
 
-	//constructores
+	//atributos
+	protected Hotel sucursal;
+
 	
+	//constructores
 	public Encargado(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
 			int id, String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion,
-			Hotel sucursal) {
+			String tipo_usuario, Hotel sucursal) {
 		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion,
-				sucursal);
+				tipo_usuario);
+		this.sucursal = sucursal;
 	}
-
+	
 	public Encargado(){
-		
+	
 	}
 
+	//getters y setters
+	public Hotel getSucursal() {
+		return sucursal;
+	}
+
+	public void setSucursal(Hotel sucursal) {
+		this.sucursal = sucursal;
+	}
 
 	//toString
 	@Override
 	public String toString() {
-		return "Encargado [sucursal=" + sucursal + ", user=" + user + ", nombre=" + nombre + "]";
+		return "Encargado [sucursal=" + sucursal + "]";
 	}
+
 	
 	//metodos
 	

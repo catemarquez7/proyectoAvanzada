@@ -15,11 +15,12 @@ public class Usuario extends Persona {
 	protected String pregunta;
 	protected String respuesta;
 	protected LocalDate fecha_creacion;
+	protected String tipo_usuario;
 
 	// constructores
 
 	public Usuario(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion, int id,
-			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion) {
+			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion, String tipo_usuario) {
 		super(nombre, apellido, fecha_nac, mail, dni, direccion);
 		this.id = id;
 		this.user = user;
@@ -27,23 +28,13 @@ public class Usuario extends Persona {
 		this.pregunta = pregunta;
 		this.respuesta = respuesta;
 		this.fecha_creacion = fecha_creacion;
+		this.tipo_usuario = "1";
 	}
 
 	public Usuario(int id, String user, String pass) {
 		this.id = id;
 		this.user = user;
 		this.pass = pass;
-	}
-
-	public Usuario(int id, String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
-			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion) {
-		super(nombre, apellido, fecha_nac, mail, dni, direccion);
-		this.id = id;
-		this.user = user;
-		this.pass = pass;
-		this.pregunta = pregunta;
-		this.respuesta = respuesta;
-		this.fecha_creacion = fecha_creacion;
 	}
 
 	public Usuario(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
@@ -54,11 +45,13 @@ public class Usuario extends Persona {
 		this.pregunta = pregunta;
 		this.respuesta = respuesta;
 		this.fecha_creacion = LocalDate.now();
+		this.tipo_usuario = "1";
 	}
 
 	public Usuario() {
 
 	}
+
 
 	// getters y setters
 	public int getId() {
@@ -109,11 +102,26 @@ public class Usuario extends Persona {
 		this.fecha_creacion = fecha_creacion;
 	}
 
+	public String getTipo_usuario() {
+		return tipo_usuario;
+	}
+
+	public void setTipo_usuario(String tipo_usuario) {
+		this.tipo_usuario = tipo_usuario;
+	}
+
 	// toString
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", user=" + user + ", pass=" + pass + ", pregunta=" + pregunta + ", respuesta="
-				+ respuesta + ", fecha_creacion=" + fecha_creacion + "]";
+				+ respuesta + ", fecha_creacion=" + fecha_creacion + ", tipo_usuario=" + tipo_usuario + ", nombre="
+				+ nombre + ", apellido=" + apellido + ", fecha_nac=" + fecha_nac + ", mail=" + mail + ", dni=" + dni
+				+ ", direccion=" + direccion + ", getId()=" + getId() + ", getUser()=" + getUser() + ", getPass()="
+				+ getPass() + ", getPregunta()=" + getPregunta() + ", getRespuesta()=" + getRespuesta()
+				+ ", getFecha_creacion()=" + getFecha_creacion() + ", getNombre()=" + getNombre() + ", getApellido()="
+				+ getApellido() + ", getFecha_nac()=" + getFecha_nac() + ", getMail()=" + getMail() + ", getDni()="
+				+ getDni() + ", getDireccion()=" + getDireccion() + ", toString()=" + super.toString() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + "]";
 	}
 
 	// metodos
@@ -136,6 +144,7 @@ public class Usuario extends Persona {
 			return null;
 		}
 	}
+
 
 	public static boolean registrarse() {
 

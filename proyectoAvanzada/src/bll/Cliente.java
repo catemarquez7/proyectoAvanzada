@@ -13,8 +13,8 @@ public class Cliente extends Usuario{
 	
 	public Cliente(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion, int id,
 			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion,
-			LinkedList<Reserva> reservas) {
-		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion);
+			LinkedList<Reserva> reservas, String tipo_usuario) {
+		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion, tipo_usuario);
 		this.reservas = reservas;
 	}
 	
