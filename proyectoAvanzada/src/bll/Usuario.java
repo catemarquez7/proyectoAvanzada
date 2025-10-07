@@ -16,11 +16,13 @@ public class Usuario extends Persona {
 	protected String respuesta;
 	protected LocalDate fecha_creacion;
 	protected String tipo_usuario;
+	protected String estado;
 
 	// constructores
 
 	public Usuario(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion, int id,
-			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion, String tipo_usuario) {
+			String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion, String tipo_usuario,
+			String estado) {
 		super(nombre, apellido, fecha_nac, mail, dni, direccion);
 		this.id = id;
 		this.user = user;
@@ -28,7 +30,8 @@ public class Usuario extends Persona {
 		this.pregunta = pregunta;
 		this.respuesta = respuesta;
 		this.fecha_creacion = fecha_creacion;
-		this.tipo_usuario = "1";
+		this.tipo_usuario = tipo_usuario;
+		this.estado = estado;
 	}
 
 	public Usuario(int id, String user, String pass) {
@@ -46,14 +49,15 @@ public class Usuario extends Persona {
 		this.respuesta = respuesta;
 		this.fecha_creacion = LocalDate.now();
 		this.tipo_usuario = "1";
+		this.estado = "activo";
 	}
 
 	public Usuario() {
 
 	}
 
-
 	// getters y setters
+
 	public int getId() {
 		return id;
 	}
@@ -110,18 +114,20 @@ public class Usuario extends Persona {
 		this.tipo_usuario = tipo_usuario;
 	}
 
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
 	// toString
 	@Override
 	public String toString() {
 		return "Usuario [id=" + id + ", user=" + user + ", pass=" + pass + ", pregunta=" + pregunta + ", respuesta="
-				+ respuesta + ", fecha_creacion=" + fecha_creacion + ", tipo_usuario=" + tipo_usuario + ", nombre="
-				+ nombre + ", apellido=" + apellido + ", fecha_nac=" + fecha_nac + ", mail=" + mail + ", dni=" + dni
-				+ ", direccion=" + direccion + ", getId()=" + getId() + ", getUser()=" + getUser() + ", getPass()="
-				+ getPass() + ", getPregunta()=" + getPregunta() + ", getRespuesta()=" + getRespuesta()
-				+ ", getFecha_creacion()=" + getFecha_creacion() + ", getNombre()=" + getNombre() + ", getApellido()="
-				+ getApellido() + ", getFecha_nac()=" + getFecha_nac() + ", getMail()=" + getMail() + ", getDni()="
-				+ getDni() + ", getDireccion()=" + getDireccion() + ", toString()=" + super.toString() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + "]";
+				+ respuesta + ", fecha_creacion=" + fecha_creacion + ", tipo_usuario=" + tipo_usuario + ", estado="
+				+ estado + "]";
 	}
 
 	// metodos
@@ -144,7 +150,6 @@ public class Usuario extends Persona {
 			return null;
 		}
 	}
-
 
 	public static boolean registrarse() {
 
@@ -223,4 +228,117 @@ public class Usuario extends Persona {
 
 	}// fin
 
-}
+	public static void redirigir(Usuario usuario) {
+
+		String tipoUser = usuario.getTipo_usuario();
+
+		switch (tipoUser) {
+		case "1": // Cliente
+			menuCliente(usuario);
+			break;
+		case "2": // Encargado
+			menuEncargado(usuario);
+			break;
+		case "3": // Administrador
+			menuAdmin(usuario);
+			break;
+		default:
+			JOptionPane.showMessageDialog(null, "Tipo de usuario no reconocido", "ERROR", 0);
+		}
+
+	}// fin
+
+	public static void menuCliente(Usuario usuario) {
+        int opcion;
+        
+        do {
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
+            
+            switch(opcion) {
+            	case 0:
+            		//Reservas
+            		break;
+                case 1:
+                	//Realizar_reseñas
+                    break;
+                case 2:
+                    //Preferencias
+                    break;
+                case 3:
+                    //Historial
+                    break;
+                case 4:
+                    //Atras
+                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+                    break;
+            }
+            
+        } while(opcion != 4);
+    }//fin
+	
+	
+	public static void menuEncargado(Usuario usuario) {
+        int opcion;
+        
+        do {
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_enc.values(), repository.Acciones_enc.values());
+            
+            switch(opcion) {
+            	case 0:
+            		//Reservas
+            		break;
+                case 1:
+                	//Habitaciones
+                    break;
+                case 2:
+                    //Actividades
+                    break;
+                case 3:
+                    //Check_in
+                    break;
+                case 4:
+                    //Check_out
+                    break;
+                case 5:
+            		//Datos_cliente
+            		break;
+                case 6:
+                	//Historial
+                    break;
+                case 7:
+                    //Promociones
+                    break;
+                case 8:
+                    //Atras
+                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+                    break;
+            }
+            
+        } while(opcion != 8);
+    }//fin
+	
+	
+	public static void menuAdmin(Usuario usuario) {
+        int opcion;
+        //Ver_hoteles, Gestionar_cuentas, Atrás;
+        
+        do {
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
+            
+            switch(opcion) {
+            	case 0:
+            		//Reservas
+            		break;
+                case 1:
+                	//Habitaciones
+                    break;
+                case 2:
+                    //Atras
+                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+                    break;
+            }
+            
+        } while(opcion != 2);
+    }//fin
+
+}//FIN USUARIO

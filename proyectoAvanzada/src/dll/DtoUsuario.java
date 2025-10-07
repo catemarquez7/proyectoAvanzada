@@ -27,7 +27,18 @@ public class DtoUsuario {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				int id = rs.getInt("id_usuario");
+				
+				String estado = rs.getString("estado");
+	            
+	            if (estado.equals("bloqueado")) {
+	                JOptionPane.showMessageDialog(null, 
+	                    "Su cuenta ha sido bloqueada. Contacte al administrador.", 
+	                    "CUENTA BLOQUEADA", 
+	                    JOptionPane.ERROR_MESSAGE);
+	                return null;
+	            }
+				
+				int id = rs.getInt("id");
 				String nombre = rs.getString("nombre");
 				String apellido = rs.getString("apellido");
 				LocalDate fecha_nac = rs.getDate("fecha_nac").toLocalDate();
@@ -40,9 +51,10 @@ public class DtoUsuario {
 				String respuesta = rs.getString("respuesta");
 				LocalDate fecha_creacion = rs.getDate("fecha_creacion").toLocalDate();
 				String tipo_usuario = rs.getString("tipo_usuario");
+				
 
-				usuario = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, userDB, pass, pregunta,
-						respuesta);
+				 usuario = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, id, 
+                         userDB, pass, pregunta, respuesta, fecha_creacion, tipo_usuario, estado);
 			}
 
 		} catch (Exception e) {
@@ -69,6 +81,7 @@ public class DtoUsuario {
 			statement.setString(10, usuario.getRespuesta());
 			statement.setDate(11, java.sql.Date.valueOf(usuario.getFecha_creacion()));
 			statement.setString(12, usuario.getTipo_usuario());
+			statement.setString(13, usuario.getEstado());
 
 			int filas = statement.executeUpdate();
 			if (filas > 0) {

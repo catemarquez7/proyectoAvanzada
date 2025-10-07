@@ -24,6 +24,12 @@ public class Main {
 			
 			Inicio = Usuario.login();
 			
+			if (Inicio != null) {
+     
+               Usuario.redirigir(Inicio);
+               
+            }
+			
 			break;
 		case 1: //registrarse
 			
