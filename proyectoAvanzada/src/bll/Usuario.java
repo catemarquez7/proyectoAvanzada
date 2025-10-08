@@ -286,18 +286,22 @@ public class Usuario extends Persona {
             switch(opcion) {
             	case 0:
             		//Reservas
+            		Encargado.verReservas();
             		break;
                 case 1:
                 	//Habitaciones
+            		Encargado.verHabitaciones();
                     break;
                 case 2:
                     //Actividades
                     break;
                 case 3:
                     //Check_in
+                	Encargado.realizarCheckin();
                     break;
                 case 4:
                     //Check_out
+                	Encargado.realizarCheckout();
                     break;
                 case 5:
             		//Datos_cliente
