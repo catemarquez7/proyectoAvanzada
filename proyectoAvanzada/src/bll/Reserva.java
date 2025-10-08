@@ -4,110 +4,109 @@ import java.time.LocalDateTime;
 
 public class Reserva {
 
-	//atributos
-    protected int id;
-    protected Cliente cliente;
-    protected Paquete paquete;
-    protected String estado; 
-    protected LocalDateTime fecha_checkin;
-    protected LocalDateTime fecha_checkout;
-    protected String tarjeta_resguardo;
-    protected double monto_final;
+	// atributos
+	protected int id;
+	protected Cliente cliente;
+	protected Paquete paquete;
+	protected String estado;
+	protected LocalDateTime fecha_checkin;
+	protected LocalDateTime fecha_checkout;
+	protected String tarjeta_resguardo;
+	protected double monto_final;
 
-    //constructores
-    
-    public Reserva(int id, Cliente cliente, Paquete paquete, String estado, 
-                   LocalDateTime fecha_checkin, LocalDateTime fecha_checkout, 
-                   String tarjeta_resguardo, double monto_final) {
-        this.id = id;
-        this.cliente = cliente;
-        this.paquete = paquete;
-        this.estado = estado;
-        this.fecha_checkin = fecha_checkin;
-        this.fecha_checkout = fecha_checkout;
-        this.tarjeta_resguardo = tarjeta_resguardo;
-        this.monto_final = monto_final;
-    }
+	// constructores
 
-    public Reserva(Cliente cliente, Paquete paquete) {
-        this.cliente = cliente;
-        this.paquete = paquete;
-        this.estado = "pendiente";
-    }
+	public Reserva(int id, Cliente cliente, Paquete paquete, String estado, LocalDateTime fecha_checkin,
+			LocalDateTime fecha_checkout, String tarjeta_resguardo, double monto_final) {
+		this.id = id;
+		this.cliente = cliente;
+		this.paquete = paquete;
+		this.estado = estado;
+		this.fecha_checkin = fecha_checkin;
+		this.fecha_checkout = fecha_checkout;
+		this.tarjeta_resguardo = tarjeta_resguardo;
+		this.monto_final = monto_final;
+	}
 
-    public Reserva() {
-    }
+	public Reserva(Cliente cliente, Paquete paquete) {
+		this.cliente = cliente;
+		this.paquete = paquete;
+		this.estado = "pendiente";
+	}
 
-    //getters y setters
-    public int getId() {
-        return id;
-    }
+	public Reserva() {
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	// getters y setters
+	public int getId() {
+		return id;
+	}
 
-    public Cliente getCliente() {
-        return cliente;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
+	public Cliente getCliente() {
+		return cliente;
+	}
 
-    public Paquete getPaquete() {
-        return paquete;
-    }
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
-    public void setPaquete(Paquete paquete) {
-        this.paquete = paquete;
-    }
+	public Paquete getPaquete() {
+		return paquete;
+	}
 
-    public String getEstado() {
-        return estado;
-    }
+	public void setPaquete(Paquete paquete) {
+		this.paquete = paquete;
+	}
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+	public String getEstado() {
+		return estado;
+	}
 
-    public LocalDateTime getFecha_checkin() {
-        return fecha_checkin;
-    }
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
 
-    public void setFecha_checkin(LocalDateTime fecha_checkin) {
-        this.fecha_checkin = fecha_checkin;
-    }
+	public LocalDateTime getFecha_checkin() {
+		return fecha_checkin;
+	}
 
-    public LocalDateTime getFecha_checkout() {
-        return fecha_checkout;
-    }
+	public void setFecha_checkin(LocalDateTime fecha_checkin) {
+		this.fecha_checkin = fecha_checkin;
+	}
 
-    public void setFecha_checkout(LocalDateTime fecha_checkout) {
-        this.fecha_checkout = fecha_checkout;
-    }
+	public LocalDateTime getFecha_checkout() {
+		return fecha_checkout;
+	}
 
-    public String getTarjeta_resguardo() {
-        return tarjeta_resguardo;
-    }
+	public void setFecha_checkout(LocalDateTime fecha_checkout) {
+		this.fecha_checkout = fecha_checkout;
+	}
 
-    public void setTarjeta_resguardo(String tarjeta_resguardo) {
-        this.tarjeta_resguardo = tarjeta_resguardo;
-    }
+	public String getTarjeta_resguardo() {
+		return tarjeta_resguardo;
+	}
 
-    public double getMonto_final() {
-        return monto_final;
-    }
+	public void setTarjeta_resguardo(String tarjeta_resguardo) {
+		this.tarjeta_resguardo = tarjeta_resguardo;
+	}
 
-    public void setMonto_final(double monto_final) {
-        this.monto_final = monto_final;
-    }
+	public double getMonto_final() {
+		return monto_final;
+	}
 
-    //toString
-    @Override
-    public String toString() {
-        return "Reserva [id=" + id + ", cliente=" + cliente.getNombre() + " " + cliente.getApellido() 
-                + ", paquete=" + paquete.getHotel().getNombre() 
-                + ", estado=" + estado + ", habitacion=" + paquete.getHabitacion().getNumero() + "]";
-    }
+	public void setMonto_final(double monto_final) {
+		this.monto_final = monto_final;
+	}
+
+	// toString
+	@Override
+	public String toString() {
+		return "Reserva [id=" + id + ", cliente=" + cliente.getNombre() + " " + cliente.getApellido() + ", paquete="
+				+ paquete.getHotel().getNombre() + ", estado=" + estado + ", habitacion="
+				+ paquete.getHabitacion().getNumero() + "]";
+	}
 }

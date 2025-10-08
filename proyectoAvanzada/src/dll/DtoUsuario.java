@@ -55,6 +55,11 @@ public class DtoUsuario {
 
 				 usuario = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, id, 
                          userDB, pass, pregunta, respuesta, fecha_creacion, tipo_usuario, estado);
+			
+				 if (tipo_usuario.equals("2")) {
+		                return DtoEncargado.cargarEncargado(id);
+		            }
+				 
 			}
 
 		} catch (Exception e) {

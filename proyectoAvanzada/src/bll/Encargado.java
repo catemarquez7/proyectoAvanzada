@@ -6,138 +6,112 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import dll.DtoEncargado;
+import repository.Validaciones;
 
 public class Encargado extends Usuario {
 
 	// atributos
-	protected Hotel sucursal;
+	protected int id_hotel;
 
 	// constructores
 
 	public Encargado(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni, String direccion,
-			int id, String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion,
-			String tipo_usuario, String estado, Hotel sucursal) {
-		super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion,
-				tipo_usuario, estado);
-		this.sucursal = sucursal;
-	}
+            int id, String user, String pass, String pregunta, String respuesta, LocalDate fecha_creacion,
+            String tipo_usuario, String estado, int id_hotel) {
+        super(nombre, apellido, fecha_nac, mail, dni, direccion, id, user, pass, pregunta, respuesta, fecha_creacion,
+                tipo_usuario, estado);
+        this.id_hotel = id_hotel;
+    }
 
 	public Encargado() {
 
 	}
 
 	// getters y setters
-	public Hotel getSucursal() {
-		return sucursal;
+	public int getId_hotel() {
+		return id_hotel;
 	}
 
-	public void setSucursal(Hotel sucursal) {
-		this.sucursal = sucursal;
+	public void setId_hotel(int id_hotel) {
+		this.id_hotel = id_hotel;
 	}
 
 	// toString
-	@Override
 	public String toString() {
-		return "Encargado [sucursal=" + sucursal + "]";
-	}
+        return "Encargado [idHotel=" + id_hotel + ", nombre=" + nombre + ", apellido=" + apellido + "]";
+    }
 
 	// metodos
 
+	
+
 	// Check-in
-	public static void realizarCheckin() {
-		try {
-			String idReservaStr = JOptionPane.showInputDialog("Ingrese ID de la reserva:");
-			if (idReservaStr == null)
-				return;
-			int idReserva = Integer.parseInt(idReservaStr);
-
-			String dni = JOptionPane.showInputDialog("Ingrese DNI del cliente:");
-			if (dni == null)
-				return;
-
-			String tarjeta = JOptionPane.showInputDialog("Ingrese número de tarjeta de resguardo:");
-			if (tarjeta == null)
-				return;
-
-			DtoEncargado.realizarCheckin(idReserva, dni, tarjeta);
-
-		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "Datos inválidos", "ERROR", 0);
-		}
-	}// fin
+	public static void realizarCheckin(int id_hotel) {
+        int idReserva = Validaciones.ValidarNum("Ingrese ID de la reserva:");
+        int dni = Validaciones.ValidarNum("Ingrese DNI del cliente:");
+        String tarjeta = Validaciones.ValidarContras("Ingrese número de tarjeta de resguardo:");
+        
+        DtoEncargado.realizarCheckin(idReserva, String.valueOf(dni), tarjeta, id_hotel);
+    }//fin
 
 	// Check-out
-	public static void realizarCheckout() {
-		try {
-			String idReservaStr = JOptionPane.showInputDialog("Ingrese ID de la reserva para check-out:");
-			if (idReservaStr == null)
-				return;
-			int idReserva = Integer.parseInt(idReservaStr);
-
-			DtoEncargado.realizarCheckout(idReserva);
-
-		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "ID inválido", "ERROR", 0);
-		}
-	}// fin
+	public static void realizarCheckout(int id_hotel) {
+        int idReserva = Validaciones.ValidarNum("Ingrese ID de la reserva para check-out:");
+        DtoEncargado.realizarCheckout(idReserva, id_hotel);
+    }//fin
 
 	// Ver reservas
-	public static void verReservas() {
-		List<Reserva> reservas = DtoEncargado.verTodasReservas();
+	public static void verReservas(int id_hotel) {
+        List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
 
-		if (reservas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay reservas registradas", "INFO", 1);
-			return;
-		}
+        if (reservas.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No hay reservas registradas para su hotel", "INFO", 1);
+            return;
+        }
 
-		StringBuilder sb = new StringBuilder("=== LISTA DE RESERVAS ===\n\n");
+        String texto = "=== RESERVAS DE MI HOTEL ===\n\n";
 
-		for (Reserva r : reservas) {
-			sb.append("ID: ").append(r.getId()).append(" | Cliente: ").append(r.getCliente().getNombre()).append(" ")
-					.append(r.getCliente().getApellido()).append(" | DNI: ").append(r.getCliente().getDni())
-					.append("\nHabitación: ").append(r.getPaquete().getHabitacion().getNumero()).append(" | Estado: ")
-					.append(r.getEstado()).append(" | Precio: $")
-					.append(String.format("%.2f", r.getPaquete().getPrecio())).append("\n");
+        for (Reserva r : reservas) {
+            texto += "ID: " + r.getId()
+                  + " | Cliente: " + r.getCliente().getNombre() + " " + r.getCliente().getApellido()
+                  + " | DNI: " + r.getCliente().getDni()
+                  + "\nHabitación: " + r.getPaquete().getHabitacion().getNumero()
+                  + " | Estado: " + r.getEstado()
+                  + " | Precio: $" + String.format("%.2f", r.getPaquete().getPrecio())
+                  + "\n";
 
-			if (r.getTarjeta_resguardo() != null) {
-				sb.append("Tarjeta: ").append(r.getTarjeta_resguardo()).append("\n");
-			}
+            if (r.getTarjeta_resguardo() != null) {
+                texto += "Tarjeta: " + r.getTarjeta_resguardo() + "\n";
+            }
 
-			sb.append("------------------------\n");
-		}
+            texto += "------------------------\n";
+        }
 
-		JOptionPane.showMessageDialog(null, sb.toString(), "RESERVAS", JOptionPane.INFORMATION_MESSAGE);
-	}
+        JOptionPane.showMessageDialog(null, texto, "RESERVAS", JOptionPane.INFORMATION_MESSAGE);
+    }//fin 
 	
 	//Ver habitaciones
-	public static void verHabitaciones() {
-		try {
-			String idHotelStr = JOptionPane.showInputDialog("Ingrese ID del hotel:");
-			if (idHotelStr == null)
-				return;
-			int idHotel = Integer.parseInt(idHotelStr);
+	public static void verHabitaciones(int id_hotel) {
+	    List<Habitacion> habitaciones = DtoEncargado.verHabitaciones(id_hotel);
 
-			List<Habitacion> habitaciones = DtoEncargado.verHabitaciones(idHotel);
+	    if (habitaciones.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No hay habitaciones en su hotel", "INFO", 1);
+	        return;
+	    }
 
-			if (habitaciones.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "No hay habitaciones en este hotel", "INFO", 1);
-				return;
-			}
+	    String texto = "=== HABITACIONES DE MI HOTEL ===\n\n";
 
-			StringBuilder sb = new StringBuilder("=== HABITACIONES DEL HOTEL ===\n\n");
+	    for (Habitacion h : habitaciones) {
+	        texto += "ID: " + h.getId()
+	              + " | Número: " + h.getNumero()
+	              + "\nTipo: " + h.getTipo()
+	              + " | Camas: " + h.getCant_camas()
+	              + "\nPrecio: $" + String.format("%.2f", h.getPrecio_noche())
+	              + " | Estado: " + h.getEstado()
+	              + "\n------------------------\n";
+	    }
 
-			for (Habitacion h : habitaciones) {
-				sb.append("ID: ").append(h.getId()).append(" | Número: ").append(h.getNumero()).append("\nTipo: ")
-						.append(h.getTipo()).append(" | Camas: ").append(h.getCant_camas()).append("\nPrecio: $")
-						.append(String.format("%.2f", h.getPrecio_noche())).append(" | Estado: ").append(h.getEstado())
-						.append("\n------------------------\n");
-			}
-
-			JOptionPane.showMessageDialog(null, sb.toString(), "HABITACIONES", 1);
-
-		} catch (NumberFormatException e) {
-			JOptionPane.showMessageDialog(null, "ID inválido", "ERROR", 0);
-		}
+	    JOptionPane.showMessageDialog(null, texto, "HABITACIONES", JOptionPane.INFORMATION_MESSAGE);
 	}//fin
 
-}
+}//final clase

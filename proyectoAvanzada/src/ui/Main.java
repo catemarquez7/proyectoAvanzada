@@ -29,7 +29,6 @@ public class Main {
                Usuario.redirigir(Inicio);
                
             }
-			
 			break;
 		case 1: //registrarse
 			
@@ -41,7 +40,6 @@ public class Main {
 			JOptionPane.showMessageDialog(null, "Hasta luego! ", "ADIOS!", 0);
 			
 			break;
-			
 		}//fin switch
 		
 		} while (eleccion != 2);

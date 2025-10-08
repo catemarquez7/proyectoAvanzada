@@ -279,6 +279,7 @@ public class Usuario extends Persona {
 	
 	public static void menuEncargado(Usuario usuario) {
         int opcion;
+        Encargado encargado = (Encargado) usuario;
         
         do {
         	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_enc.values(), repository.Acciones_enc.values());
@@ -286,22 +287,22 @@ public class Usuario extends Persona {
             switch(opcion) {
             	case 0:
             		//Reservas
-            		Encargado.verReservas();
+            		Encargado.verReservas(encargado.getId_hotel());
             		break;
                 case 1:
                 	//Habitaciones
-            		Encargado.verHabitaciones();
+            		Encargado.verHabitaciones(encargado.getId_hotel());
                     break;
                 case 2:
                     //Actividades
                     break;
                 case 3:
                     //Check_in
-                	Encargado.realizarCheckin();
+                	Encargado.realizarCheckin(encargado.getId_hotel());
                     break;
                 case 4:
                     //Check_out
-                	Encargado.realizarCheckout();
+                	Encargado.realizarCheckout(encargado.getId_hotel());
                     break;
                 case 5:
             		//Datos_cliente
