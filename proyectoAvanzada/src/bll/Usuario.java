@@ -252,7 +252,7 @@ public class Usuario extends Persona {
         int opcion;
         
         do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
             
             switch(opcion) {
             	case 0:
@@ -282,7 +282,7 @@ public class Usuario extends Persona {
         Encargado encargado = (Encargado) usuario;
         
         do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_enc.values(), repository.Acciones_enc.values());
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_enc.values(), repository.Acciones_enc.values());
             
             switch(opcion) {
             	case 0:
@@ -328,7 +328,7 @@ public class Usuario extends Persona {
         //Ver_hoteles, Gestionar_cuentas, Atrás;
         
         do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO" + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
+        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
             
             switch(opcion) {
             	case 0:
