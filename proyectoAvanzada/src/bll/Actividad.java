@@ -16,10 +16,11 @@ public class Actividad {
 	protected LocalDate inicioDate;
 	protected LocalDate finDate;
 	protected Hotel hotel;
+	protected String riesgo;
 	
 	//constructores
 	public Actividad(int id, String nombre, String categoria, int edad_minima, int edad_maxima, double duracion,
-			double precio, String locacion, LocalDate inicioDate, LocalDate finDate, Hotel hotel) {
+			double precio, String locacion, LocalDate inicioDate, LocalDate finDate, Hotel hotel, String riesgo) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
@@ -32,6 +33,7 @@ public class Actividad {
 		this.inicioDate = inicioDate;
 		this.finDate = finDate;
 		this.hotel = hotel;
+		this.riesgo = riesgo;
 	}
 	
 	public Actividad() {
@@ -127,14 +129,22 @@ public class Actividad {
 	public void setHotel(Hotel hotel) {
 		this.hotel = hotel;
 	}
-
 	
+	
+	public String getRiesgo() {
+		return riesgo;
+	}
+
+	public void setRiesgo(String riesgo) {
+		this.riesgo = riesgo;
+	}
+
 	//toString
 	@Override
 	public String toString() {
 		return "Actividad [id=" + id + ", nombre=" + nombre + ", categoria=" + categoria + ", edad_minima="
 				+ edad_minima + ", edad_maxima=" + edad_maxima + ", duracion=" + duracion + ", precio=" + precio
-				+ ", locacion=" + locacion + ", inicioDate=" + inicioDate + ", finDate=" + finDate + ", hotel=" + hotel
+				+ ", locacion=" + locacion + ", inicioDate=" + inicioDate + ", finDate=" + finDate + ", hotel=" + hotel + ", riesto=" + riesgo
 				+ "]";
 	}
 	

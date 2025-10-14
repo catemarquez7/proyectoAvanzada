@@ -262,7 +262,7 @@ public class Usuario extends Persona {
                 	//Realizar_reseñas
                     break;
                 case 2:
-                    //Preferencias
+        			JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas correctamente!":"No se pudo agregar.");
                     break;
                 case 3:
                     //Historial
