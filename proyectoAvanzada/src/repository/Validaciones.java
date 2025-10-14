@@ -21,19 +21,25 @@ public interface Validaciones {
 //validacion de ingreso de numeros (-0, enter, letras)
 
 	public static int ValidarNum(String mensaje) {
-		String data;
+		String data="";
 		boolean flag;
 		int numero = 0;
 
 		do {
 			flag = true;
+			try {
 			do {
-				data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO");
+				data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO", 0);
 				if (data.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "No puede haber espacios en blanco,\nvuelva a intentarlo",
 							"ERROR!", 0);
 				}
 			} while (data.isEmpty());
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "Cancelado");
+				break;
+				// COMPLETAR !!!!
+			}
 			for (int i = 0; i < data.length(); i++) {
 				if (!Character.isDigit(data.charAt(i))) {
 					JOptionPane.showMessageDialog(null,
@@ -65,7 +71,7 @@ public interface Validaciones {
 		do {
 			flag = true;
 			do {
-				data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO");
+				data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO", 0);
 				if (data.isEmpty()) {
 					JOptionPane.showMessageDialog(null, "No puede haber espacios en blanco,\nvuelva a intentarlo",
 							"ERROR!", 0);
@@ -90,7 +96,7 @@ public interface Validaciones {
 		String data;
 
 		do {
-			data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO");
+			data = (String) JOptionPane.showInputDialog(null, mensaje, "INGRESO", 0);
 			if (data.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "No puede haber espacios en blanco,\nvuelva a intentarlo", "ERROR!", 0);
 			}

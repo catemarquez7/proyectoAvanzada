@@ -69,7 +69,7 @@ public class DtoEncargado {
 				JOptionPane.showMessageDialog(null, "Reserva no encontrada, ya procesada o no pertenece a su hotel",
 						"ERROR", 0);
 				return false;
-			}
+			}	
 
 			int dni = rs.getInt("dni");
 			int id_habitacion = rs.getInt("id_habitacion");
