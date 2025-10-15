@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import dll.DtoCliente;
-import dll.DtoEncargado;
 
 public class Cliente extends Usuario{
 

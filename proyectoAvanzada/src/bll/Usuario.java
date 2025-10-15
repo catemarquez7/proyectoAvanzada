@@ -343,20 +343,29 @@ public class Usuario extends Persona {
 	                Administrador.verReservas();
 	                break;
 	            case 3:
-	                //Ver_paquetes
-	                Administrador.verPaquetes();
+	            	//Modificar_reserva
+	                Administrador.modificarReserva();
 	                break;
 	            case 4:
+	            	//Ver_paquetes
+	                Administrador.verPaquetes();
+	            case 5:
+	              //Modificar_paquete
+	                Administrador.modificarPaquete();
+	                break;
+	            case 6:
 	                //Gestionar_cuentas
 	                Administrador.gestionarCuentas();
 	                break;
-	            case 5:
+	            case 7:
 	                //Cerrar_Sesión
 	                JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 	                break;
 	        }
 	        
-	    } while(opcion != 5);
+	    } while(opcion != 7);
+	
+	
 	}//fin
 
 }//FIN USUARIO

@@ -23,7 +23,7 @@ public class DtoAdministrador {
 
     private static Connection conx = Conexion.getInstance().getConnection();
 
-    // =============== VER HOTELES ===============
+    // Ver hoteles
     public static List<Hotel> verHoteles() {
         List<Hotel> hoteles = new ArrayList<>();
         
@@ -51,7 +51,7 @@ public class DtoAdministrador {
         return hoteles;
     }
 
-    // =============== MODIFICAR HOTEL ===============
+    // Modificar hotel
     public static boolean modificarHotel(int idHotel, String nuevoNombre) {
         try {
             PreparedStatement stmt = conx.prepareStatement(
@@ -74,7 +74,220 @@ public class DtoAdministrador {
         return false;
     }
 
-    // =============== VER RESERVAS ===============
+    // Modificar paquetes
+    public static boolean modificarPaquete(int idPaquete, LocalDate fechaInicio, LocalDate fechaFin, 
+                                          double precio, int idHotel, Integer idHabitacion, Integer idActividad) {
+        try {
+            PreparedStatement stmt = conx.prepareStatement(
+                "UPDATE paquete SET fecha_inicio = ?, fecha_fin = ?, precio = ?, " +
+                "id_hotel = ?, id_habitacion = ?, id_actividad = ? WHERE id = ?");
+            
+            stmt.setDate(1, java.sql.Date.valueOf(fechaInicio));
+            stmt.setDate(2, java.sql.Date.valueOf(fechaFin));
+            stmt.setDouble(3, precio);
+            stmt.setInt(4, idHotel);
+            
+            if (idHabitacion != null) {
+                stmt.setInt(5, idHabitacion);
+            } else {
+                stmt.setNull(5, java.sql.Types.INTEGER);
+            }
+            
+            if (idActividad != null) {
+                stmt.setInt(6, idActividad);
+            } else {
+                stmt.setNull(6, java.sql.Types.INTEGER);
+            }
+            
+            stmt.setInt(7, idPaquete);
+            
+            int filas = stmt.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(null, "Paquete modificado exitosamente", "ÉXITO", 1);
+                return true;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al modificar paquete: " + e.getMessage(), "ERROR", 0);
+        }
+        return false;
+    }
+
+    // Modificar reserva
+    public static boolean modificarReserva(int idReserva, int idUsuario, int idPaquete, String estado, 
+                                          LocalDateTime fechaCheckin, LocalDateTime fechaCheckout, 
+                                          String tarjeta, double montoFinal) {
+        try {
+            PreparedStatement stmt = conx.prepareStatement(
+                "UPDATE reserva SET id_usuario = ?, id_paquete = ?, estado = ?, " +
+                "fecha_checkin = ?, fecha_checkout = ?, tarjeta_resguardo = ?, monto_final = ? " +
+                "WHERE id = ?");
+            
+            stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idPaquete);
+            stmt.setString(3, estado);
+            
+            if (fechaCheckin != null) {
+                stmt.setTimestamp(4, java.sql.Timestamp.valueOf(fechaCheckin));
+            } else {
+                stmt.setNull(4, java.sql.Types.TIMESTAMP);
+            }
+            
+            if (fechaCheckout != null) {
+                stmt.setTimestamp(5, java.sql.Timestamp.valueOf(fechaCheckout));
+            } else {
+                stmt.setNull(5, java.sql.Types.TIMESTAMP);
+            }
+            
+            stmt.setString(6, tarjeta);
+            stmt.setDouble(7, montoFinal);
+            stmt.setInt(8, idReserva);
+            
+            int filas = stmt.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(null, "Reserva modificada exitosamente", "ÉXITO", 1);
+                return true;
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al modificar reserva: " + e.getMessage(), "ERROR", 0);
+        }
+        return false;
+    }
+
+    // Crear user
+    public static boolean crearUsuario(Usuario usuario) {
+        try {
+            PreparedStatement statement = conx.prepareStatement(
+                "INSERT INTO usuario (nombre, apellido, fecha_nac, mail, dni, direccion, user, pass, " +
+                "pregunta, respuesta, fecha_creacion, tipo_usuario, estado) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                java.sql.Statement.RETURN_GENERATED_KEYS);
+
+            statement.setString(1, usuario.getNombre());
+            statement.setString(2, usuario.getApellido());
+            statement.setDate(3, java.sql.Date.valueOf(usuario.getFecha_nac()));
+            statement.setString(4, usuario.getMail());
+            statement.setInt(5, usuario.getDni());
+            statement.setString(6, usuario.getDireccion());
+            statement.setString(7, usuario.getUser());
+            statement.setString(8, repository.Encriptador.encriptar(usuario.getPass()));
+            statement.setString(9, usuario.getPregunta());
+            statement.setString(10, usuario.getRespuesta());
+            statement.setDate(11, java.sql.Date.valueOf(usuario.getFecha_creacion()));
+            statement.setString(12, usuario.getTipo_usuario());
+            statement.setString(13, usuario.getEstado());
+
+            int filas = statement.executeUpdate();
+            
+            if (filas > 0) {
+                // Obtener el ID generado
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int idGenerado = generatedKeys.getInt(1);
+                    usuario.setId(idGenerado);
+                }
+                
+                JOptionPane.showMessageDialog(null, "Usuario creado exitosamente", "ÉXITO", 1);
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al crear usuario: " + e.getMessage(), "ERROR", 0);
+            return false;
+        }
+
+        return false;
+    }
+
+    // Creae encargado
+    public static boolean crearEncargado(int idUsuario, int idHotel) {
+        try {
+            PreparedStatement statement = conx.prepareStatement(
+                "INSERT INTO encargado (id_usuario, id_hotel) VALUES (?, ?)");
+
+            statement.setInt(1, idUsuario);
+            statement.setInt(2, idHotel);
+
+            int filas = statement.executeUpdate();
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(null, "Encargado asignado al hotel exitosamente", "ÉXITO", 1);
+                return true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error al asignar encargado: " + e.getMessage(), "ERROR", 0);
+            return false;
+        }
+
+        return false;
+    }
+
+    // Habitaciones
+    public static List<Habitacion> obtenerHabitacionesPorHotel(int idHotel) {
+        List<Habitacion> habitaciones = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conx.prepareStatement(
+                "SELECT h.*, hot.nombre as nombre_hotel FROM habitacion h " +
+                "INNER JOIN hotel hot ON h.id_hotel = hot.id WHERE h.id_hotel = ?");
+            stmt.setInt(1, idHotel);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setId(idHotel);
+                hotel.setNombre(rs.getString("nombre_hotel"));
+                
+                Habitacion hab = new Habitacion(hotel, rs.getInt("id"), rs.getInt("numero"), 
+                    rs.getString("estado"), rs.getString("tipo"), 
+                    rs.getDouble("precio"), rs.getInt("cant_camas"));
+                habitaciones.add(hab);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return habitaciones;
+    }
+
+    // Act por id hoetl
+    public static List<Actividad> obtenerActividadesPorHotel(int idHotel) {
+        List<Actividad> actividades = new ArrayList<>();
+        
+        try {
+            PreparedStatement stmt = conx.prepareStatement(
+                "SELECT a.*, h.nombre as nombre_hotel FROM actividad a " +
+                "INNER JOIN hotel h ON a.id_hotel = h.id WHERE a.id_hotel = ?");
+            stmt.setInt(1, idHotel);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Hotel hotel = new Hotel();
+                hotel.setId(idHotel);
+                hotel.setNombre(rs.getString("nombre_hotel"));
+                
+                Actividad act = new Actividad(rs.getInt("id"), rs.getString("nombre"), 
+                    rs.getString("categoria"), rs.getInt("edad_minima"), rs.getInt("edad_maxima"),
+                    rs.getDouble("duracion"), rs.getDouble("precio"), rs.getString("locacion"),
+                    rs.getDate("fecha_inicio").toLocalDate(), rs.getDate("fecha_fin").toLocalDate(),
+                    hotel, rs.getString("riesgo"));
+                actividades.add(act);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return actividades;
+    }
+
+    // Ver reservas
     public static List<Reserva> verReservas() {
         List<Reserva> reservas = new ArrayList<>();
         
@@ -195,7 +408,7 @@ public class DtoAdministrador {
         return reservas;
     }
 
-    // =============== VER PAQUETES ===============
+    // Ver paq
     public static List<Paquete> verPaquetes() {
         List<Paquete> paquetes = new ArrayList<>();
         
@@ -242,7 +455,7 @@ public class DtoAdministrador {
                         tipoHab, precioHab, cantCamas);
                 }
                 
-                // Datos de la actividad
+                // Datos de la activida
                 Actividad actividad = null;
                 if (rs.getObject("act.id") != null) {
                     int idAct = rs.getInt("act.id");
@@ -261,7 +474,7 @@ public class DtoAdministrador {
                         duracion, precioAct, locacion, inicioAct, finAct, hotel, riesgo);
                 }
                 
-                // Crear paquete
+                // Crear paqu
                 Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, 
                     hotel, habitacion, actividad);
                 
@@ -336,7 +549,7 @@ public class DtoAdministrador {
         return false;
     }
 
-    // Desbloquear cuenta de usuario
+    // Desbloquear cuenta
     public static boolean desbloquearCuenta(int idUsuario) {
         try {
             PreparedStatement stmt = conx.prepareStatement(
@@ -356,7 +569,7 @@ public class DtoAdministrador {
         return false;
     }
 
-    // Eliminar cuenta de usuario
+    // Eliminar cuenta
     public static boolean eliminarCuenta(int idUsuario) {
         try {
             PreparedStatement stmt = conx.prepareStatement(
@@ -381,28 +594,28 @@ public class DtoAdministrador {
         StringBuilder stats = new StringBuilder();
         
         try {
-            // Total de usuarios
+            // Total usuarios
             PreparedStatement stmt1 = conx.prepareStatement("SELECT COUNT(*) as total FROM usuario");
             ResultSet rs1 = stmt1.executeQuery();
             if (rs1.next()) {
                 stats.append("Total de usuarios: ").append(rs1.getInt("total")).append("\n");
             }
             
-            // Total de clientes
+            // Total clientes
             PreparedStatement stmt2 = conx.prepareStatement("SELECT COUNT(*) as total FROM usuario WHERE tipo_usuario = '1'");
             ResultSet rs2 = stmt2.executeQuery();
             if (rs2.next()) {
                 stats.append("Clientes: ").append(rs2.getInt("total")).append("\n");
             }
             
-            // Total de encargados
+            // Total encargados
             PreparedStatement stmt3 = conx.prepareStatement("SELECT COUNT(*) as total FROM usuario WHERE tipo_usuario = '2'");
             ResultSet rs3 = stmt3.executeQuery();
             if (rs3.next()) {
                 stats.append("Encargados: ").append(rs3.getInt("total")).append("\n");
             }
             
-            // Total de administradores
+            // Total admins
             PreparedStatement stmt4 = conx.prepareStatement("SELECT COUNT(*) as total FROM usuario WHERE tipo_usuario = '3'");
             ResultSet rs4 = stmt4.executeQuery();
             if (rs4.next()) {
@@ -416,7 +629,7 @@ public class DtoAdministrador {
                 stats.append("Total de reservas: ").append(rs5.getInt("total")).append("\n");
             }
             
-            // Total de hoteles
+            // Total hoteles
             PreparedStatement stmt6 = conx.prepareStatement("SELECT COUNT(*) as total FROM hotel");
             ResultSet rs6 = stmt6.executeQuery();
             if (rs6.next()) {
