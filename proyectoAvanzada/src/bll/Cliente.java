@@ -77,12 +77,14 @@ public class Cliente extends Usuario{
         }
 
         JOptionPane.showMessageDialog(null, texto, "PAQUETES", JOptionPane.INFORMATION_MESSAGE);
-    }//fin 
+    }
 	
 	
 	//Reservar_paquetes
-		
-		
+	
+	
+	//Cancelar_reserva
+
 		
 	//Menu_preferencias
 	public static void preferencias(Usuario usuario) {
@@ -139,14 +141,5 @@ public class Cliente extends Usuario{
 			return DtoCliente.ingresarPreferencias(preferencias);
 		}
 		
-		
-	//Cancelar_reserva
-		
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -150,10 +150,6 @@ public class DtoCliente {
 		}
 		
 		
-		
-		
-		
-		
 		//Cancelar paquete
 		
 					//aca directamente se elimina de las reservas del cliente segun el id, desde el panel de reservas ya hechas
