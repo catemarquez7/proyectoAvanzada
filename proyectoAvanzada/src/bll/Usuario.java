@@ -324,26 +324,39 @@ public class Usuario extends Persona {
 	
 	
 	public static void menuAdmin(Usuario usuario) {
-        int opcion;
-        //Ver_hoteles, Gestionar_cuentas, Atrás;
-        
-        do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
-            
-            switch(opcion) {
-            	case 0:
-            		//Reservas
-            		break;
-                case 1:
-                	//Habitaciones
-                    break;
-                case 2:
-                    //Atras
-                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-                    break;
-            }
-            
-        } while(opcion != 2);
-    }//fin
+	    int opcion;
+	    
+	    do {
+	        opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
+	        
+	        switch(opcion) {
+	            case 0:
+	                //Ver_hoteles
+	                Administrador.verHoteles();
+	                break;
+	            case 1:
+	                //Modificar_hotel
+	                Administrador.modificarHotel();
+	                break;
+	            case 2:
+	                //Ver_reservas
+	                Administrador.verReservas();
+	                break;
+	            case 3:
+	                //Ver_paquetes
+	                Administrador.verPaquetes();
+	                break;
+	            case 4:
+	                //Gestionar_cuentas
+	                Administrador.gestionarCuentas();
+	                break;
+	            case 5:
+	                //Cerrar_Sesión
+	                JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+	                break;
+	        }
+	        
+	    } while(opcion != 5);
+	}//fin
 
 }//FIN USUARIO
