@@ -255,22 +255,22 @@ public class Usuario extends Persona {
         	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
             
             switch(opcion) {
-            	case 0:
+            		case 0:
             		//Reservas
             		break;
                 case 1:
                 	//Realizar_reseñas
-                    break;
+                break;
                 case 2:
-        			JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas correctamente!":"No se pudo agregar.");
-                    break;
+                		Cliente.preferencias(usuario);
+                break;
                 case 3:
-                    //Historial
-                    break;
+                //Historial
+                break;
                 case 4:
-                    //Atras
-                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-                    break;
+                //Atras
+                		JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+                break;
             }
             
         } while(opcion != 4);

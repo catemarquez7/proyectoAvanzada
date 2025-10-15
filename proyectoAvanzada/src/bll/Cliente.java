@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 
 import dll.DtoCliente;
 import dll.DtoEncargado;
+import repository.Actividades_categoria;
+import repository.SiNoOpcion;
 
 public class Cliente extends Usuario{
 
@@ -50,7 +52,7 @@ public class Cliente extends Usuario{
 	
 	
 	//metodos
-	//Ver paquetes
+	//Ver_paquetes
 	public static void verPaquetes(Usuario usuario) {
         List<Paquete> paquetes = DtoCliente.verPaquetes(usuario.getId());
 
@@ -78,72 +80,67 @@ public class Cliente extends Usuario{
     }//fin 
 	
 	
-	//Reservar paquetes
+	//Reservar_paquetes
 		
 		
 		
-	//Ingresar preferencias
-	public static boolean ingresarPreferencias(Usuario usuario) {
+	//Menu_preferencias
+	public static void preferencias(Usuario usuario) {
 				
-		int categoriaNum, riesgoNum;
 		double duracion;
 		String categoria="", riesgo= "";
+		String opcion="";
 		
-		duracion = repository.Validaciones.ValidarNum("Ingrese la duracion ideal de la actividad, en horas:");
 		
-		categoriaNum = (int)JOptionPane.showInputDialog(null, "Seleccione la categoria de su interes", "SELECCION", 0, null, repository.Actividades_categoria.values(), repository.Actividades_categoria.values());
-		
-		riesgoNum = (int)JOptionPane.showInputDialog(null, "Desea un alto nivel de riesgo?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());
-		
-		switch (categoriaNum) {
-		case 0:
-			categoria = "cultural";
-			break;
-		case 1:
-			categoria = "entretenimiento";
-			break;
-		case 2:
-			categoria = "deportivo";
-			break;
-		case 3:
-			categoria = "aventura";
-			break;
-		case 4:
-			categoria = "recreativo";
-			break;
-		case 5:
-			categoria = "naturaleza";
-			break;
-		case 6:
-			categoria = "gastronómico";
-			break;
-		
-		} 
-		
-		// HACER QUE PUEDA ELEGIR MAS DE UNA CATEGORIA !!!!!
-		// ver si hacemos otro panel para modificarlas o si directamente llene esto otra vez y listo
+		if (DtoCliente.preferenciasExistentes(usuario)) {
+			
+			JOptionPane.showMessageDialog(null, 	DtoCliente.mostrarPreferencias(usuario));
+			
+			SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea modificar sus preferencias?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+			
+			opcion = opcionEnum.toString();
+			
+			switch (opcion) {
+			case "Si": 
+				JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas/modificadas correctamente!":"No se pudo agregar.");
+				break;
+			case "No": 
+				break;
+			}
+			
+			
+		} else {
 
-		
-		switch (riesgoNum) {
-		case 0:
-			riesgo = "Si";
-			break;
-		case 1:
-			riesgo = "No";
-			break;
+			JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas/modificadas correctamente!":"No se pudo agregar.");
 
 		}
-			
-		Preferencias preferencias = new Preferencias(categoria, riesgo, duracion, usuario.getId());
-		return DtoCliente.ingresarPreferencias(preferencias);
+		
+		
 	}
 		
+	
+	
+	//Ingresar_preferencias
+		public static boolean ingresarPreferencias(Usuario usuario) {
+			double duracion;
+			String categoria="", riesgo= "";
+			duracion = repository.Validaciones.ValidarNum("Ingrese la duracion ideal de la actividad, en horas:");
+			
+			Actividades_categoria categoriaEnum = (Actividades_categoria) JOptionPane.showInputDialog(null, "Seleccione la categoria de su interes", "SELECCION", 0, null, repository.Actividades_categoria.values(), repository.Actividades_categoria.values());
+			
+			SiNoOpcion riesgoEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea un alto nivel de riesgo?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());
+			
+			
+			categoria = categoriaEnum.toString();
+			riesgo = riesgoEnum.toString();
+			
+			Preferencias preferencias = new Preferencias(categoria, riesgo, duracion, usuario.getId());
+			
+			return DtoCliente.ingresarPreferencias(preferencias);
+		}
 		
-	//Modificar preferencias
 		
-		
-		
-	//Cancelar paquete
+	//Cancelar_reserva
 		
 	
 	
