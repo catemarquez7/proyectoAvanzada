@@ -349,6 +349,7 @@ public class Usuario extends Persona {
 	            case 4:
 	            	//Ver_paquetes
 	                Administrador.verPaquetes();
+	                break;
 	            case 5:
 	              //Modificar_paquete
 	                Administrador.modificarPaquete();
