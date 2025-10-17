@@ -3,15 +3,19 @@ package bll;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
 import dll.DtoCliente;
+import dll.DtoEncargado;
+import repository.Actividades_categoria;
+import repository.SiNoOpcion;
 
 public class Cliente extends Usuario{
 
 	//atributos
-	protected LinkedList<Reserva> reservas;
+	protected LinkedList<Reserva> reservas = new LinkedList<Reserva>();
 	
 	//constructores
 	
@@ -49,106 +53,169 @@ public class Cliente extends Usuario{
 	
 	
 	//metodos
-	//Ver paquetes
-	public static void verPaquetes(Usuario usuario) {
-        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario.getId());
+	//Ver_paquetes
+	public static void verPaquetes(Usuario usuario, Cliente cliente) {
+		
+        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario);
 
         if (paquetes.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay paquetes disponibles.", "INFO", 1);
             return;
         }
 
-        String texto = "=== PAQUETES DISPONIBLES PARA USTED ===\n\n";
+        String texto = "=== EXPLORAR PAQUETES RECOMENDADOS ===\n\n";
 
         for (Paquete p : paquetes) {
-            texto += "ID: " + p.getId()
-                  + " | Hotel: " + p.getHotel()
-                  + " | Ubicacion: " + p.getHotel().getProvincia()
-                  + " | Actividad: " + p.getActividad().getNombre()
-                  + "\nFecha inicio: " + p.getActividad().getInicioDate()
-                  + " | Fecha fin: " + p.getActividad().getFinDate()
-                  + "\nPrecio total: " + p.getPrecio()
-                  + "\n";
+            texto += "Hotel: " + p.getHotel().getNombre()
+                   + " | Actividad: " + p.getActividad().getNombre()
+                   + " | Provincia: " + p.getHotel().getProvincia()
+                   + "\nInicio: " + p.getInicioDate()
+                   + " | Fin: " + p.getFinDate()
+                   + " | Precio: $" + String.format("%.2f", p.getPrecio())
+                   + "\n";
 
             texto += "------------------------\n";
         }
-
+        
         JOptionPane.showMessageDialog(null, texto, "PAQUETES", JOptionPane.INFORMATION_MESSAGE);
-    }//fin 
+        
+        SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea reservar algun paquete?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+		
+		String opcion = opcionEnum.toString();
+		
+		switch (opcion) {
+		case "Si": 
+			JOptionPane.showMessageDialog(null, Cliente.reservarPaquete(usuario, paquetes, cliente)==true?"Excelente!\nSu paquete ha sido reservado con exito":"No se pudo reservar.");
+			break;
+		case "No": 
+			break;
+		}
+        
+        
+	
+	}
 	
 	
-	//Reservar paquetes
+	
+	//Reservar_paquetes
+	public static boolean reservarPaquete(Usuario usuario, List<Paquete> paquetes, Cliente cliente ) {
 		
-		
-		
-	//Ingresar preferencias
-	public static boolean ingresarPreferencias(Usuario usuario) {
+		String[] opciones = new String[paquetes.size()];
+	    for (int i = 0; i < paquetes.size(); i++) {
+	        Paquete p = paquetes.get(i);
+	        opciones[i] = p.getHotel().getNombre()
+	                   + " | " + p.getActividad().getNombre()
+	                   + " | Precio: $" + String.format("%.2f", p.getPrecio());
+	    }
+
+	    String seleccion = (String) JOptionPane.showInputDialog(
+	        null, "Seleccione un paquete para reservar:", "Reservar Paquete", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+
+	    if (seleccion == null) {
+	        return false; 
+	    }
+
+	    Paquete paqueteSeleccionado = null;
+	    for (Paquete p : paquetes) {
+	        String texto = p.getHotel().getNombre()
+	                     + " | " + p.getActividad().getNombre()
+	                     + " | Precio: $" + String.format("%.2f", p.getPrecio());
+	        if (texto.equals(seleccion)) {
+	            paqueteSeleccionado = p;
+	            break;
+	        }
+	    }
+
+	    return DtoCliente.reservarPaquete(usuario, paqueteSeleccionado, cliente);
+	}
+	
+	//Ver_reservas
+	
+	public static void verReservas(LinkedList<Reserva> reservas) {
+		 if (reservas.isEmpty()) {
+			 JOptionPane	.showMessageDialog(null, "Usted no ha realizado ninguna reserva todavia.");
+			 } else {
 				
-		int categoriaNum, riesgoNum;
+			
+
+		    String texto = "=== MIS RESERVAS ===\n\n";
+
+		    for (Reserva r : reservas) {
+		        texto += "ID Reserva: " + r.getId()
+		               + " | Hotel: " + r.getPaquete().getHotel().getNombre()
+		               + "\nInicio: " + r.getPaquete().getInicioDate()
+		               + " | Fin: " + r.getPaquete().getFinDate()
+		               + " | Precio: $" + String.format("%.2f", r.getPaquete().getPrecio())
+		               + "\n\n";
+
+		        texto += "------------------------\n\n";
+		    }
+		    
+			 JOptionPane	.showMessageDialog(null, texto);
+			 }
+
+	}
+	
+
+	
+	
+	//Cancelar_reserva
+
+		
+	//Menu_preferencias
+	public static void preferencias(Usuario usuario) {
+				
 		double duracion;
 		String categoria="", riesgo= "";
+		String opcion="";
 		
-		duracion = repository.Validaciones.ValidarNum("Ingrese la duracion ideal de la actividad, en horas:");
 		
-		categoriaNum = (int)JOptionPane.showInputDialog(null, "Seleccione la categoria de su interes", "SELECCION", 0, null, repository.Actividades_categoria.values(), repository.Actividades_categoria.values());
-		
-		riesgoNum = (int)JOptionPane.showInputDialog(null, "Desea un alto nivel de riesgo?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());
-		
-		switch (categoriaNum) {
-		case 0:
-			categoria = "cultural";
-			break;
-		case 1:
-			categoria = "entretenimiento";
-			break;
-		case 2:
-			categoria = "deportivo";
-			break;
-		case 3:
-			categoria = "aventura";
-			break;
-		case 4:
-			categoria = "recreativo";
-			break;
-		case 5:
-			categoria = "naturaleza";
-			break;
-		case 6:
-			categoria = "gastronómico";
-			break;
-		
-		} 
-		
-		// HACER QUE PUEDA ELEGIR MAS DE UNA CATEGORIA !!!!!
-		// ver si hacemos otro panel para modificarlas o si directamente llene esto otra vez y listo
+		if (DtoCliente.preferenciasExistentes(usuario)) {
+			
+			JOptionPane.showMessageDialog(null, 	DtoCliente.mostrarPreferencias(usuario));
+			
+			SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea modificar sus preferencias?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+			
+			opcion = opcionEnum.toString();
+			
+			switch (opcion) {
+			case "Si": 
+				JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas/modificadas correctamente!":"No se pudo agregar.");
+				break;
+			case "No": 
+				break;
+			}
+			
+			
+		} else {
 
-		
-		switch (riesgoNum) {
-		case 0:
-			riesgo = "Si";
-			break;
-		case 1:
-			riesgo = "No";
-			break;
+			JOptionPane.showMessageDialog(null, Cliente.ingresarPreferencias(usuario)==true?"Preferencias agregadas/modificadas correctamente!":"No se pudo agregar.");
 
 		}
-			
-		Preferencias preferencias = new Preferencias(categoria, riesgo, duracion, usuario.getId());
-		return DtoCliente.ingresarPreferencias(preferencias);
+		
+		
 	}
 		
+	
+	
+	//Ingresar_preferencias
+		public static boolean ingresarPreferencias(Usuario usuario) {
+			double duracion;
+			String categoria="", riesgo= "";
+			duracion = repository.Validaciones.ValidarNum("Ingrese la duracion ideal de la actividad, en horas:");
+			
+			Actividades_categoria categoriaEnum = (Actividades_categoria) JOptionPane.showInputDialog(null, "Seleccione la categoria de su interes", "SELECCION", 0, null, repository.Actividades_categoria.values(), repository.Actividades_categoria.values());
+			
+			SiNoOpcion riesgoEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea un alto nivel de riesgo?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());
+			
+			
+			categoria = categoriaEnum.toString();
+			riesgo = riesgoEnum.toString();
+			
+			Preferencias preferencias = new Preferencias(categoria, riesgo, duracion, usuario.getId());
+			
+			return DtoCliente.ingresarPreferencias(preferencias);
+		}
 		
-	//Modificar preferencias
-		
-		
-		
-	//Cancelar paquete
-		
-	
-	
-	
-	
-	
-	
-	
+
 }
