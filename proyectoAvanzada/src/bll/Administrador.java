@@ -94,7 +94,7 @@ public class Administrador extends Usuario {
 
 	// Ver reservas
 	public static void verReservas() {
-		
+
 		List<Hotel> hoteles = DtoAdministrador.verHoteles();
 
 		if (hoteles.isEmpty()) {
@@ -112,8 +112,7 @@ public class Administrador extends Usuario {
 				"VER RESERVAS", JOptionPane.QUESTION_MESSAGE, null, opcionesHoteles, opcionesHoteles[0]);
 
 		int idHotel = Integer.parseInt(seleccion.split(" - ")[0]);
-		
-		
+
 		List<Reserva> reservas = DtoAdministrador.verReservas(idHotel);
 
 		if (reservas.isEmpty()) {
@@ -145,25 +144,26 @@ public class Administrador extends Usuario {
 
 	// Modificar reserva
 	public static void modificarReserva() {
-		
+
 		List<Hotel> hoteles = DtoAdministrador.verHoteles();
 		if (hoteles.isEmpty()) {
-		    JOptionPane.showMessageDialog(null, "No hay hoteles registrados.", "INFO", 1);
-		    return;
+			JOptionPane.showMessageDialog(null, "No hay hoteles registrados.", "INFO", 1);
+			return;
 		}
 
 		String[] opcionesHoteles = new String[hoteles.size()];
 		for (int i = 0; i < hoteles.size(); i++) {
-		    Hotel h = hoteles.get(i);
-		    opcionesHoteles[i] = h.getId() + " - " + h.getNombre() + " (" + h.getProvincia() + ")";
+			Hotel h = hoteles.get(i);
+			opcionesHoteles[i] = h.getId() + " - " + h.getNombre() + " (" + h.getProvincia() + ")";
 		}
 
 		String hotelSel = (String) JOptionPane.showInputDialog(null, "Seleccione el hotel:", "HOTEL",
-		        JOptionPane.QUESTION_MESSAGE, null, opcionesHoteles, opcionesHoteles[0]);
+				JOptionPane.QUESTION_MESSAGE, null, opcionesHoteles, opcionesHoteles[0]);
 
-		if (hotelSel == null) return;
+		if (hotelSel == null)
+			return;
 		int idHotel = Integer.parseInt(hotelSel.split(" - ")[0]);
-		
+
 		List<Reserva> reservas = DtoAdministrador.verReservas(idHotel);
 
 		if (reservas.isEmpty()) {
@@ -210,22 +210,23 @@ public class Administrador extends Usuario {
 		// Seleccionar paquete
 		List<Paquete> paquetes = DtoAdministrador.verPaquetes(idHotel);
 
-	    if (paquetes.isEmpty()) {
-	        JOptionPane.showMessageDialog(null, "No hay paquetes para este hotel.", "INFO", 1);
-	        return;
-	    }
+		if (paquetes.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "No hay paquetes para este hotel.", "INFO", 1);
+			return;
+		}
 
-	    String[] opcionesPaquetes = new String[paquetes.size()];
-	    for (int i = 0; i < paquetes.size(); i++) {
-	        Paquete p = paquetes.get(i);
-	        opcionesPaquetes[i] = p.getId() + " - " + p.getHotel().getNombre() + " - $" + p.getPrecio();
-	    }
+		String[] opcionesPaquetes = new String[paquetes.size()];
+		for (int i = 0; i < paquetes.size(); i++) {
+			Paquete p = paquetes.get(i);
+			opcionesPaquetes[i] = p.getId() + " - " + p.getHotel().getNombre() + " - $" + p.getPrecio();
+		}
 
-	    String paqueteSel = (String) JOptionPane.showInputDialog(null, "Seleccione el paquete:", "PAQUETE",
-	            JOptionPane.QUESTION_MESSAGE, null, opcionesPaquetes, opcionesPaquetes[0]);
+		String paqueteSel = (String) JOptionPane.showInputDialog(null, "Seleccione el paquete:", "PAQUETE",
+				JOptionPane.QUESTION_MESSAGE, null, opcionesPaquetes, opcionesPaquetes[0]);
 
-	    if (paqueteSel == null) return;
-	    int idPaquete = Integer.parseInt(paqueteSel.split(" - ")[0]);
+		if (paqueteSel == null)
+			return;
+		int idPaquete = Integer.parseInt(paqueteSel.split(" - ")[0]);
 
 		// Seleccionar estado
 		String[] estados = { "pendiente", "activa", "finalizada", "cancelada" };
