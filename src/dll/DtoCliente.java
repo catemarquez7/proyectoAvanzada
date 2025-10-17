@@ -26,7 +26,7 @@ public class DtoCliente {
 	
 	
 		//Ver paquetes
-		public static List<Paquete> verPaquetes(Usuario usuario) {
+		public static List<Paquete> verPaquetes(Usuario usuario, Cliente cliente) {
 			
 		    List<Paquete> paquetes = new ArrayList<>();
 			
@@ -78,9 +78,8 @@ public class DtoCliente {
 		                Paquete paquete = new Paquete();
 		                paquete.setId(rsPaq.getInt("id"));
 		                paquete.setPrecio(rsPaq.getDouble("precio"));
-		                paquete.setInicioDate(rsPaq.getDate("fecha_inicio"));
-		                paquete.setFinDate(
-		                    rsPaq.getDate("fecha_fin"));
+		                paquete.setInicioDate(rsPaq.getDate("fecha_inicio").toLocalDate());
+		                paquete.setFinDate(rsPaq.getDate("fecha_fin").toLocalDate());
 
 		                paquete.setActividad(actividad);
 
@@ -205,8 +204,8 @@ public class DtoCliente {
 		            // Crear paquete
 		            bll.Paquete paquete = new bll.Paquete();
 		            paquete.setId(rs.getInt("id_paquete"));
-		            paquete.setInicioDate(rs.getDate("fecha_inicio"));
-		            paquete.setFinDate(rs.getDate("fecha_fin"));
+		            paquete.setInicioDate(rs.getDate("fecha_inicio").toLocalDate());
+		            paquete.setFinDate(rs.getDate("fecha_fin").toLocalDate());
 		            paquete.setPrecio(rs.getDouble("precio"));
 		            paquete.setHotel(hotel);
 		            paquete.setActividad(actividad);

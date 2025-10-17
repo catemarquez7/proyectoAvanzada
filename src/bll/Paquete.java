@@ -1,6 +1,5 @@
 package bll;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 public class Paquete {
@@ -8,8 +7,8 @@ public class Paquete {
 	//atributos
 	protected int id;
 	protected String nombre;
-	protected Date inicioDate;
-	protected Date finDate;
+	protected LocalDate inicioDate;
+	protected LocalDate finDate;
 	protected double precio;
 	protected Hotel hotel;
 	protected Habitacion habitacion;
@@ -17,9 +16,20 @@ public class Paquete {
 	
 	
 	//constructores
-	public Paquete(String nombre, int id, Date inicioDate, Date finDate, double precio, Hotel hotel, Habitacion habitacion,
+	public Paquete(String nombre, int id, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel, Habitacion habitacion,
 			Actividad actividad) {
 		this.nombre = nombre;
+		this.id = id;
+		this.inicioDate = inicioDate;
+		this.finDate = finDate;
+		this.precio = precio;
+		this.hotel = hotel;
+		this.habitacion = habitacion;
+		this.actividad = actividad;
+	}
+	
+	public Paquete(int id, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel, Habitacion habitacion,
+			Actividad actividad) {
 		this.id = id;
 		this.inicioDate = inicioDate;
 		this.finDate = finDate;
@@ -52,19 +62,19 @@ public class Paquete {
 		this.nombre = nombre;
 	}
 
-	public Date getInicioDate() {
+	public LocalDate getInicioDate() {
 		return inicioDate;
 	}
 
-	public void setInicioDate(Date date) {
+	public void setInicioDate(LocalDate date) {
 		this.inicioDate = date;
 	}
 
-	public Date getFinDate() {
+	public LocalDate getFinDate() {
 		return finDate;
 	}
 
-	public void setFinDate(Date date) {
+	public void setFinDate(LocalDate date) {
 		this.finDate = date;
 	}
 

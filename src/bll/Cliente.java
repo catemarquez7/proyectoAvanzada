@@ -3,12 +3,9 @@ package bll;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
-
 import javax.swing.JOptionPane;
 
 import dll.DtoCliente;
-import dll.DtoEncargado;
 import repository.Actividades_categoria;
 import repository.SiNoOpcion;
 
@@ -56,7 +53,7 @@ public class Cliente extends Usuario{
 	//Ver_paquetes
 	public static void verPaquetes(Usuario usuario, Cliente cliente) {
 		
-        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario);
+        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario, cliente);
 
         if (paquetes.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay paquetes disponibles.", "INFO", 1);
@@ -165,8 +162,6 @@ public class Cliente extends Usuario{
 	//Menu_preferencias
 	public static void preferencias(Usuario usuario) {
 				
-		double duracion;
-		String categoria="", riesgo= "";
 		String opcion="";
 		
 		

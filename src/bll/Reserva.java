@@ -34,6 +34,19 @@ public class Reserva {
 		this.paquete = paquete;
 		this.estado = "pendiente";
 	}
+	
+	public Reserva(int id, Cliente cliente, Paquete paquete, String estado, LocalDateTime fecha_checkin,
+	        LocalDateTime fecha_checkout, String tarjeta_resguardo, double monto_final) {
+	    this.id = id;
+	    this.usuario = cliente;
+	    this.cliente = cliente;  // Setear ambos
+	    this.paquete = paquete;
+	    this.estado = estado;
+	    this.fecha_checkin = fecha_checkin;
+	    this.fecha_checkout = fecha_checkout;
+	    this.tarjeta_resguardo = tarjeta_resguardo;
+	    this.monto_final = monto_final;
+	}
 
 	public Reserva() {
 	}
