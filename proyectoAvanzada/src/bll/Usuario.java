@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import javax.swing.JOptionPane;
 
+import dll.DtoCliente;
 import dll.DtoUsuario;
 
 public class Usuario extends Persona {
@@ -234,7 +235,8 @@ public class Usuario extends Persona {
 
 		switch (tipoUser) {
 		case "1": // Cliente
-			menuCliente(usuario);
+			Cliente cliente = new Cliente();
+			menuCliente(usuario, cliente);
 			break;
 		case "2": // Encargado
 			menuEncargado(usuario);
@@ -248,32 +250,36 @@ public class Usuario extends Persona {
 
 	}// fin
 
-	public static void menuCliente(Usuario usuario) {
+	public static void menuCliente(Usuario usuario, Cliente cliente) {
         int opcion;
+        DtoCliente.cargarReservasExistentes(usuario, cliente);
         
         do {
         	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
             
             switch(opcion) {
-            		case 0:
-            		//Reservas
-            		break;
-                case 1:
+            	case 0:
+            		Cliente.verPaquetes(usuario, cliente);	
+            	break;
+            	case 1:
+            		Cliente.verReservas(cliente.reservas);
+            	break;
+                case 2:
                 	//Realizar_reseñas
                 break;
-                case 2:
+                case 3:
                 		Cliente.preferencias(usuario);
                 break;
-                case 3:
+                case 4:
                 //Historial
                 break;
-                case 4:
+                case 5:
                 //Atras
-                		JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+                JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
                 break;
             }
             
-        } while(opcion != 4);
+        } while(opcion != 5);
     }//fin
 	
 	

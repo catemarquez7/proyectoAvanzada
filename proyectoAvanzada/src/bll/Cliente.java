@@ -3,6 +3,7 @@ package bll;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -14,7 +15,7 @@ import repository.SiNoOpcion;
 public class Cliente extends Usuario{
 
 	//atributos
-	protected LinkedList<Reserva> reservas;
+	protected LinkedList<Reserva> reservas = new LinkedList<Reserva>();
 	
 	//constructores
 	
@@ -53,34 +54,109 @@ public class Cliente extends Usuario{
 	
 	//metodos
 	//Ver_paquetes
-	public static void verPaquetes(Usuario usuario) {
-        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario.getId());
+	public static void verPaquetes(Usuario usuario, Cliente cliente) {
+		
+        List<Paquete> paquetes = DtoCliente.verPaquetes(usuario);
 
         if (paquetes.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No hay paquetes disponibles.", "INFO", 1);
             return;
         }
 
-        String texto = "=== PAQUETES DISPONIBLES PARA USTED ===\n\n";
+        String texto = "=== EXPLORAR PAQUETES RECOMENDADOS ===\n\n";
 
         for (Paquete p : paquetes) {
-            texto += "ID: " + p.getId()
-                  + " | Hotel: " + p.getHotel()
-                  + " | Ubicacion: " + p.getHotel().getProvincia()
-                  + " | Actividad: " + p.getActividad().getNombre()
-                  + "\nFecha inicio: " + p.getActividad().getInicioDate()
-                  + " | Fecha fin: " + p.getActividad().getFinDate()
-                  + "\nPrecio total: " + p.getPrecio()
-                  + "\n";
+            texto += "Hotel: " + p.getHotel().getNombre()
+                   + " | Actividad: " + p.getActividad().getNombre()
+                   + " | Provincia: " + p.getHotel().getProvincia()
+                   + "\nInicio: " + p.getInicioDate()
+                   + " | Fin: " + p.getFinDate()
+                   + " | Precio: $" + String.format("%.2f", p.getPrecio())
+                   + "\n";
 
             texto += "------------------------\n";
         }
-
+        
         JOptionPane.showMessageDialog(null, texto, "PAQUETES", JOptionPane.INFORMATION_MESSAGE);
-    }
+        
+        SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea reservar algun paquete?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+		
+		String opcion = opcionEnum.toString();
+		
+		switch (opcion) {
+		case "Si": 
+			JOptionPane.showMessageDialog(null, Cliente.reservarPaquete(usuario, paquetes, cliente)==true?"Excelente!\nSu paquete ha sido reservado con exito":"No se pudo reservar.");
+			break;
+		case "No": 
+			break;
+		}
+        
+        
+	
+	}
+	
 	
 	
 	//Reservar_paquetes
+	public static boolean reservarPaquete(Usuario usuario, List<Paquete> paquetes, Cliente cliente ) {
+		
+		String[] opciones = new String[paquetes.size()];
+	    for (int i = 0; i < paquetes.size(); i++) {
+	        Paquete p = paquetes.get(i);
+	        opciones[i] = p.getHotel().getNombre()
+	                   + " | " + p.getActividad().getNombre()
+	                   + " | Precio: $" + String.format("%.2f", p.getPrecio());
+	    }
+
+	    String seleccion = (String) JOptionPane.showInputDialog(
+	        null, "Seleccione un paquete para reservar:", "Reservar Paquete", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
+
+	    if (seleccion == null) {
+	        return false; 
+	    }
+
+	    Paquete paqueteSeleccionado = null;
+	    for (Paquete p : paquetes) {
+	        String texto = p.getHotel().getNombre()
+	                     + " | " + p.getActividad().getNombre()
+	                     + " | Precio: $" + String.format("%.2f", p.getPrecio());
+	        if (texto.equals(seleccion)) {
+	            paqueteSeleccionado = p;
+	            break;
+	        }
+	    }
+
+	    return DtoCliente.reservarPaquete(usuario, paqueteSeleccionado, cliente);
+	}
+	
+	//Ver_reservas
+	
+	public static void verReservas(LinkedList<Reserva> reservas) {
+		 if (reservas.isEmpty()) {
+			 JOptionPane	.showMessageDialog(null, "Usted no ha realizado ninguna reserva todavia.");
+			 } else {
+				
+			
+
+		    String texto = "=== MIS RESERVAS ===\n\n";
+
+		    for (Reserva r : reservas) {
+		        texto += "ID Reserva: " + r.getId()
+		               + " | Hotel: " + r.getPaquete().getHotel().getNombre()
+		               + "\nInicio: " + r.getPaquete().getInicioDate()
+		               + " | Fin: " + r.getPaquete().getFinDate()
+		               + " | Precio: $" + String.format("%.2f", r.getPaquete().getPrecio())
+		               + "\n\n";
+
+		        texto += "------------------------\n\n";
+		    }
+		    
+			 JOptionPane	.showMessageDialog(null, texto);
+			 }
+
+	}
+	
+
 	
 	
 	//Cancelar_reserva

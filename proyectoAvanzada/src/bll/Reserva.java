@@ -6,6 +6,7 @@ public class Reserva {
 
 	// atributos
 	protected int id;
+	protected Usuario usuario;
 	protected Cliente cliente;
 	protected Paquete paquete;
 	protected String estado;
@@ -16,10 +17,10 @@ public class Reserva {
 
 	// constructores
 
-	public Reserva(int id, Cliente cliente, Paquete paquete, String estado, LocalDateTime fecha_checkin,
+	public Reserva(int id, Usuario usuario, Paquete paquete, String estado, LocalDateTime fecha_checkin,
 			LocalDateTime fecha_checkout, String tarjeta_resguardo, double monto_final) {
 		this.id = id;
-		this.cliente = cliente;
+		this.usuario = usuario;
 		this.paquete = paquete;
 		this.estado = estado;
 		this.fecha_checkin = fecha_checkin;
@@ -28,8 +29,8 @@ public class Reserva {
 		this.monto_final = monto_final;
 	}
 
-	public Reserva(Cliente cliente, Paquete paquete) {
-		this.cliente = cliente;
+	public Reserva( Usuario usuario, Paquete paquete) {
+		this.usuario = usuario;
 		this.paquete = paquete;
 		this.estado = "pendiente";
 	}
@@ -52,6 +53,14 @@ public class Reserva {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Paquete getPaquete() {
@@ -105,7 +114,7 @@ public class Reserva {
 	// toString
 	@Override
 	public String toString() {
-		return "Reserva [id=" + id + ", cliente=" + cliente.getNombre() + " " + cliente.getApellido() + ", paquete="
+		return "Reserva [id=" + id + ", cliente=" + usuario.getNombre() + " " + usuario.getApellido() + ", paquete="
 				+ paquete.getHotel().getNombre() + ", estado=" + estado + ", habitacion="
 				+ paquete.getHabitacion().getNumero() + "]";
 	}

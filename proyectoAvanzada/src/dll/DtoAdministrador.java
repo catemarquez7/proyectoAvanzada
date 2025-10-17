@@ -177,8 +177,7 @@ public class DtoAdministrador {
                 LocalDate finPaq = rs.getDate("p.fecha_fin").toLocalDate();
                 double precioPaq = rs.getDouble("p.precio");
                 
-                Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, 
-                    hotel, habitacion, actividad);
+                Paquete paquete = new Paquete();
                 
                 // Crear reserva
                 Reserva reserva = new Reserva(idReserva, cliente, paquete, estadoReserva,
@@ -262,8 +261,7 @@ public class DtoAdministrador {
                 }
                 
                 // Crear paquete
-                Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, 
-                    hotel, habitacion, actividad);
+                Paquete paquete = new Paquete();
                 
                 paquetes.add(paquete);
             }

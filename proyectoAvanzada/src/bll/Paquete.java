@@ -1,13 +1,15 @@
 package bll;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Paquete {
 
 	//atributos
 	protected int id;
-	protected LocalDate inicioDate;
-	protected LocalDate finDate;
+	protected String nombre;
+	protected Date inicioDate;
+	protected Date finDate;
 	protected double precio;
 	protected Hotel hotel;
 	protected Habitacion habitacion;
@@ -15,9 +17,9 @@ public class Paquete {
 	
 	
 	//constructores
-	public Paquete(int id, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel, Habitacion habitacion,
+	public Paquete(String nombre, int id, Date inicioDate, Date finDate, double precio, Hotel hotel, Habitacion habitacion,
 			Actividad actividad) {
-		super();
+		this.nombre = nombre;
 		this.id = id;
 		this.inicioDate = inicioDate;
 		this.finDate = finDate;
@@ -40,21 +42,30 @@ public class Paquete {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
 
-	public LocalDate getInicioDate() {
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public Date getInicioDate() {
 		return inicioDate;
 	}
 
-	public void setInicioDate(LocalDate inicioDate) {
-		this.inicioDate = inicioDate;
+	public void setInicioDate(Date date) {
+		this.inicioDate = date;
 	}
 
-	public LocalDate getFinDate() {
+	public Date getFinDate() {
 		return finDate;
 	}
 
-	public void setFinDate(LocalDate finDate) {
-		this.finDate = finDate;
+	public void setFinDate(Date date) {
+		this.finDate = date;
 	}
 
 	public double getPrecio() {
@@ -90,12 +101,13 @@ public class Paquete {
 	}
 
 	
-	//toString
 	@Override
 	public String toString() {
 		return "Paquete [id=" + id + ", inicioDate=" + inicioDate + ", finDate=" + finDate + ", precio=" + precio
 				+ ", hotel=" + hotel + ", habitacion=" + habitacion + ", actividad=" + actividad + "]";
 	}
+
+
 	
 	
 	
