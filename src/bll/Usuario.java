@@ -251,128 +251,131 @@ public class Usuario extends Persona {
 	}// fin
 
 	public static void menuCliente(Usuario usuario, Cliente cliente) {
-        int opcion;
-        DtoCliente.cargarReservasExistentes(usuario, cliente);
-        
-        do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_cl.values(), repository.Acciones_cl.values());
-            
-            switch(opcion) {
-            	case 0:
-            		Cliente.verPaquetes(usuario, cliente);	
-            	break;
-            	case 1:
-            		Cliente.verReservas(cliente.reservas);
-            	break;
-                case 2:
-                	//Realizar_reseñas
-                break;
-                case 3:
-                		Cliente.preferencias(usuario);
-                break;
-                case 4:
-                //Historial
-                break;
-                case 5:
-                //Atras
-                JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-                break;
-            }
-            
-        } while(opcion != 5);
-    }//fin
-	
-	
-	public static void menuEncargado(Usuario usuario) {
-        int opcion;
-        Encargado encargado = (Encargado) usuario;
-        
-        do {
-        	opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_enc.values(), repository.Acciones_enc.values());
-            
-            switch(opcion) {
-            	case 0:
-            		//Reservas
-            		Encargado.verReservas(encargado.getId_hotel());
-            		break;
-                case 1:
-                	//Habitaciones
-            		Encargado.verHabitaciones(encargado.getId_hotel());
-                    break;
-                case 2:
-                    //Actividades
-                    break;
-                case 3:
-                    //Check_in
-                	Encargado.realizarCheckin(encargado.getId_hotel());
-                    break;
-                case 4:
-                    //Check_out
-                	Encargado.realizarCheckout(encargado.getId_hotel());
-                    break;
-                case 5:
-            		//Datos_cliente
-            		break;
-                case 6:
-                	//Historial
-                    break;
-                case 7:
-                    //Promociones
-                    break;
-                case 8:
-                    //Atras
-                	JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-                    break;
-            }
-            
-        } while(opcion != 8);
-    }//fin
-	
-	
-	public static void menuAdmin(Usuario usuario) {
-	    int opcion;
-	    
-	    do {
-	        opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null, repository.Acciones_adm.values(), repository.Acciones_adm.values());
-	        
-	        switch(opcion) {
-	            case 0:
-	                //Ver_hoteles
-	                Administrador.verHoteles();
-	                break;
-	            case 1:
-	                //Modificar_hotel
-	                Administrador.modificarHotel();
-	                break;
-	            case 2:
-	                //Ver_reservas
-	                Administrador.verReservas();
-	                break;
-	            case 3:
-	            	//Modificar_reserva
-	                Administrador.modificarReserva();
-	                break;
-	            case 4:
-	            	//Ver_paquetes
-	                Administrador.verPaquetes();
-	                break;
-	            case 5:
-	              //Modificar_paquete
-	                Administrador.modificarPaquete();
-	                break;
-	            case 6:
-	                //Gestionar_cuentas
-	                Administrador.gestionarCuentas();
-	                break;
-	            case 7:
-	                //Cerrar_Sesión
-	                JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-	                break;
-	        }
-	        
-	    } while(opcion != 7);
-	
-	
-	}//fin
+		int opcion;
+		DtoCliente.cargarReservasExistentes(usuario, cliente);
 
-}//FIN USUARIO
+		do {
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+					repository.Acciones_cl.values(), repository.Acciones_cl.values());
+
+			switch (opcion) {
+			case 0:
+				Cliente.verPaquetes(usuario, cliente);
+				break;
+			case 1:
+				Cliente.verReservas(cliente.reservas);
+				break;
+			case 2:
+				// Realizar_reseñas
+				break;
+			case 3:
+				Cliente.preferencias(usuario);
+				break;
+			case 4:
+				// Historial
+				break;
+			case 5:
+				// Atras
+				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+				break;
+			}
+
+		} while (opcion != 5);
+	}// fin
+
+	public static void menuEncargado(Usuario usuario) {
+		int opcion, opcion1;
+		Encargado encargado = (Encargado) usuario;
+
+		do {
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+					repository.Acciones_enc.values(), repository.Acciones_enc.values());
+
+			switch (opcion) {
+			case 0:
+				// Reservas
+				Encargado.verReservas(encargado.getId_hotel());
+				break;
+			case 1:
+				// Habitaciones
+				Encargado.verHabitaciones(encargado.getId_hotel());
+				break;
+			case 2:
+				// Check_in
+				Encargado.realizarCheckin(encargado.getId_hotel());
+				break;
+			case 3:
+				// Check_out
+				Encargado.realizarCheckout(encargado.getId_hotel());
+				break;
+			case 4:
+				// Datos_cliente
+				Encargado.verDatosClientes(encargado.getId_hotel());
+				break;
+			case 5:
+				// Vistas
+				Encargado.Vistas(encargado.getId_hotel());
+				break;
+			case 6:
+				// Historial
+				break;
+			case 7:
+				// Promociones
+				Encargado.gestionarPromociones(encargado.getId_hotel());
+				break;
+			case 8:
+				// Atras
+				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+				break;
+			}//switch1
+
+		} while (opcion != 8);
+	}// fin
+
+	public static void menuAdmin(Usuario usuario) {
+		int opcion;
+
+		do {
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+					repository.Acciones_adm.values(), repository.Acciones_adm.values());
+
+			switch (opcion) {
+			case 0:
+				// Ver_hoteles
+				Administrador.verHoteles();
+				break;
+			case 1:
+				// Modificar_hotel
+				Administrador.modificarHotel();
+				break;
+			case 2:
+				// Ver_reservas
+				Administrador.verReservas();
+				break;
+			case 3:
+				// Modificar_reserva
+				Administrador.modificarReserva();
+				break;
+			case 4:
+				// Ver_paquetes
+				Administrador.verPaquetes();
+				break;
+			case 5:
+				// Modificar_paquete
+				Administrador.modificarPaquete();
+				break;
+			case 6:
+				// Gestionar_cuentas
+				Administrador.gestionarCuentas();
+				break;
+			case 7:
+				// Cerrar_Sesión
+				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+				break;
+			}
+
+		} while (opcion != 7);
+
+	}// fin
+
+}// FIN USUARIO

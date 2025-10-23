@@ -13,6 +13,8 @@ public class Paquete {
 	protected Hotel hotel;
 	protected Habitacion habitacion;
 	protected Actividad actividad;
+	protected double precioOriginal;
+	protected Promocion promocion;
 	
 	
 	//constructores
@@ -41,7 +43,21 @@ public class Paquete {
 	
 	public Paquete() {
 		
-		
+	}
+	
+	public Paquete(int id, String nombre, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel,
+			Habitacion habitacion, Actividad actividad, double precioOriginal, Promocion promocion) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.inicioDate = inicioDate;
+		this.finDate = finDate;
+		this.precio = precio;
+		this.hotel = hotel;
+		this.habitacion = habitacion;
+		this.actividad = actividad;
+		this.precioOriginal = precioOriginal;
+		this.promocion = promocion;
 	}
 
 	//getters y setters
@@ -109,16 +125,28 @@ public class Paquete {
 	public void setActividad(Actividad actividad) {
 		this.actividad = actividad;
 	}
-
 	
-	@Override
-	public String toString() {
-		return "Paquete [id=" + id + ", inicioDate=" + inicioDate + ", finDate=" + finDate + ", precio=" + precio
-				+ ", hotel=" + hotel + ", habitacion=" + habitacion + ", actividad=" + actividad + "]";
+	public double getPrecioOriginal() {
+	    return precioOriginal;
 	}
 
+	public void setPrecioOriginal(double precioOriginal) {
+	    this.precioOriginal = precioOriginal;
+	}
 
-	
-	
+	public Promocion getPromocion() {
+	    return promocion;
+	}
+
+	public void setPromocion(Promocion promocion) {
+	    this.promocion = promocion;
+	}
+
+	@Override
+	public String toString() {
+		return "Paquete [id=" + id + ", nombre=" + nombre + ", inicioDate=" + inicioDate + ", finDate=" + finDate
+				+ ", precio=" + precio + ", hotel=" + hotel + ", habitacion=" + habitacion + ", actividad=" + actividad
+				+ ", precioOriginal=" + precioOriginal + ", promocion=" + promocion + "]";
+	}
 	
 }
