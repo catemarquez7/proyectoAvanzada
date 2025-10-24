@@ -317,19 +317,16 @@ public class Usuario extends Persona {
 				Encargado.Vistas(encargado.getId_hotel());
 				break;
 			case 6:
-				// Historial
-				break;
-			case 7:
 				// Promociones
 				Encargado.gestionarPromociones(encargado.getId_hotel());
 				break;
-			case 8:
+			case 7:
 				// Atras
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
 			}//switch1
 
-		} while (opcion != 8);
+		} while (opcion != 7);
 	}// fin
 
 	public static void menuAdmin(Usuario usuario) {

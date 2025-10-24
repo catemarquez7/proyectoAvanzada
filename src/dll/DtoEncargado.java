@@ -476,45 +476,46 @@ public class DtoEncargado {
 	}// fin
 
 	// crear promoción
-	public static boolean crearPromocion(String nombre, String descripcion, double porcentaje, 
-	                                      LocalDate fechaInicio, LocalDate fechaFin, int id_hotel) {
-	    try {
-	        if (porcentaje <= 0 || porcentaje > 100) {
-	            JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
-	            return false;
-	        }
-	        
-	        if (fechaFin.isBefore(fechaInicio)) {
-	            JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio", "ERROR", 0);
-	            return false;
-	        }
-	        
-	        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
-	            "INSERT INTO promocion (nombre, descripcion, porcentaje_descuento, fecha_inicio, fecha_fin, estado, id_hotel) " +
-	            "VALUES (?, ?, ?, ?, ?, 'activa', ?)");
-	        
-	        stmt.setString(1, nombre);
-	        stmt.setString(2, descripcion);
-	        stmt.setDouble(3, porcentaje);
-	        stmt.setDate(4, java.sql.Date.valueOf(fechaInicio));
-	        stmt.setDate(5, java.sql.Date.valueOf(fechaFin));
-	        stmt.setInt(6, id_hotel);
-	        
-	        int filas = stmt.executeUpdate();
-	        
-	        if (filas > 0) {
-	            JOptionPane.showMessageDialog(null, 
-	                "Promoción creada exitosamente: " + nombre + "\nDescuento: " + porcentaje + "%", 
-	                "ÉXITO", JOptionPane.INFORMATION_MESSAGE);
-	            return true;
-	        }
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        JOptionPane.showMessageDialog(null, "Error al crear promoción: " + e.getMessage(), "ERROR", 0);
-	    }
-	    return false;
-	}//fin
+	public static boolean crearPromocion(String nombre, String descripcion, double porcentaje, LocalDate fechaInicio,
+			LocalDate fechaFin, int id_hotel) {
+		try {
+			if (porcentaje <= 0 || porcentaje > 100) {
+				JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
+				return false;
+			}
+
+			if (fechaFin.isBefore(fechaInicio)) {
+				JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio", "ERROR",
+						0);
+				return false;
+			}
+
+			PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
+					"INSERT INTO promocion (nombre, descripcion, porcentaje_descuento, fecha_inicio, fecha_fin, estado, id_hotel) "
+							+ "VALUES (?, ?, ?, ?, ?, 'activa', ?)");
+
+			stmt.setString(1, nombre);
+			stmt.setString(2, descripcion);
+			stmt.setDouble(3, porcentaje);
+			stmt.setDate(4, java.sql.Date.valueOf(fechaInicio));
+			stmt.setDate(5, java.sql.Date.valueOf(fechaFin));
+			stmt.setInt(6, id_hotel);
+
+			int filas = stmt.executeUpdate();
+
+			if (filas > 0) {
+				JOptionPane.showMessageDialog(null,
+						"Promoción creada exitosamente: " + nombre + "\nDescuento: " + porcentaje + "%", "ÉXITO",
+						JOptionPane.INFORMATION_MESSAGE);
+				return true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al crear promoción: " + e.getMessage(), "ERROR", 0);
+		}
+		return false;
+	}// fin
 
 	// aplicar promoción a paquete
 	public static boolean aplicarPromocionAPaquete(int id_paquete, int id_promocion, int id_hotel) {
@@ -566,7 +567,7 @@ public class DtoEncargado {
 			JOptionPane.showMessageDialog(null, "Error al aplicar promoción: " + e.getMessage(), "ERROR", 0);
 		}
 		return false;
-	}//fin
+	}// fin
 
 	// Ver promociones del hotel
 	public static List<Promocion> verPromocionesDelHotel(int id_hotel) {
@@ -591,7 +592,7 @@ public class DtoEncargado {
 		}
 
 		return promociones;
-	}//fin
+	}// fin
 
 	// Eliminar promoción
 	public static boolean eliminarPromocion(int id_promocion, int id_hotel) {
@@ -628,7 +629,7 @@ public class DtoEncargado {
 			JOptionPane.showMessageDialog(null, "Error al eliminar promoción: " + e.getMessage(), "ERROR", 0);
 		}
 		return false;
-	}//fin
+	}// fin
 
 	// ver paquetes con promos
 	public static List<Paquete> verPaquetesConPromociones(int id_hotel) {
@@ -691,6 +692,6 @@ public class DtoEncargado {
 		}
 
 		return paquetes;
-	}//fin
+	}// fin
 
 }// fin clase
