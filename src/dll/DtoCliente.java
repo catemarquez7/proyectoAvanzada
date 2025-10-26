@@ -25,8 +25,8 @@ public class DtoCliente {
 
 	
 	
-		//Ver paquetes
-		public static List<Paquete> verPaquetes(Usuario usuario, Cliente cliente) {
+		//Ver paquetes recomendados
+		public static List<Paquete> verPaquetesReco(Usuario usuario, Cliente cliente) {
 			
 		    List<Paquete> paquetes = new ArrayList<>();
 			
@@ -114,11 +114,6 @@ public class DtoCliente {
 		}
 	
 	
-		
-		
-		
-		
-		
 		//Reservar paquetes
 		public static boolean reservarPaquete(Usuario usuario, Paquete paquete, Cliente cliente) {
 			try {
@@ -170,57 +165,111 @@ public class DtoCliente {
 		//Cargar_reservas
 		public static void cargarReservasExistentes(Usuario usuario, Cliente cliente) {
 			try {
-		        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
-		            "SELECT r.id AS id_reserva, r.estado, r.id_paquete, " +
-		            "p.fecha_inicio, p.fecha_fin, p.precio, p.id_hotel, p.id_actividad, " +
-		            "h.nombre AS hotel_nombre, h.direccion, h.provincia, " +
-		            "a.nombre AS actividad_nombre, a.categoria, a.riesgo " +
-		            "FROM reserva r " +
-		            "JOIN paquete p ON r.id_paquete = p.id " +
-		            "JOIN hotel h ON p.id_hotel = h.id " +
-		            "JOIN actividad a ON p.id_actividad = a.id " +
-		            "WHERE r.id_usuario = ?"
-		        );
+			    PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
+			        "SELECT r.id AS id_reserva, r.estado, r.id_paquete, " +
+			        "p.fecha_inicio, p.fecha_fin, p.precio, p.id_hotel, p.id_actividad, " +
+			        "h.nombre AS hotel_nombre, h.direccion, h.provincia, " +
+			        "a.nombre AS actividad_nombre, a.categoria, a.riesgo " +
+			        "FROM reserva r " +
+			        "JOIN paquete p ON r.id_paquete = p.id " +
+			        "JOIN hotel h ON p.id_hotel = h.id " +
+			        "JOIN actividad a ON p.id_actividad = a.id " +
+			        "WHERE r.id_usuario = ? AND estado = ?"
+			    );
 
-		        stmt.setInt(1, usuario.getId()); 
+			    stmt.setInt(1, usuario.getId()); 
+			    stmt.setString(2, "pendiente");
 
-		        ResultSet rs = stmt.executeQuery();
+			    ResultSet rs = stmt.executeQuery();
 
-		        while (rs.next()) {
-		            // Crear actividad
-		            bll.Actividad actividad = new bll.Actividad();
-		            actividad.setId(rs.getInt("id_actividad"));
-		            actividad.setNombre(rs.getString("actividad_nombre"));
-		            actividad.setCategoria(rs.getString("categoria"));
-		            actividad.setRiesgo(rs.getString("riesgo"));
+			    while (rs.next()) {
+			        // Crear actividad
+			        Actividad actividad = new Actividad();
+			        actividad.setId(rs.getInt("id_actividad"));
+			        actividad.setNombre(rs.getString("actividad_nombre"));
+			        actividad.setCategoria(rs.getString("categoria"));
+			        actividad.setRiesgo(rs.getString("riesgo"));
 
-		            // Crear hotel
-		            bll.Hotel hotel = new bll.Hotel();
-		            hotel.setId(rs.getInt("id_hotel"));
-		            hotel.setNombre(rs.getString("hotel_nombre"));
-		            hotel.setDireccion(rs.getString("direccion"));
-		            hotel.setProvincia(rs.getString("provincia"));
+			        // Crear hotel
+			        Hotel hotel = new Hotel();
+			        hotel.setId(rs.getInt("id_hotel"));
+			        hotel.setNombre(rs.getString("hotel_nombre"));
+			        hotel.setDireccion(rs.getString("direccion"));
+			        hotel.setProvincia(rs.getString("provincia"));
 
-		            // Crear paquete
-		            bll.Paquete paquete = new bll.Paquete();
-		            paquete.setId(rs.getInt("id_paquete"));
-		            paquete.setInicioDate(rs.getDate("fecha_inicio").toLocalDate());
-		            paquete.setFinDate(rs.getDate("fecha_fin").toLocalDate());
-		            paquete.setPrecio(rs.getDouble("precio"));
-		            paquete.setHotel(hotel);
-		            paquete.setActividad(actividad);
+			        // Crear paquete
+			        Paquete paquete = new Paquete();
+			        paquete.setId(rs.getInt("id_paquete"));
+			        paquete.setInicioDate(rs.getDate("fecha_inicio").toLocalDate());
+			        paquete.setFinDate(rs.getDate("fecha_fin").toLocalDate());
+			        paquete.setPrecio(rs.getDouble("precio"));
+			        paquete.setHotel(hotel);
+			        paquete.setActividad(actividad);
 
-		            // Crear reserva
-		            bll.Reserva reserva = new bll.Reserva();
-		            reserva.setId(rs.getInt("id_reserva"));
-		            reserva.setCliente(cliente);
-		            reserva.setUsuario(usuario); // <- asignamos el usuario
-		            reserva.setPaquete(paquete);
-		            reserva.setEstado(rs.getString("estado"));
+			        // Crear reserva
+			        Reserva reserva = new Reserva();
+			        reserva.setId(rs.getInt("id_reserva"));
+			        reserva.setCliente(cliente);
+			        reserva.setUsuario(usuario);
+			        reserva.setPaquete(paquete);
+			        reserva.setEstado(rs.getString("estado"));
 
-		            // Agregar a la lista del cliente
-		            cliente.getReservas().add(reserva);
-		        }
+			        // Agregar a la lista del cliente
+			        cliente.getReservas().add(reserva);
+			    }
+
+			    // Segundo PreparedStatement para reservas finalizadas
+			    PreparedStatement stmt2 = (PreparedStatement) conx.prepareStatement(
+			        "SELECT r.id AS id_reserva, r.estado, r.id_paquete, " +
+			        "p.fecha_inicio, p.fecha_fin, p.precio, p.id_hotel, p.id_actividad, " +
+			        "h.nombre AS hotel_nombre, h.direccion, h.provincia, " +
+			        "a.nombre AS actividad_nombre, a.categoria, a.riesgo " +
+			        "FROM reserva r " +
+			        "JOIN paquete p ON r.id_paquete = p.id " +
+			        "JOIN hotel h ON p.id_hotel = h.id " +
+			        "JOIN actividad a ON p.id_actividad = a.id " +
+			        "WHERE r.id_usuario = ? AND estado = ?"
+			    );
+
+			    stmt2.setInt(1, usuario.getId());
+			    stmt2.setString(2, "finalizada");
+
+			    ResultSet rs2 = stmt2.executeQuery();
+			    while (rs2.next()) {
+			        Actividad actividad2 = new Actividad();
+			        actividad2.setId(rs2.getInt("id_actividad"));
+			        actividad2.setNombre(rs2.getString("actividad_nombre"));
+			        actividad2.setCategoria(rs2.getString("categoria"));
+			        actividad2.setRiesgo(rs2.getString("riesgo"));
+
+			        Hotel hotel2 = new Hotel();
+			        hotel2.setId(rs2.getInt("id_hotel"));
+			        hotel2.setNombre(rs2.getString("hotel_nombre"));
+			        hotel2.setDireccion(rs2.getString("direccion"));
+			        hotel2.setProvincia(rs2.getString("provincia"));
+
+			        Paquete paquete2 = new Paquete();
+			        paquete2.setId(rs2.getInt("id_paquete"));
+			        paquete2.setInicioDate(rs2.getDate("fecha_inicio").toLocalDate());
+			        paquete2.setFinDate(rs2.getDate("fecha_fin").toLocalDate());
+			        paquete2.setPrecio(rs2.getDouble("precio"));
+			        paquete2.setHotel(hotel2);
+			        paquete2.setActividad(actividad2);
+
+			        Reserva r = new Reserva();
+			        r.setId(rs2.getInt("id_reserva"));
+			        r.setCliente(cliente);
+			        r.setUsuario(usuario);
+			        r.setPaquete(paquete2);
+			        r.setEstado(rs2.getString("estado"));
+
+			        cliente.getReservasPasadas().add(r);
+			    }
+
+			    rs.close();
+			    stmt.close();
+			    rs2.close();
+			    stmt2.close();
 
 		    } catch (SQLException e) {
 		        e.printStackTrace();
@@ -272,7 +321,6 @@ public class DtoCliente {
 		    }
 		}
 
-		
 		
 		//Chequeo de preferencias existentes, para que haya una sola por usuario
 		public static boolean preferenciasExistentes(Usuario usuario) {
@@ -328,7 +376,30 @@ public class DtoCliente {
 		
 		
 		//Cancelar paquete
+		public static boolean cancelarReserva(Usuario usuario, Cliente cliente, Reserva reserva) {
+			
+			try {
+				  PreparedStatement stmt = (PreparedStatement) conx.prepareStatement("DELETE FROM reserva WHERE id = ?");
+			        stmt.setInt(1, reserva.getId());
+			        int filas = stmt.executeUpdate();
+			        boolean eliminado = (filas > 0);
+			        
+			        cliente.getReservas().clear();
+			        DtoCliente.cargarReservasExistentes(usuario, cliente);
+			        
+			        return eliminado;
+				
+			} catch (Exception e) {
+	            e.printStackTrace();
+			}
+			
+			
+			return false;
+		}
 		
-					//aca directamente se elimina de las reservas del cliente segun el id, desde el panel de reservas ya hechas
+	
 		
-}
+		
+		
+		
+}//fin

@@ -12,12 +12,13 @@ import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import bll.Usuario;
 import bll.Administrador;
 import repository.Encriptador;
+import repository.Validaciones;
 
 public class DtoUsuario {
 
     private static Connection conx = Conexion.getInstance().getConnection();
 
-    // Log in
+    // Log_in
     public static Usuario login(String user, String password) {
         Usuario usuario = null;
         try {
@@ -30,14 +31,6 @@ public class DtoUsuario {
             if (rs.next()) {
 
                 String estado = rs.getString("estado");
-
-                if (estado.equals("bloqueado")) {
-                    JOptionPane.showMessageDialog(null,
-                            "Su cuenta ha sido bloqueada. Contacte al administrador.",
-                            "CUENTA BLOQUEADA",
-                            JOptionPane.ERROR_MESSAGE);
-                    return null;
-                }
 
                 int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
@@ -74,7 +67,7 @@ public class DtoUsuario {
         return usuario;
     }// fin login
 
-    // Sign in
+    // Sign_in
     public static boolean agregarUsuario(Usuario usuario) {
         try {
             PreparedStatement statement = conx.prepareStatement(
@@ -123,4 +116,98 @@ public class DtoUsuario {
         return false;
     }// fin sign in
 
+    
+    //Usuario_bloqueado
+    public static boolean usuarioBloqueado(Usuario usuario) {
+    	try {
+    	
+    		  PreparedStatement stmt = conx.prepareStatement("SELECT * FROM usuario WHERE user = ? AND pass = ?");
+              stmt.setString(1, usuario.getUser());
+              stmt.setString(2, Encriptador.encriptar(usuario.getPass()));
+
+              ResultSet rs = stmt.executeQuery();
+
+              if (rs.next()) {
+
+                  String estado = rs.getString("estado");
+
+                  if (estado.equals("bloqueado")) {
+                     return false;
+                  } else {
+					return true;
+				}
+              }
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
+    	
+    	
+    	
+    	return false;
+    }
+    
+    
+    //Recuperar_contraseña
+    public static boolean recuperarPass() {
+		
+		String user = JOptionPane.showInputDialog("Ingrese su nombre de usuario:");
+
+		try {
+			
+			 PreparedStatement stmt = conx.prepareStatement("SELECT nombre, user, pass, pregunta, respuesta FROM usuario WHERE user = ?");
+	            stmt.setString(1, user);
+
+	            ResultSet rs = stmt.executeQuery();
+			
+	            if (rs.next()) {
+	            		String pregunta = rs.getString("pregunta");
+	            		String respuesta = rs.getString("respuesta");
+
+	            		
+	            		String ans = Validaciones.ValidarLetras(pregunta);
+	            		if (ans.equals(respuesta)) {
+							JOptionPane.showMessageDialog(null, "Respuesta correcta!");
+							boolean flag = true;
+							boolean actualizado = false;
+							do {
+								
+								String pass1 = Validaciones.ValidarContras("Ingrese su nueva contraseña:");
+								String pass2 = Validaciones.ValidarContras("Por favor, ingrese la contraseña nuevamente:");
+								
+								if (pass2.equals(pass1)) {
+									flag = true;
+									
+									 PreparedStatement stmt2 = conx.prepareStatement("UPDATE usuario SET pass = ? WHERE user = ?");
+							            stmt2.setString(1, pass2);
+							            stmt2.setString(2, user);
+							            
+							            int rs2 = stmt2.executeUpdate();
+
+							            actualizado = (rs2 > 0);
+							            
+									return actualizado;
+								} else {
+									JOptionPane.showMessageDialog(null, "Las contraseñas no coindiden.");
+									flag = false;
+								}
+							} while (!flag);
+							
+							
+						} else {
+							return false;
+						}
+	            		
+				} 
+			
+		} catch (Exception e) {
+            e.printStackTrace();
+		}
+		
+		
+		
+		return false;
+	}
+    
+    
+    
 }// fin clase

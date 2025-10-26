@@ -2,6 +2,6 @@ package repository;
 
 public enum Inicio {
 
-	Iniciar_sesion, Registrarse, Salir;
+	Iniciar_sesion, Registrarse, Recuperar_pass , Salir;
 
 }

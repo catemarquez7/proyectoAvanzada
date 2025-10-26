@@ -142,9 +142,23 @@ public class Usuario extends Persona {
 		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
 
 		if (usuarioEncontrado != null) {
-			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "LOGIN EXITOSO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return usuarioEncontrado;
+			
+			if (!DtoUsuario.usuarioBloqueado(usuarioEncontrado)) {
+				  JOptionPane.showMessageDialog(null,
+                          "Su cuenta ha sido bloqueada. Contacte al administrador.",
+                          "CUENTA BLOQUEADA",
+                          JOptionPane.ERROR_MESSAGE);
+				  return null;
+			} else {
+				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "LOGIN EXITOSO",
+						JOptionPane.INFORMATION_MESSAGE);
+				return usuarioEncontrado;
+
+			}
+			
+			
+			
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
 					JOptionPane.ERROR_MESSAGE);
@@ -259,23 +273,22 @@ public class Usuario extends Persona {
 					repository.Acciones_cl.values(), repository.Acciones_cl.values());
 
 			switch (opcion) {
-			case 0:
+			case 0://paquetes_recomendados
+				Cliente.verPaquetesReco(usuario, cliente);
+				break;
+			case 1://paquetes_todos
 				Cliente.verPaquetes(usuario, cliente);
 				break;
-			case 1:
-				Cliente.verReservas(cliente.reservas);
+			case 2: //reservas_activas
+				Cliente.reservas(usuario, cliente);;
 				break;
-			case 2:
-				// Realizar_reseñas
+			case 3: //realizar_reseñas
+				Cliente.reviews(usuario, cliente);
 				break;
-			case 3:
+			case 4: //ver _preferencias
 				Cliente.preferencias(usuario);
 				break;
-			case 4:
-				// Historial
-				break;
-			case 5:
-				// Atras
+			case 5://atras
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
 			}
@@ -284,7 +297,7 @@ public class Usuario extends Persona {
 	}// fin
 
 	public static void menuEncargado(Usuario usuario) {
-		int opcion, opcion1;
+		int opcion;
 		Encargado encargado = (Encargado) usuario;
 
 		do {
@@ -375,4 +388,6 @@ public class Usuario extends Persona {
 
 	}// fin
 
+	
+	
 }// FIN USUARIO
