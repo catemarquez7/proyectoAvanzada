@@ -267,6 +267,7 @@ public class Usuario extends Persona {
 	public static void menuCliente(Usuario usuario, Cliente cliente) {
 		int opcion;
 		DtoCliente.cargarReservasExistentes(usuario, cliente);
+		DtoCliente.cargarReviewsExistentes(usuario, cliente);
 
 		do {
 			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,

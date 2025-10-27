@@ -377,8 +377,11 @@ public class DtoAdministrador {
 				LocalDate inicioPaq = rs.getDate("p.fecha_inicio").toLocalDate();
 				LocalDate finPaq = rs.getDate("p.fecha_fin").toLocalDate();
 				double precioPaq = rs.getDouble("p.precio");
+				int cupo_actual = rs.getInt("p.cupo_actual");
+				int cupo_maximo = rs.getInt("p.cupo_maximo");
 
-				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad);
+
+				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad, precioPaq, null, cupo_actual, cupo_maximo);
 
 				// Crear reserva
 				Reserva reserva = new Reserva(idReserva, cliente, paquete, estadoReserva, checkin, checkout, tarjeta,
@@ -414,6 +417,9 @@ public class DtoAdministrador {
 				LocalDate inicioPaq = rs.getDate("p.fecha_inicio").toLocalDate();
 				LocalDate finPaq = rs.getDate("p.fecha_fin").toLocalDate();
 				double precioPaq = rs.getDouble("p.precio");
+				int cupo_actual = rs.getInt("p.cupo_actual");
+				int cupo_maximo = rs.getInt("p.cupo_maximo");
+
 
 				// Datos del hotel
 				int idHotelRes = rs.getInt("h.id");
@@ -459,7 +465,7 @@ public class DtoAdministrador {
 				}
 
 				// Crear paqu
-				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad);
+				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad, precioPaq, null, cupo_actual, cupo_maximo);
 
 				paquetes.add(paquete);
 			}

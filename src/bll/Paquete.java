@@ -6,7 +6,6 @@ public class Paquete {
 
 	//atributos
 	protected int id;
-	protected String nombre;
 	protected LocalDate inicioDate;
 	protected LocalDate finDate;
 	protected double precio;
@@ -15,41 +14,16 @@ public class Paquete {
 	protected Actividad actividad;
 	protected double precioOriginal;
 	protected Promocion promocion;
+	protected int cupo_actual;
+	protected int cupo_maximo;
+
 	
 	
 	//constructores
-	public Paquete(String nombre, int id, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel, Habitacion habitacion,
-			Actividad actividad) {
-		this.nombre = nombre;
-		this.id = id;
-		this.inicioDate = inicioDate;
-		this.finDate = finDate;
-		this.precio = precio;
-		this.hotel = hotel;
-		this.habitacion = habitacion;
-		this.actividad = actividad;
-	}
-	
 	public Paquete(int id, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel, Habitacion habitacion,
-			Actividad actividad) {
-		this.id = id;
-		this.inicioDate = inicioDate;
-		this.finDate = finDate;
-		this.precio = precio;
-		this.hotel = hotel;
-		this.habitacion = habitacion;
-		this.actividad = actividad;
-	}
-	
-	public Paquete() {
-		
-	}
-	
-	public Paquete(int id, String nombre, LocalDate inicioDate, LocalDate finDate, double precio, Hotel hotel,
-			Habitacion habitacion, Actividad actividad, double precioOriginal, Promocion promocion) {
+			Actividad actividad, double precioOriginal, Promocion promocion, int cupo_actual, int cupo_maximo) {
 		super();
 		this.id = id;
-		this.nombre = nombre;
 		this.inicioDate = inicioDate;
 		this.finDate = finDate;
 		this.precio = precio;
@@ -58,7 +32,16 @@ public class Paquete {
 		this.actividad = actividad;
 		this.precioOriginal = precioOriginal;
 		this.promocion = promocion;
+		this.cupo_actual = cupo_actual;
+		this.cupo_maximo = cupo_maximo;
 	}
+
+	public Paquete() {
+		
+	}
+	
+
+	
 
 	//getters y setters
 	public int getId() {
@@ -69,14 +52,6 @@ public class Paquete {
 		this.id = id;
 	}
 	
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 	public LocalDate getInicioDate() {
 		return inicioDate;
@@ -141,12 +116,32 @@ public class Paquete {
 	public void setPromocion(Promocion promocion) {
 	    this.promocion = promocion;
 	}
+	
+
+	public int getCupo_actual() {
+		return cupo_actual;
+	}
+
+	public void setCupo_actual(int cupo_actual) {
+		this.cupo_actual = cupo_actual;
+	}
+
+	public int getCupo_maximo() {
+		return cupo_maximo;
+	}
+
+	public void setCupo_maximo(int cupo_maximo) {
+		this.cupo_maximo = cupo_maximo;
+	}
 
 	@Override
 	public String toString() {
-		return "Paquete [id=" + id + ", nombre=" + nombre + ", inicioDate=" + inicioDate + ", finDate=" + finDate
-				+ ", precio=" + precio + ", hotel=" + hotel + ", habitacion=" + habitacion + ", actividad=" + actividad
-				+ ", precioOriginal=" + precioOriginal + ", promocion=" + promocion + "]";
+		return "Paquete [id=" + id + ", inicioDate=" + inicioDate + ", finDate=" + finDate + ", precio=" + precio
+				+ ", hotel=" + hotel + ", habitacion=" + habitacion + ", actividad=" + actividad + ", precioOriginal="
+				+ precioOriginal + ", promocion=" + promocion + ", cupo_actual=" + cupo_actual + ", cupo_maximo="
+				+ cupo_maximo + "]";
 	}
+
+	
 	
 }
