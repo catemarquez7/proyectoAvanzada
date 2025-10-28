@@ -150,8 +150,7 @@ public class Usuario extends Persona {
                           JOptionPane.ERROR_MESSAGE);
 				  return null;
 			} else {
-				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "LOGIN EXITOSO",
-						JOptionPane.INFORMATION_MESSAGE);
+				
 				return usuarioEncontrado;
 
 			}
@@ -249,13 +248,25 @@ public class Usuario extends Persona {
 
 		switch (tipoUser) {
 		case "1": // Cliente
+			if (DtoUsuario.chequeoSuspension()) {
+				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+			}else {
+				
 			Cliente cliente = new Cliente();
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuCliente(usuario, cliente);
+			}
 			break;
 		case "2": // Encargado
+			if (DtoUsuario.chequeoSuspension()) {
+				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+			}else {
+				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuEncargado(usuario);
+			}
 			break;
 		case "3": // Administrador
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuAdmin(usuario);
 			break;
 		default:
@@ -360,32 +371,40 @@ public class Usuario extends Persona {
 				Administrador.modificarHotel();
 				break;
 			case 2:
+				// Eliminar_hotel
+				Administrador.eliminarHotel();
+				break;
+			case 3:
 				// Ver_reservas
 				Administrador.verReservas();
 				break;
-			case 3:
+			case 4:
 				// Modificar_reserva
 				Administrador.modificarReserva();
 				break;
-			case 4:
+			case 5:
 				// Ver_paquetes
 				Administrador.verPaquetes();
 				break;
-			case 5:
+			case 6:
 				// Modificar_paquete
 				Administrador.modificarPaquete();
 				break;
-			case 6:
+			case 7:
 				// Gestionar_cuentas
 				Administrador.gestionarCuentas();
 				break;
-			case 7:
+			case 8:
+				// Suspender_sistema
+				Administrador.suspenderSistema();
+				break;
+			case 9:
 				// Cerrar_Sesión
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
 			}
 
-		} while (opcion != 7);
+		} while (opcion != 9);
 
 	}// fin
 

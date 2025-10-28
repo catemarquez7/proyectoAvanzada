@@ -185,7 +185,7 @@ public class DtoCliente {
 								locacion, inicioAct, finAct, hotel, riesgo);
 					}
 
-					// Crear paqu
+					// Crear paq
 					Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad, precioPaq, null, cupo_actual, cupo_maximo);
 
 					paquetes.add(paquete);

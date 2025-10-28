@@ -8,6 +8,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import dll.DtoAdministrador;
+import dll.DtoUsuario;
+import repository.SiNoOpcion;
 
 public class Administrador extends Usuario {
 
@@ -92,6 +94,43 @@ public class Administrador extends Usuario {
 		DtoAdministrador.modificarHotel(idHotel, nuevoNombre);
 	}
 
+	// Eliminar hotel
+		public static void eliminarHotel() {
+			List<Hotel> hoteles = DtoAdministrador.verHoteles();
+
+			if (hoteles.isEmpty()) {
+				JOptionPane.showMessageDialog(null, "No hay hoteles registrados.", "INFO", 1);
+				return;
+			}
+
+			// Dropdown con hoteles
+			String[] opcionesHoteles = new String[hoteles.size()];
+			for (int i = 0; i < hoteles.size(); i++) {
+				Hotel h = hoteles.get(i);
+				opcionesHoteles[i] = h.getId() + " - " + h.getNombre() + " (" + h.getProvincia() + ")";
+			}
+
+			String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione el hotel a eliminar:",
+					"ELIMINAR HOTEL", JOptionPane.QUESTION_MESSAGE, null, opcionesHoteles, opcionesHoteles[0]);
+
+			if (seleccion == null)
+				return;
+
+			int idHotel = Integer.parseInt(seleccion.split(" - ")[0]);
+			
+			 SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Esta seguro que quiere eliminar el hotel? No podrá volver atrás.", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+				
+				String opcion = opcionEnum.toString();
+				
+				switch (opcion) {
+				case "Si": 
+					DtoAdministrador.eliminarHotel(idHotel);
+					break;
+				case "No": 
+					break;
+				}
+		}
+	
 	// Ver reservas
 	public static void verReservas() {
 
@@ -612,6 +651,41 @@ public class Administrador extends Usuario {
 
 		int idUsuario = Integer.parseInt(seleccion.split(" - ")[0]);
 		DtoAdministrador.desbloquearCuenta(idUsuario);
+	}
+	
+	static void suspenderSistema() {
+		if (DtoUsuario.chequeoSuspension()) {
+			
+			 SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea reactivar el sistema en suspensión?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+				
+				String opcion = opcionEnum.toString();
+				
+				switch (opcion) {
+				case "Si":
+					DtoAdministrador.activarSistema();
+				break;
+
+				case "No": 
+				break;
+				}
+		} else {
+		
+		 SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea poner todo el sistema en suspensión? El programa quedará fuera de uso", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+			
+			String opcion = opcionEnum.toString();
+			
+			switch (opcion) {
+			case "Si":
+				DtoAdministrador.suspenderSistema();
+			break;
+
+			case "No": 
+			break;
+			}
+				
+	}
+	
+
 	}
 
 	// Eliminar cuenta

@@ -15,7 +15,6 @@ public class Main {
 		Usuario inicio = new Usuario();
 
 		JOptionPane.showMessageDialog(null, "Bienvenido al Sistema de House Hunter!", "BIENVENIDO!", 0);
-
 		
 		do {
 

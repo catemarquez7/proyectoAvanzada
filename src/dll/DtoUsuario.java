@@ -207,7 +207,25 @@ public class DtoUsuario {
 		
 		return false;
 	}
-    
-    
-    
+    //Chequeo suspension
+    public static boolean chequeoSuspension() {
+    	try {
+			PreparedStatement stmt = conx.prepareStatement("SELECT * FROM sistema");
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				int estadoSuspension = rs.getInt("estado");
+				if (estadoSuspension == 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al cargar cuentas: " + e.getMessage(), "ERROR", 0);
+		}
+    	return false;
+    }
 }// fin clase

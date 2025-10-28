@@ -72,6 +72,27 @@ public class DtoAdministrador {
 		}
 		return false;
 	}
+	
+	// Eliminar hotel
+		public static boolean eliminarHotel(int idHotel) {
+			try {
+				PreparedStatement stmt = conx.prepareStatement("DELETE FROM hotel WHERE id = ?");
+				stmt.setInt(1, idHotel);
+
+				int filas = stmt.executeUpdate();
+				if (filas > 0) {
+					JOptionPane.showMessageDialog(null, "Hotel eliminado exitosamente", "ÉXITO", 1);
+					return true;
+				} else {
+					JOptionPane.showMessageDialog(null, "No se encontró el hotel con ID: " + idHotel, "ERROR", 0);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error al eliminar hotel: " + e.getMessage(), "ERROR", 0);
+			}
+			return false;
+		}
 
 	// Modificar paquetes
 	public static boolean modificarPaquete(int idPaquete, LocalDate fechaInicio, LocalDate fechaFin, double precio,
@@ -628,6 +649,51 @@ public class DtoAdministrador {
 		}
 
 		return stats.toString();
+	
 	}
+	
+	
+	//Supender_sistema
+	public static void suspenderSistema() {
+		try {
+			PreparedStatement stmt = conx.prepareStatement("UPDATE sistema SET estado = ? WHERE id = ?");
+			stmt.setInt(1,0);
+			stmt.setInt(2,1);
 
+			int filas = stmt.executeUpdate();
+			if (filas > 0) {
+				JOptionPane.showMessageDialog(null, "Sistema en modo Suspensión", "ÉXITO", 1);
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+		}
+	}
+	
+	//Activar_sistema
+	public static void activarSistema() {
+		try {
+			PreparedStatement stmt = conx.prepareStatement("UPDATE sistema SET estado = ? WHERE id = ?");
+			stmt.setInt(1,1);
+			stmt.setInt(2,1);
+
+			int filas = stmt.executeUpdate();
+			if (filas > 0) {
+				JOptionPane.showMessageDialog(null, "Sistema reactivado correctamente", "ÉXITO", 1);
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+		}
+	}
+	
+	
 }
