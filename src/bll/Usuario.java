@@ -355,57 +355,68 @@ public class Usuario extends Persona {
 	}// fin
 
 	public static void menuAdmin(Usuario usuario) {
-		int opcion;
+	    int opcion;
 
-		do {
-			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
-					repository.Acciones_adm.values(), repository.Acciones_adm.values());
+	    do {
+	        opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+	                repository.Acciones_adm.values(), repository.Acciones_adm.values());
 
-			switch (opcion) {
-			case 0:
-				// Ver_hoteles
-				Administrador.verHoteles();
-				break;
-			case 1:
-				// Modificar_hotel
-				Administrador.modificarHotel();
-				break;
-			case 2:
-				// Eliminar_hotel
-				Administrador.eliminarHotel();
-				break;
-			case 3:
-				// Ver_reservas
-				Administrador.verReservas();
-				break;
-			case 4:
-				// Modificar_reserva
-				Administrador.modificarReserva();
-				break;
-			case 5:
-				// Ver_paquetes
-				Administrador.verPaquetes();
-				break;
-			case 6:
-				// Modificar_paquete
-				Administrador.modificarPaquete();
-				break;
-			case 7:
-				// Gestionar_cuentas
-				Administrador.gestionarCuentas();
-				break;
-			case 8:
-				// Suspender_sistema
-				Administrador.suspenderSistema();
-				break;
-			case 9:
-				// Cerrar_Sesión
-				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-				break;
-			}
+	        switch (opcion) {
+	        case 0:
+	            // Ver_hoteles
+	            Administrador.verHoteles();
+	            break;
+	        case 1:
+	            // Modificar_hotel
+	            Administrador.modificarHotel();
+	            break;
+	        case 2:
+	            // Eliminar_hotel
+	            Administrador.eliminarHotel();
+	            break;
+	        case 3:
+	            // Crear_hotel
+	            Administrador.crearHotel();
+	            break;
+	        case 4:
+	            // Ver_reservas
+	            Administrador.verReservas();
+	            break;
+	        case 5:
+	            // Modificar_reserva
+	            Administrador.modificarReserva();
+	            break;
+	        case 6:
+	            // Ver_paquetes
+	            Administrador.verPaquetes();
+	            break;
+	        case 7:
+	            // Modificar_paquete
+	            Administrador.modificarPaquete();
+	            break;
+	        case 8:
+	            // Crear_paquete
+	            Administrador.crearPaquete();
+	            break;
+	        case 9:
+	            // Crear_actividad
+	            Administrador.crearActividad();
+	            break;
+	        case 10:
+	            // Gestionar_cuentas
+	            Administrador.gestionarCuentas();
+	            break;
+	        case 11:
+	            // Mantenimiento (Suspender_sistema)
+	            Administrador.suspenderSistema();
+	            break;
+	        case 12:
+	            // Cerrar_Sesión
+	            JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+	            break;
+	        }
 
-		} while (opcion != 9);
-
+	    } while (opcion != 12);
 	}// fin
 
 	

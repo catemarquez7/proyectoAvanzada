@@ -740,4 +740,135 @@ public class Administrador extends Usuario {
 		JOptionPane.showMessageDialog(null, stats, "ESTADÍSTICAS DEL SISTEMA", JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	// =============== CREAR HOTEL ===============
+	public static void crearHotel() {
+	    String nombre = repository.Validaciones.ValidarContras("Ingrese nombre del hotel:");
+	    String provincia = repository.Validaciones.ValidarLetras("Ingrese provincia:");
+	    String direccion = repository.Validaciones.ValidarContras("Ingrese dirección:");
+	    int cantHabitaciones = repository.Validaciones.ValidarNum("Ingrese cantidad de habitaciones:");
+	    int cupoMaximo = repository.Validaciones.ValidarNum("Ingrese cupo máximo del hotel:");
+	    
+	    DtoAdministrador.crearHotel(nombre, provincia, direccion, cantHabitaciones, cupoMaximo);
+	}
+
+	// =============== CREAR ACTIVIDAD ===============
+	public static void crearActividad() {
+	    // Seleccionar hotel
+	    List<Hotel> hoteles = DtoAdministrador.verHoteles();
+	    
+	    if (hoteles.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No hay hoteles registrados. Cree un hotel primero.", "INFO", 1);
+	        return;
+	    }
+	    
+	    String[] opcionesHoteles = new String[hoteles.size()];
+	    for (int i = 0; i < hoteles.size(); i++) {
+	        Hotel h = hoteles.get(i);
+	        opcionesHoteles[i] = h.getId() + " - " + h.getNombre() + " (" + h.getProvincia() + ")";
+	    }
+	    
+	    String hotelSel = (String) JOptionPane.showInputDialog(null,
+	        "Seleccione el hotel para la actividad:",
+	        "HOTEL",
+	        JOptionPane.QUESTION_MESSAGE,
+	        null,
+	        opcionesHoteles,
+	        opcionesHoteles[0]);
+	    
+	    if (hotelSel == null) return;
+	    int idHotel = Integer.parseInt(hotelSel.split(" - ")[0]);
+	    
+	    // Ingresar datos de la actividad
+	    String nombre = repository.Validaciones.ValidarContras("Ingrese nombre de la actividad:");
+	    
+	    // Dropdown de categoría
+	    repository.Actividades_categoria categoriaEnum = (repository.Actividades_categoria) JOptionPane.showInputDialog(
+	        null,
+	        "Seleccione la categoría:",
+	        "CATEGORÍA",
+	        JOptionPane.QUESTION_MESSAGE,
+	        null,
+	        repository.Actividades_categoria.values(),
+	        repository.Actividades_categoria.values()[0]);
+	    
+	    if (categoriaEnum == null) return;
+	    String categoria = categoriaEnum.toString();
+	    
+	    String locacion = repository.Validaciones.ValidarContras("Ingrese locación:");
+	    int edadMinima = repository.Validaciones.ValidarNum("Ingrese edad mínima:");
+	    int edadMaxima = repository.Validaciones.ValidarNum("Ingrese edad máxima:");
+	    double precio = repository.Validaciones.ValidarNum("Ingrese precio:");
+	    double duracion = repository.Validaciones.ValidarNum("Ingrese duración (en horas):");
+	    LocalDate fechaInicio = repository.Validaciones.ValidarFecha("Ingrese fecha de inicio");
+	    LocalDate fechaFin = repository.Validaciones.ValidarFecha("Ingrese fecha de fin");
+	    
+	    String riesgo = repository.Validaciones.ValidarContras("¿Tiene riesgo? (Si/No):");
+	    
+	    DtoAdministrador.crearActividad(nombre, categoria, locacion, edadMinima, edadMaxima,
+	        precio, duracion, fechaInicio, fechaFin, idHotel, riesgo);
+	}
+
+	// =============== CREAR PAQUETE ===============
+	public static void crearPaquete() {
+	    // Seleccionar hotel
+	    List<Hotel> hoteles = DtoAdministrador.verHoteles();
+	    
+	    if (hoteles.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, "No hay hoteles registrados.", "INFO", 1);
+	        return;
+	    }
+	    
+	    String[] opcionesHoteles = new String[hoteles.size()];
+	    for (int i = 0; i < hoteles.size(); i++) {
+	        Hotel h = hoteles.get(i);
+	        opcionesHoteles[i] = h.getId() + " - " + h.getNombre() + " (" + h.getProvincia() + ")";
+	    }
+	    
+	    String hotelSel = (String) JOptionPane.showInputDialog(null,
+	        "Seleccione el hotel:",
+	        "HOTEL",
+	        JOptionPane.QUESTION_MESSAGE,
+	        null,
+	        opcionesHoteles,
+	        opcionesHoteles[0]);
+	    
+	    if (hotelSel == null) return;
+	    int idHotel = Integer.parseInt(hotelSel.split(" - ")[0]);
+	    
+	    // Seleccionar actividad del hotel seleccionado
+	    List<Actividad> actividades = DtoAdministrador.obtenerActividadesPorHotel(idHotel);
+	    
+	    if (actividades.isEmpty()) {
+	        JOptionPane.showMessageDialog(null, 
+	            "Este hotel no tiene actividades. Cree una actividad primero.", "INFO", 1);
+	        return;
+	    }
+	    
+	    String[] opcionesActividades = new String[actividades.size()];
+	    for (int i = 0; i < actividades.size(); i++) {
+	        Actividad a = actividades.get(i);
+	        opcionesActividades[i] = a.getId() + " - " + a.getNombre() + 
+	            " (" + a.getCategoria() + ") - $" + a.getPrecio();
+	    }
+	    
+	    String actSel = (String) JOptionPane.showInputDialog(null,
+	        "Seleccione la actividad:",
+	        "ACTIVIDAD",
+	        JOptionPane.QUESTION_MESSAGE,
+	        null,
+	        opcionesActividades,
+	        opcionesActividades[0]);
+	    
+	    if (actSel == null) return;
+	    int idActividad = Integer.parseInt(actSel.split(" - ")[0]);
+	    
+	    // Ingresar datos del paquete
+	    LocalDate fechaInicio = repository.Validaciones.ValidarFecha("Ingrese fecha de inicio del paquete");
+	    LocalDate fechaFin = repository.Validaciones.ValidarFecha("Ingrese fecha de fin del paquete");
+	    double precio = repository.Validaciones.ValidarNum("Ingrese precio del paquete:");
+	    int cupoMaximo = repository.Validaciones.ValidarNum("Ingrese cupo máximo de personas:");
+	    
+	    DtoAdministrador.crearPaquete(fechaInicio, fechaFin, precio, idHotel, idActividad, cupoMaximo);
+	}
+	
 }// fin

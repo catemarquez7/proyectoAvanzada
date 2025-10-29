@@ -695,5 +695,97 @@ public class DtoAdministrador {
 		}
 	}
 	
+	// =============== CREAR HOTEL ===============
+	public static boolean crearHotel(String nombre, String provincia, String direccion, 
+	                                int cantHabitaciones, int cupoMaximo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO hotel (nombre, provincia, direccion, cant_habitaciones, calificacion_promedio, cupo_actual, cupo_maximo) " +
+	            "VALUES (?, ?, ?, ?, 0.0, 0, ?)");
+	        
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, provincia);
+	        stmt.setString(3, direccion);
+	        stmt.setInt(4, cantHabitaciones);
+	        stmt.setInt(5, cupoMaximo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Hotel creado exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear hotel: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}
+
+	// =============== CREAR ACTIVIDAD ===============
+	public static boolean crearActividad(String nombre, String categoria, String locacion, 
+	                                    int edadMinima, int edadMaxima, double precio, 
+	                                    double duracion, LocalDate fechaInicio, LocalDate fechaFin, 
+	                                    int idHotel, String riesgo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO actividad (nombre, categoria, locacion, edad_minima, edad_maxima, " +
+	            "precio, duracion, fecha_inicio, fecha_fin, id_hotel, riesgo) " +
+	            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	        
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, categoria);
+	        stmt.setString(3, locacion);
+	        stmt.setInt(4, edadMinima);
+	        stmt.setInt(5, edadMaxima);
+	        stmt.setDouble(6, precio);
+	        stmt.setDouble(7, duracion);
+	        stmt.setDate(8, java.sql.Date.valueOf(fechaInicio));
+	        stmt.setDate(9, java.sql.Date.valueOf(fechaFin));
+	        stmt.setInt(10, idHotel);
+	        stmt.setString(11, riesgo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Actividad creada exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear actividad: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}
+
+	// =============== CREAR PAQUETE ===============
+	public static boolean crearPaquete(LocalDate fechaInicio, LocalDate fechaFin, double precio, 
+	                                  int idHotel, int idActividad, int cupoMaximo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO paquete (fecha_inicio, fecha_fin, precio, id_hotel, id_habitacion, id_actividad, " +
+	            "precio_original, id_promocion, cupo_actual, cupo_maximo) " +
+	            "VALUES (?, ?, ?, ?, NULL, ?, ?, NULL, 0, ?)");
+	        
+	        stmt.setDate(1, java.sql.Date.valueOf(fechaInicio));
+	        stmt.setDate(2, java.sql.Date.valueOf(fechaFin));
+	        stmt.setDouble(3, precio);
+	        stmt.setInt(4, idHotel);
+	        stmt.setInt(5, idActividad);
+	        stmt.setDouble(6, precio); // precio_original = precio inicial
+	        stmt.setInt(7, cupoMaximo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Paquete creado exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear paquete: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}
 	
 }
