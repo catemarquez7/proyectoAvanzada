@@ -693,5 +693,99 @@ public class DtoEncargado {
 
 		return paquetes;
 	}// fin
+	
+	//Editar
+	public static boolean editarPromocion(int id_promocion, String campo, String nuevoValor, int id_hotel) {
+	    try {
+	        String sql = "";
+	        PreparedStatement stmt = null;
+
+	        switch (campo) {
+	        case "nombre":
+	            sql = "UPDATE promocion SET nombre = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setString(1, nuevoValor);
+	            break;
+
+	        case "descripcion":
+	            sql = "UPDATE promocion SET descripcion = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setString(1, nuevoValor);
+	            break;
+
+	        case "porcentaje":
+	            sql = "UPDATE promocion SET porcentaje_descuento = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setDouble(1, Double.parseDouble(nuevoValor));
+	            break;
+
+	        case "fecha_inicio":
+	            sql = "UPDATE promocion SET fecha_inicio = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
+	            break;
+
+	        case "fecha_fin":
+	            sql = "UPDATE promocion SET fecha_fin = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
+	            break;
+
+	        case "estado":
+	            sql = "UPDATE promocion SET estado = ? WHERE id = ? AND id_hotel = ?";
+	            stmt = (PreparedStatement) conx.prepareStatement(sql);
+	            stmt.setString(1, nuevoValor);
+	            break;
+
+	        default:
+	            JOptionPane.showMessageDialog(null, "Campo inválido", "ERROR", 0);
+	            return false;
+	        }
+
+	        stmt.setInt(2, id_promocion);
+	        stmt.setInt(3, id_hotel);
+
+	        int filas = stmt.executeUpdate();
+
+	        if (filas > 0) {
+	            if (campo.equals("porcentaje")) {
+	                actualizarPreciosPaquetesConPromocion(id_promocion, Double.parseDouble(nuevoValor));
+	            }
+
+	            JOptionPane.showMessageDialog(null, "Promoción actualizada exitosamente", "ÉXITO",
+	                    JOptionPane.INFORMATION_MESSAGE);
+	            return true;
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No se pudo actualizar la promoción", "ERROR", 0);
+	            return false;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}// fin
+
+	//Actualizar
+	private static void actualizarPreciosPaquetesConPromocion(int id_promocion, double nuevoPorcentaje) {
+	    try {
+	        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
+	                "UPDATE paquete SET precio = precio_original - (precio_original * ? / 100) WHERE id_promocion = ?");
+
+	        stmt.setDouble(1, nuevoPorcentaje);
+	        stmt.setInt(2, id_promocion);
+
+	        int filasActualizadas = stmt.executeUpdate();
+	        
+	        if (filasActualizadas > 0) {
+	            System.out.println("Se actualizaron " + filasActualizadas + " paquetes con el nuevo porcentaje");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al actualizar precios de paquetes: " + e.getMessage(), "ERROR", 0);
+	    }
+	}//fin
 
 }// fin clase
