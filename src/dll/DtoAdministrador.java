@@ -72,6 +72,27 @@ public class DtoAdministrador {
 		}
 		return false;
 	}
+	
+	// Eliminar hotel
+		public static boolean eliminarHotel(int idHotel) {
+			try {
+				PreparedStatement stmt = conx.prepareStatement("DELETE FROM hotel WHERE id = ?");
+				stmt.setInt(1, idHotel);
+
+				int filas = stmt.executeUpdate();
+				if (filas > 0) {
+					JOptionPane.showMessageDialog(null, "Hotel eliminado exitosamente", "ÉXITO", 1);
+					return true;
+				} else {
+					JOptionPane.showMessageDialog(null, "No se encontró el hotel con ID: " + idHotel, "ERROR", 0);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Error al eliminar hotel: " + e.getMessage(), "ERROR", 0);
+			}
+			return false;
+		}
 
 	// Modificar paquetes
 	public static boolean modificarPaquete(int idPaquete, LocalDate fechaInicio, LocalDate fechaFin, double precio,
@@ -377,8 +398,11 @@ public class DtoAdministrador {
 				LocalDate inicioPaq = rs.getDate("p.fecha_inicio").toLocalDate();
 				LocalDate finPaq = rs.getDate("p.fecha_fin").toLocalDate();
 				double precioPaq = rs.getDouble("p.precio");
+				int cupo_actual = rs.getInt("p.cupo_actual");
+				int cupo_maximo = rs.getInt("p.cupo_maximo");
 
-				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad);
+
+				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad, precioPaq, null, cupo_actual, cupo_maximo);
 
 				// Crear reserva
 				Reserva reserva = new Reserva(idReserva, cliente, paquete, estadoReserva, checkin, checkout, tarjeta,
@@ -414,6 +438,9 @@ public class DtoAdministrador {
 				LocalDate inicioPaq = rs.getDate("p.fecha_inicio").toLocalDate();
 				LocalDate finPaq = rs.getDate("p.fecha_fin").toLocalDate();
 				double precioPaq = rs.getDouble("p.precio");
+				int cupo_actual = rs.getInt("p.cupo_actual");
+				int cupo_maximo = rs.getInt("p.cupo_maximo");
+
 
 				// Datos del hotel
 				int idHotelRes = rs.getInt("h.id");
@@ -459,7 +486,7 @@ public class DtoAdministrador {
 				}
 
 				// Crear paqu
-				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad);
+				Paquete paquete = new Paquete(idPaquete, inicioPaq, finPaq, precioPaq, hotel, habitacion, actividad, precioPaq, null, cupo_actual, cupo_maximo);
 
 				paquetes.add(paquete);
 			}
@@ -622,6 +649,143 @@ public class DtoAdministrador {
 		}
 
 		return stats.toString();
+	
+	}
+	
+	
+	//Supender_sistema
+	public static void suspenderSistema() {
+		try {
+			PreparedStatement stmt = conx.prepareStatement("UPDATE sistema SET estado = ? WHERE id = ?");
+			stmt.setInt(1,0);
+			stmt.setInt(2,1);
+
+			int filas = stmt.executeUpdate();
+			if (filas > 0) {
+				JOptionPane.showMessageDialog(null, "Sistema en modo Suspensión", "ÉXITO", 1);
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+		}
+	}
+	
+	//Activar_sistema
+	public static void activarSistema() {
+		try {
+			PreparedStatement stmt = conx.prepareStatement("UPDATE sistema SET estado = ? WHERE id = ?");
+			stmt.setInt(1,1);
+			stmt.setInt(2,1);
+
+			int filas = stmt.executeUpdate();
+			if (filas > 0) {
+				JOptionPane.showMessageDialog(null, "Sistema reactivado correctamente", "ÉXITO", 1);
+				
+			} else {
+				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+		}
+	}
+	
+	// =============== CREAR HOTEL ===============
+	public static boolean crearHotel(String nombre, String provincia, String direccion, 
+	                                int cantHabitaciones, int cupoMaximo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO hotel (nombre, provincia, direccion, cant_habitaciones, calificacion_promedio, cupo_actual, cupo_maximo) " +
+	            "VALUES (?, ?, ?, ?, 0.0, 0, ?)");
+	        
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, provincia);
+	        stmt.setString(3, direccion);
+	        stmt.setInt(4, cantHabitaciones);
+	        stmt.setInt(5, cupoMaximo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Hotel creado exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear hotel: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
 	}
 
+	// =============== CREAR ACTIVIDAD ===============
+	public static boolean crearActividad(String nombre, String categoria, String locacion, 
+	                                    int edadMinima, int edadMaxima, double precio, 
+	                                    double duracion, LocalDate fechaInicio, LocalDate fechaFin, 
+	                                    int idHotel, String riesgo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO actividad (nombre, categoria, locacion, edad_minima, edad_maxima, " +
+	            "precio, duracion, fecha_inicio, fecha_fin, id_hotel, riesgo) " +
+	            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	        
+	        stmt.setString(1, nombre);
+	        stmt.setString(2, categoria);
+	        stmt.setString(3, locacion);
+	        stmt.setInt(4, edadMinima);
+	        stmt.setInt(5, edadMaxima);
+	        stmt.setDouble(6, precio);
+	        stmt.setDouble(7, duracion);
+	        stmt.setDate(8, java.sql.Date.valueOf(fechaInicio));
+	        stmt.setDate(9, java.sql.Date.valueOf(fechaFin));
+	        stmt.setInt(10, idHotel);
+	        stmt.setString(11, riesgo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Actividad creada exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear actividad: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}
+
+	// =============== CREAR PAQUETE ===============
+	public static boolean crearPaquete(LocalDate fechaInicio, LocalDate fechaFin, double precio, 
+	                                  int idHotel, int idActividad, int cupoMaximo) {
+	    try {
+	        PreparedStatement stmt = conx.prepareStatement(
+	            "INSERT INTO paquete (fecha_inicio, fecha_fin, precio, id_hotel, id_habitacion, id_actividad, " +
+	            "precio_original, id_promocion, cupo_actual, cupo_maximo) " +
+	            "VALUES (?, ?, ?, ?, NULL, ?, ?, NULL, 0, ?)");
+	        
+	        stmt.setDate(1, java.sql.Date.valueOf(fechaInicio));
+	        stmt.setDate(2, java.sql.Date.valueOf(fechaFin));
+	        stmt.setDouble(3, precio);
+	        stmt.setInt(4, idHotel);
+	        stmt.setInt(5, idActividad);
+	        stmt.setDouble(6, precio); // precio_original = precio inicial
+	        stmt.setInt(7, cupoMaximo);
+	        
+	        int filas = stmt.executeUpdate();
+	        if (filas > 0) {
+	            JOptionPane.showMessageDialog(null, "Paquete creado exitosamente", "ÉXITO", 1);
+	            return true;
+	        }
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(null, "Error al crear paquete: " + e.getMessage(), "ERROR", 0);
+	    }
+	    return false;
+	}
+	
 }

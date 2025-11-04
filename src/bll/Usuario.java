@@ -142,9 +142,22 @@ public class Usuario extends Persona {
 		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
 
 		if (usuarioEncontrado != null) {
-			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuarioEncontrado.getNombre() + "!", "LOGIN EXITOSO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return usuarioEncontrado;
+			
+			if (!DtoUsuario.usuarioBloqueado(usuarioEncontrado)) {
+				  JOptionPane.showMessageDialog(null,
+                          "Su cuenta ha sido bloqueada. Contacte al administrador.",
+                          "CUENTA BLOQUEADA",
+                          JOptionPane.ERROR_MESSAGE);
+				  return null;
+			} else {
+				
+				return usuarioEncontrado;
+
+			}
+			
+			
+			
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
 					JOptionPane.ERROR_MESSAGE);
@@ -235,13 +248,25 @@ public class Usuario extends Persona {
 
 		switch (tipoUser) {
 		case "1": // Cliente
+			if (DtoUsuario.chequeoSuspension()) {
+				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+			}else {
+				
 			Cliente cliente = new Cliente();
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuCliente(usuario, cliente);
+			}
 			break;
 		case "2": // Encargado
+			if (DtoUsuario.chequeoSuspension()) {
+				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+			}else {
+				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuEncargado(usuario);
+			}
 			break;
 		case "3": // Administrador
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
 			menuAdmin(usuario);
 			break;
 		default:
@@ -253,29 +278,29 @@ public class Usuario extends Persona {
 	public static void menuCliente(Usuario usuario, Cliente cliente) {
 		int opcion;
 		DtoCliente.cargarReservasExistentes(usuario, cliente);
+		DtoCliente.cargarReviewsExistentes(usuario, cliente);
 
 		do {
 			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
 					repository.Acciones_cl.values(), repository.Acciones_cl.values());
 
 			switch (opcion) {
-			case 0:
+			case 0://paquetes_recomendados
+				Cliente.verPaquetesReco(usuario, cliente);
+				break;
+			case 1://paquetes_todos
 				Cliente.verPaquetes(usuario, cliente);
 				break;
-			case 1:
-				Cliente.verReservas(cliente.reservas);
+			case 2: //reservas_activas
+				Cliente.reservas(usuario, cliente);;
 				break;
-			case 2:
-				// Realizar_reseñas
+			case 3: //realizar_reseñas
+				Cliente.reviews(usuario, cliente);
 				break;
-			case 3:
+			case 4: //ver _preferencias
 				Cliente.preferencias(usuario);
 				break;
-			case 4:
-				// Historial
-				break;
-			case 5:
-				// Atras
+			case 5://atras
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
 			}
@@ -284,7 +309,7 @@ public class Usuario extends Persona {
 	}// fin
 
 	public static void menuEncargado(Usuario usuario) {
-		int opcion, opcion1;
+		int opcion;
 		Encargado encargado = (Encargado) usuario;
 
 		do {
@@ -330,49 +355,70 @@ public class Usuario extends Persona {
 	}// fin
 
 	public static void menuAdmin(Usuario usuario) {
-		int opcion;
+	    int opcion;
 
-		do {
-			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
-					repository.Acciones_adm.values(), repository.Acciones_adm.values());
+	    do {
+	        opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+	                repository.Acciones_adm.values(), repository.Acciones_adm.values());
 
-			switch (opcion) {
-			case 0:
-				// Ver_hoteles
-				Administrador.verHoteles();
-				break;
-			case 1:
-				// Modificar_hotel
-				Administrador.modificarHotel();
-				break;
-			case 2:
-				// Ver_reservas
-				Administrador.verReservas();
-				break;
-			case 3:
-				// Modificar_reserva
-				Administrador.modificarReserva();
-				break;
-			case 4:
-				// Ver_paquetes
-				Administrador.verPaquetes();
-				break;
-			case 5:
-				// Modificar_paquete
-				Administrador.modificarPaquete();
-				break;
-			case 6:
-				// Gestionar_cuentas
-				Administrador.gestionarCuentas();
-				break;
-			case 7:
-				// Cerrar_Sesión
-				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-				break;
-			}
+	        switch (opcion) {
+	        case 0:
+	            // Ver_hoteles
+	            Administrador.verHoteles();
+	            break;
+	        case 1:
+	            // Modificar_hotel
+	            Administrador.modificarHotel();
+	            break;
+	        case 2:
+	            // Eliminar_hotel
+	            Administrador.eliminarHotel();
+	            break;
+	        case 3:
+	            // Crear_hotel
+	            Administrador.crearHotel();
+	            break;
+	        case 4:
+	            // Ver_reservas
+	            Administrador.verReservas();
+	            break;
+	        case 5:
+	            // Modificar_reserva
+	            Administrador.modificarReserva();
+	            break;
+	        case 6:
+	            // Ver_paquetes
+	            Administrador.verPaquetes();
+	            break;
+	        case 7:
+	            // Modificar_paquete
+	            Administrador.modificarPaquete();
+	            break;
+	        case 8:
+	            // Crear_paquete
+	            Administrador.crearPaquete();
+	            break;
+	        case 9:
+	            // Crear_actividad
+	            Administrador.crearActividad();
+	            break;
+	        case 10:
+	            // Gestionar_cuentas
+	            Administrador.gestionarCuentas();
+	            break;
+	        case 11:
+	            // Mantenimiento (Suspender_sistema)
+	            Administrador.suspenderSistema();
+	            break;
+	        case 12:
+	            // Cerrar_Sesión
+	            JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+	            break;
+	        }
 
-		} while (opcion != 7);
-
+	    } while (opcion != 12);
 	}// fin
 
+	
+	
 }// FIN USUARIO

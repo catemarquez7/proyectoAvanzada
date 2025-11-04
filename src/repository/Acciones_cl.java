@@ -2,6 +2,6 @@ package repository;
 
 public enum Acciones_cl {
 
-	Explorar_paquetes, Mis_reservas, Realizar_reseña, Preferencias, Historial, Cerrar_Sesión;
+	Paquetes_recomendados, Explorar_destinos, Mis_reservas, Mis_reseñas, Preferencias, Cerrar_Sesión;
 	
 }
