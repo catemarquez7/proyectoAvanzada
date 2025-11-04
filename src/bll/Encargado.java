@@ -622,6 +622,9 @@ public class Encargado extends Usuario {
 
 		        if (atributoSeleccionado == -1)  // Si cancela
 		            return;
+		        
+		        do {
+					
 
 		        switch (atributoSeleccionado) {
 		        case 0:  // Nombre
@@ -704,6 +707,9 @@ public class Encargado extends Usuario {
 		            }
 		            break;
 		        }
+		        
+				} while (atributoSeleccionado != 6);
+
 
 		    } catch (Exception e) {
 		        JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);

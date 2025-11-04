@@ -335,7 +335,7 @@ public class Cliente extends Usuario{
 		int opcion ;
 		do {
 			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
-					repository.Reservas_cl.values(), repository.Reservas_cl.values());
+					repository.Reservas_cli.values(), repository.Reservas_cli.values());
 			
 			switch (opcion) {
 			case 0://ver reservas
@@ -361,7 +361,7 @@ public class Cliente extends Usuario{
 			int opcion ;
 			do {
 				opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
-						repository.Review_cl.values(), repository.Review_cl.values());
+						repository.Review_cli.values(), repository.Review_cli.values());
 				
 				switch (opcion) {
 				case 0://escribir reseña
