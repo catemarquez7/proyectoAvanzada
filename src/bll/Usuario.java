@@ -133,11 +133,7 @@ public class Usuario extends Persona {
 
 	// metodos
 
-	public static Usuario login() {
-		String user, pass;
-
-		user = JOptionPane.showInputDialog("Ingrese su nombre de usuario:");
-		pass = JOptionPane.showInputDialog("Ingrese su contraseña:");
+	public static Usuario login(String user, String pass) {
 
 		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
 
