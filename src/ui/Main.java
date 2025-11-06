@@ -24,7 +24,7 @@ public class Main {
 			switch (eleccion) {
 			case 0: // iniciar sesion
 
-				inicio = Usuario.login();
+				inicio = Usuario.login(null, null);
 
 				if (inicio != null) {
 
@@ -35,7 +35,7 @@ public class Main {
 			case 1: // registrarse
 
 				JOptionPane.showMessageDialog(null,
-						Usuario.registrarse() == true ? "Agregado correctamente" : "No se pudo agregar");
+						Usuario.registrarse(null, null, null, null, eleccion, null, null, null, null, null) == true ? "Agregado correctamente" : "No se pudo agregar");
 
 				break;
 			case 2: // recuperar contraseña

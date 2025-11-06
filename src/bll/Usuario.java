@@ -1,11 +1,13 @@
 package bll;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 import javax.swing.JOptionPane;
 
 import dll.DtoCliente;
 import dll.DtoUsuario;
+import repository.Utilidades;
 
 public class Usuario extends Persona {
 
@@ -138,22 +140,17 @@ public class Usuario extends Persona {
 		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
 
 		if (usuarioEncontrado != null) {
-			
+
 			if (!DtoUsuario.usuarioBloqueado(usuarioEncontrado)) {
-				  JOptionPane.showMessageDialog(null,
-                          "Su cuenta ha sido bloqueada. Contacte al administrador.",
-                          "CUENTA BLOQUEADA",
-                          JOptionPane.ERROR_MESSAGE);
-				  return null;
+				JOptionPane.showMessageDialog(null, "Su cuenta ha sido bloqueada. Contacte al administrador.",
+						"CUENTA BLOQUEADA", JOptionPane.ERROR_MESSAGE);
+				return null;
 			} else {
-				
+
 				return usuarioEncontrado;
 
 			}
-			
-			
-			
-			
+
 		} else {
 			JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
 					JOptionPane.ERROR_MESSAGE);
@@ -161,82 +158,63 @@ public class Usuario extends Persona {
 		}
 	}
 
-	public static boolean registrarse() {
+	public static boolean registrarse(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni,
+			String direccion, String user, String pass, String pregunta, String respuesta) {
 
-		String nombre, apellido, direccion, mail, user, pass, pregunta, respuesta;
-		int dni;
-		LocalDate fecha_nac;
+		if (nombre.trim().isEmpty() || apellido.trim().isEmpty() || mail.trim().isEmpty() || direccion.trim().isEmpty()
+				|| user.trim().isEmpty() || pass.isEmpty() || pregunta.trim().isEmpty() || respuesta.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Todos los campos son obligatorios.", "Error de Validación",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-		nombre = repository.Validaciones.ValidarLetras("Ingrese su nombre: ");
-		apellido = repository.Validaciones.ValidarLetras("Ingrese su apellido: ");
-		fecha_nac = repository.Validaciones.ValidarFecha("Ingrese su fecha de nacimiento: ");
-		do {
-			mail = JOptionPane.showInputDialog("Ingrese mail");
-			if (repository.Validaciones.ValidarMail(mail) == false) {
-				JOptionPane.showMessageDialog(null, "Mail incorrecto");
-			}
-		} while (repository.Validaciones.ValidarMail(mail) == false);
-		dni = Usuario.ingresoDni();
-		direccion = repository.Validaciones.ValidarContras("Ingrese su domicilio: ");
-		user = repository.Validaciones.ValidarLetras("Ingrese su nombre de usuario: ");
-		pass = Usuario.ingresoContra();
-		pregunta = repository.Validaciones.ValidarLetras("Ingrese su pregunta para recuperación: ");
-		respuesta = repository.Validaciones
-				.ValidarLetras("Ingrese su respuesta para recuperación:\nLa respuesta no puede ser numérica");
+		if (!repository.Utilidades.contieneSoloLetras(nombre) || !repository.Utilidades.contieneSoloLetras(apellido)) {
+			JOptionPane.showMessageDialog(null, "El nombre y apellido solo deben contener letras.", "Error de Formato",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-		Usuario nuevo = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, user, pass, pregunta, respuesta);
-		return DtoUsuario.agregarUsuario(nuevo);
+		long edad = ChronoUnit.YEARS.between(fecha_nac, LocalDate.now());
+		if (edad < 18) {
+			JOptionPane.showMessageDialog(null, "Debe ser mayor de 18 años para registrarse.", "Error de Edad",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-	}// fin
+		if (String.valueOf(dni).length() < 8) {
+			JOptionPane.showMessageDialog(null, "El DNI debe tener al menos 8 dígitos.", "Error de DNI",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-	public static int ingresoDni() {
+		if (pass.length() < 8) {
+			JOptionPane.showMessageDialog(null, "La contraseña debe tener al menos 8 caracteres.", "Error de Seguridad",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-		int dni;
-		String documento;
+		if (!Utilidades.ValidarMail(mail)) {
+			JOptionPane.showMessageDialog(null, "El formato del correo electrónico no es válido.", "Error de Formato",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
 
-		do {
-			dni = repository.Validaciones.ValidarNum("Ingrese su número de documento: ");
-			documento = Integer.toString(dni);
+		try {
+			Usuario nuevo = new Usuario(nombre, apellido, fecha_nac, mail, dni, direccion, user, pass, pregunta,
+					respuesta);
 
-			if (documento.length() < 8) {
-				JOptionPane.showMessageDialog(null, "Su número de documento debe tener al menos 8 dígitos.", "ERROR!",
-						0);
-			}
-		} while (documento.length() < 8);
+			return DtoUsuario.agregarUsuario(nuevo);
 
-		return dni;
+		} catch (Exception e) {
+			e.printStackTrace();
 
-	}// fin
+			JOptionPane.showMessageDialog(null, "Error interno al procesar el registro.", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}//fin
 
-	public static String ingresoContra() {
-
-		String cont, cont2;
-		boolean flag = false;
-
-		do {
-
-			cont = repository.Validaciones.ValidarContras("Ingrese su contraseña:\n(Debe tener 8 dígitos)");
-
-			if (cont.length() >= 8) {
-				cont2 = repository.Validaciones.ValidarContras("Ingrese su contraseña nuevamente: ");
-
-				if (cont.equals(cont2)) {
-					flag = true;
-				} else {
-					JOptionPane.showMessageDialog(null, "Las contraseñas no son idénticas, vuelva a intentarlo",
-							"ERROR!", 0);
-					flag = false;
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Su contraseña debe tener 8 dígitos", "ERROR!", 0);
-				flag = false;
-			}
-
-		} while (flag == false);
-
-		return cont;
-
-	}// fin
+	
 
 	public static void redirigir(Usuario usuario) {
 
@@ -246,23 +224,26 @@ public class Usuario extends Persona {
 		case "1": // Cliente
 			if (DtoUsuario.chequeoSuspension()) {
 				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
-			}else {
-				
-			Cliente cliente = new Cliente();
-			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
-			menuCliente(usuario, cliente);
+			} else {
+
+				Cliente cliente = new Cliente();
+				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+						JOptionPane.INFORMATION_MESSAGE);
+				menuCliente(usuario, cliente);
 			}
 			break;
 		case "2": // Encargado
 			if (DtoUsuario.chequeoSuspension()) {
 				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
-			}else {
-				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
-			menuEncargado(usuario);
+			} else {
+				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+						JOptionPane.INFORMATION_MESSAGE);
+				menuEncargado(usuario);
 			}
 			break;
 		case "3": // Administrador
-			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+					JOptionPane.INFORMATION_MESSAGE);
 			menuAdmin(usuario);
 			break;
 		default:
@@ -281,22 +262,23 @@ public class Usuario extends Persona {
 					repository.Acciones_cl.values(), repository.Acciones_cl.values());
 
 			switch (opcion) {
-			case 0://paquetes_recomendados
+			case 0:// paquetes_recomendados
 				Cliente.verPaquetesReco(usuario, cliente);
 				break;
-			case 1://paquetes_todos
+			case 1:// paquetes_todos
 				Cliente.verPaquetes(usuario, cliente);
 				break;
-			case 2: //reservas_activas
-				Cliente.reservas(usuario, cliente);;
+			case 2: // reservas_activas
+				Cliente.reservas(usuario, cliente);
+				;
 				break;
-			case 3: //realizar_reseñas
+			case 3: // realizar_reseñas
 				Cliente.reviews(usuario, cliente);
 				break;
-			case 4: //ver _preferencias
+			case 4: // ver _preferencias
 				Cliente.preferencias(usuario);
 				break;
-			case 5://atras
+			case 5:// atras
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
 			}
@@ -345,76 +327,74 @@ public class Usuario extends Persona {
 				// Atras
 				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
 				break;
-			}//switch1
+			}// switch1
 
 		} while (opcion != 7);
 	}// fin
 
 	public static void menuAdmin(Usuario usuario) {
-	    int opcion;
+		int opcion;
 
-	    do {
-	        opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
-	                repository.Acciones_adm.values(), repository.Acciones_adm.values());
+		do {
+			opcion = JOptionPane.showOptionDialog(null, "Seleccione: ", "BIENVENIDO " + usuario.getNombre(), 0, 0, null,
+					repository.Acciones_adm.values(), repository.Acciones_adm.values());
 
-	        switch (opcion) {
-	        case 0:
-	            // Ver_hoteles
-	            Administrador.verHoteles();
-	            break;
-	        case 1:
-	            // Modificar_hotel
-	            Administrador.modificarHotel();
-	            break;
-	        case 2:
-	            // Eliminar_hotel
-	            Administrador.eliminarHotel();
-	            break;
-	        case 3:
-	            // Crear_hotel
-	            Administrador.crearHotel();
-	            break;
-	        case 4:
-	            // Ver_reservas
-	            Administrador.verReservas();
-	            break;
-	        case 5:
-	            // Modificar_reserva
-	            Administrador.modificarReserva();
-	            break;
-	        case 6:
-	            // Ver_paquetes
-	            Administrador.verPaquetes();
-	            break;
-	        case 7:
-	            // Modificar_paquete
-	            Administrador.modificarPaquete();
-	            break;
-	        case 8:
-	            // Crear_paquete
-	            Administrador.crearPaquete();
-	            break;
-	        case 9:
-	            // Crear_actividad
-	            Administrador.crearActividad();
-	            break;
-	        case 10:
-	            // Gestionar_cuentas
-	            Administrador.gestionarCuentas();
-	            break;
-	        case 11:
-	            // Mantenimiento (Suspender_sistema)
-	            Administrador.suspenderSistema();
-	            break;
-	        case 12:
-	            // Cerrar_Sesión
-	            JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
-	            break;
-	        }
+			switch (opcion) {
+			case 0:
+				// Ver_hoteles
+				Administrador.verHoteles();
+				break;
+			case 1:
+				// Modificar_hotel
+				Administrador.modificarHotel();
+				break;
+			case 2:
+				// Eliminar_hotel
+				Administrador.eliminarHotel();
+				break;
+			case 3:
+				// Crear_hotel
+				Administrador.crearHotel();
+				break;
+			case 4:
+				// Ver_reservas
+				Administrador.verReservas();
+				break;
+			case 5:
+				// Modificar_reserva
+				Administrador.modificarReserva();
+				break;
+			case 6:
+				// Ver_paquetes
+				Administrador.verPaquetes();
+				break;
+			case 7:
+				// Modificar_paquete
+				Administrador.modificarPaquete();
+				break;
+			case 8:
+				// Crear_paquete
+				Administrador.crearPaquete();
+				break;
+			case 9:
+				// Crear_actividad
+				Administrador.crearActividad();
+				break;
+			case 10:
+				// Gestionar_cuentas
+				Administrador.gestionarCuentas();
+				break;
+			case 11:
+				// Mantenimiento (Suspender_sistema)
+				Administrador.suspenderSistema();
+				break;
+			case 12:
+				// Cerrar_Sesión
+				JOptionPane.showMessageDialog(null, "Redirigiendo al menú principal! ", "ADIOS!", 0);
+				break;
+			}
 
-	    } while (opcion != 12);
+		} while (opcion != 12);
 	}// fin
 
-	
-	
 }// FIN USUARIO

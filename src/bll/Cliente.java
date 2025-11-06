@@ -10,7 +10,6 @@ import dll.DtoAdministrador;
 import dll.DtoCliente;
 import repository.Actividades_categoria;
 import repository.SiNoOpcion;
-import repository.Validaciones;
 
 public class Cliente extends Usuario{
 
@@ -480,8 +479,8 @@ public class Cliente extends Usuario{
 				JOptionPane.showMessageDialog(null, "Ya ha realizado una reseña para esa reserva.");
 				return false;
 			} else {
-				double puntaje = Validaciones.ValidarNum("Qué tan satisfactoria fue tu estadía en " + reservaSeleccionada.getPaquete().getHotel().getNombre() + " \n(Escribí un numero del uno al cinco.)");
-				String descripcion = Validaciones.ValidarLetras("Queremos saber tu opinión!\nEscribinos, en pocas palabras, qué te pareció tu estadía.");
+				double puntaje = repository.Validaciones.ValidarNum("Qué tan satisfactoria fue tu estadía en " + reservaSeleccionada.getPaquete().getHotel().getNombre() + " \n(Escribí un numero del uno al cinco.)");
+				String descripcion = repository.Validaciones.ValidarLetras("Queremos saber tu opinión!\nEscribinos, en pocas palabras, qué te pareció tu estadía.");
 				
 				return DtoCliente.escribirReview(usuario, cliente, reservaSeleccionada, descripcion, puntaje);
 

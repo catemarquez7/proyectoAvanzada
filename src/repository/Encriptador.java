@@ -1,8 +1,8 @@
 package repository;
 
-public interface Encriptador {
-
-	static String encriptar(String texto) {
+public class Encriptador {
+	
+	public static String encriptar(String texto) {
 		StringBuilder resultado = new StringBuilder();
 		for (char c : texto.toCharArray()) {
 			if (Character.isLetter(c)) {
@@ -14,7 +14,7 @@ public interface Encriptador {
 		return resultado.toString();
 	}
 
-	static String desencriptar(String texto) {
+	public static String desencriptar(String texto) {
 		StringBuilder resultado = new StringBuilder();
 		for (char c : texto.toCharArray()) {
 			if (Character.isLetter(c)) {
@@ -25,5 +25,5 @@ public interface Encriptador {
 		}
 		return resultado.toString();
 	}
-
-}// fin interface
+	
+}//fin
