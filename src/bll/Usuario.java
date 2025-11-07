@@ -214,43 +214,64 @@ public class Usuario extends Persona {
 		}
 	}//fin
 
-	
 
 	public static void redirigir(Usuario usuario) {
 
-		String tipoUser = usuario.getTipo_usuario();
+	    String tipoUser = usuario.getTipo_usuario();
 
-		switch (tipoUser) {
-		case "1": // Cliente
-			if (DtoUsuario.chequeoSuspension()) {
-				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
-			} else {
+	    switch (tipoUser) {
+	        case "1": // Cliente
+	            if (DtoUsuario.chequeoSuspension()) {
+	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+	                        JOptionPane.INFORMATION_MESSAGE);
+	                // REEMPLAZADO: menuCliente(usuario, cliente);
+	                try {
+	                    // Abrir la ventana de Cliente
+	                    ui.Cliente frameCliente = new ui.Cliente();
+	                    frameCliente.setVisible(true);
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                    JOptionPane.showMessageDialog(null, "Error al cargar la vista de Cliente.", "ERROR", JOptionPane.ERROR_MESSAGE);
+	                }
+	            }
+	            break;
+	        case "2": // Encargado
+	            if (DtoUsuario.chequeoSuspension()) {
+	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+	                        JOptionPane.INFORMATION_MESSAGE);
+	                // REEMPLAZADO: menuEncargado(usuario);
+	                try {
+	                    // Abrir la ventana de Encargado (Requiere castear a bll.Encargado)
+	                    ui.Encargado frameEncargado = new ui.Encargado();
+	                    frameEncargado.setVisible(true);
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                    JOptionPane.showMessageDialog(null, "Error al cargar la vista de Encargado.", "ERROR", JOptionPane.ERROR_MESSAGE);
+	                }
+	            }
+	            break;
+	        case "3": // Administrador
+	            JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
+	                    JOptionPane.INFORMATION_MESSAGE);
+	            // REEMPLAZADO: menuAdmin(usuario);
+	            try {
+	                // Abrir la ventana de Administrador (Requiere castear a bll.Administrador)
+	                ui.Administrador frameAdmin = new ui.Administrador();
+	                frameAdmin.setVisible(true);
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                JOptionPane.showMessageDialog(null, "Error al cargar la vista de Administrador.", "ERROR", JOptionPane.ERROR_MESSAGE);
+	            }
+	            break;
+	        default:
+	            JOptionPane.showMessageDialog(null, "Tipo de usuario no reconocido", "ERROR", 0);
+	    }
 
-				Cliente cliente = new Cliente();
-				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-						JOptionPane.INFORMATION_MESSAGE);
-				menuCliente(usuario, cliente);
-			}
-			break;
-		case "2": // Encargado
-			if (DtoUsuario.chequeoSuspension()) {
-				JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
-			} else {
-				JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-						JOptionPane.INFORMATION_MESSAGE);
-				menuEncargado(usuario);
-			}
-			break;
-		case "3": // Administrador
-			JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-					JOptionPane.INFORMATION_MESSAGE);
-			menuAdmin(usuario);
-			break;
-		default:
-			JOptionPane.showMessageDialog(null, "Tipo de usuario no reconocido", "ERROR", 0);
-		}
-
-	}// fin
+	}//fin
 
 	public static void menuCliente(Usuario usuario, Cliente cliente) {
 		int opcion;

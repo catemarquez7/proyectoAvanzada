@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -19,7 +22,6 @@ public class Olvido extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField inpuser;
-	private JTextField inppreg;
 	private JTextField inpresp;
 	private JPasswordField inppass;
 	private JPasswordField inppass2;
@@ -58,16 +60,19 @@ public class Olvido extends JFrame {
 		lblRec.setBounds(257, 94, 257, 37);
 		contentPane.add(lblRec);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		ImageIcon originalIcon = new ImageIcon("C:\\Users\\victo\\Downloads\\logohouse.png");
+		JLabel Logo = new JLabel("");
+		Logo.setBackground(new Color(255, 255, 255));
+		java.net.URL imageUrl = getClass().getResource("/img/logohouse.png"); 
+		ImageIcon originalIcon;
+		originalIcon = new ImageIcon(imageUrl);
 		Image originalImage = originalIcon.getImage();
 		int newWidth = 80;
 		int newHeight = 100;
 		Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 		originalIcon.setImage(scaledImage);
-		lblNewLabel_1.setIcon(originalIcon);
-		lblNewLabel_1.setBounds(24, 11, 83, 103);
-		contentPane.add(lblNewLabel_1);
+		Logo.setIcon(originalIcon);
+		Logo.setBounds(24, 11, 83, 103);
+		contentPane.add(Logo);
 		
 		JLabel Usuario = new JLabel("Nombre de usuario");
 		Usuario.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
@@ -84,11 +89,6 @@ public class Olvido extends JFrame {
 		preg.setBounds(132, 238, 179, 14);
 		contentPane.add(preg);
 		
-		inppreg = new JTextField();
-		inppreg.setColumns(10);
-		inppreg.setBounds(132, 263, 179, 25);
-		contentPane.add(inppreg);
-		
 		JLabel lblRta = new JLabel("Respuesta de recuperación");
 		lblRta.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
 		lblRta.setBounds(440, 238, 179, 14);
@@ -101,28 +101,58 @@ public class Olvido extends JFrame {
 		
 		JLabel lblPass = new JLabel("Nueva Contraseña");
 		lblPass.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		lblPass.setBounds(132, 299, 179, 14);
+		lblPass.setBounds(132, 354, 179, 14);
 		contentPane.add(lblPass);
 		
 		inppass = new JPasswordField();
-		inppass.setBounds(132, 324, 179, 25);
+		inppass.setBounds(132, 379, 179, 25);
 		contentPane.add(inppass);
 		
 		JLabel Pass2 = new JLabel("Confirmar Contraseña");
 		Pass2.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		Pass2.setBounds(440, 299, 179, 14);
+		Pass2.setBounds(440, 354, 179, 14);
 		contentPane.add(Pass2);
 		
 		inppass2 = new JPasswordField();
-		inppass2.setBounds(440, 324, 179, 25);
+		inppass2.setBounds(440, 379, 179, 25);
 		contentPane.add(inppass2);
 		
 		JButton btnConf = new JButton("Confirmar contraseña");
 		btnConf.setForeground(Color.BLACK);
 		btnConf.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
 		btnConf.setBackground(Color.WHITE);
-		btnConf.setBounds(292, 389, 188, 37);
+		btnConf.setBounds(292, 444, 188, 37);
 		contentPane.add(btnConf);
+		
+		JButton btnAtrs = new JButton("Atrás");
+		btnAtrs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+				Index frameIndex = new Index();
+				frameIndex.setVisible(true);
+			}
+		});
+		btnAtrs.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+		btnAtrs.setBounds(547, 515, 72, 25);
+		contentPane.add(btnAtrs);
+		
+		JLabel preg_1 = new JLabel("");
+		preg_1.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+		preg_1.setBounds(132, 263, 189, 30);
+		contentPane.add(preg_1);
+		
+		JButton btnsend = new JButton("Enviar");
+		btnsend.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+		btnsend.setBounds(501, 180, 83, 25);
+		contentPane.add(btnsend);
+		
+		JButton btnsend_1 = new JButton("Enviar");
+		btnsend_1.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+		btnsend_1.setBounds(335, 300, 83, 25);
+		contentPane.add(btnsend_1);
+		
+		
 	}
 
 }//fin

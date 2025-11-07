@@ -146,7 +146,6 @@ public class Registro extends JFrame {
 		Mail.setBounds(440, 277, 179, 14);
 		contentPane.add(Mail);
 
-		// --- Cambio a JPasswordField ---
 		inpPass = new JPasswordField();
 		inpPass.setBounds(440, 363, 179, 25);
 		contentPane.add(inpPass);
@@ -166,7 +165,6 @@ public class Registro extends JFrame {
 		inpPreg.setBounds(127, 424, 179, 25);
 		contentPane.add(inpPreg);
 
-		// --- Cambio a JPasswordField ---
 		inpConpass = new JPasswordField();
 		inpConpass.setBounds(440, 424, 179, 25);
 		contentPane.add(inpConpass);
@@ -190,11 +188,9 @@ public class Registro extends JFrame {
 		btnConfirmarRegistro.setBackground(new Color(255, 255, 255));
 		btnConfirmarRegistro.setForeground(new Color(0, 0, 0));
 
-		// --- Lógica del botón con JDateChooser ---
 		btnConfirmarRegistro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// 1. Obtener la contraseña y confirmación
 				String pass = new String(inpPass.getPassword());
 				String conPass = new String(inpConpass.getPassword());
 
@@ -235,19 +231,35 @@ public class Registro extends JFrame {
 			}
 		});
 		btnConfirmarRegistro.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		btnConfirmarRegistro.setBounds(440, 479, 188, 37);
+		btnConfirmarRegistro.setBounds(440, 485, 179, 25);
 		contentPane.add(btnConfirmarRegistro);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
-		ImageIcon originalIcon = new ImageIcon("C:\\Users\\victo\\Downloads\\logohouse.png");
+		JLabel Logo = new JLabel("");
+		Logo.setBackground(new Color(255, 255, 255));
+		java.net.URL imageUrl = getClass().getResource("/img/logohouse.png"); 
+		ImageIcon originalIcon;
+		originalIcon = new ImageIcon(imageUrl);
 		Image originalImage = originalIcon.getImage();
 		int newWidth = 80;
 		int newHeight = 100;
 		Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
 		originalIcon.setImage(scaledImage);
-		lblNewLabel_1.setIcon(originalIcon);
-		lblNewLabel_1.setBounds(24, 11, 83, 103);
-		contentPane.add(lblNewLabel_1);
+		Logo.setIcon(originalIcon);
+		Logo.setBounds(24, 11, 83, 103);
+		contentPane.add(Logo);
+		
+		JButton btnAtrs = new JButton("Atrás");
+		btnAtrs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				
+				Index frameIndex = new Index();
+				frameIndex.setVisible(true);
+			}
+		});
+		btnAtrs.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
+		btnAtrs.setBounds(547, 546, 72, 25);
+		contentPane.add(btnAtrs);
 		
 	}
 }
