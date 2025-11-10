@@ -653,7 +653,7 @@ public class Administrador extends Usuario {
 		DtoAdministrador.desbloquearCuenta(idUsuario);
 	}
 	
-	static void suspenderSistema() {
+	public static void suspenderSistema() {
 		if (DtoUsuario.chequeoSuspension()) {
 			
 			 SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea reactivar el sistema en suspensión?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		

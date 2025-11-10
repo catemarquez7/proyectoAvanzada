@@ -259,7 +259,7 @@ public class Usuario extends Persona {
 	            // REEMPLAZADO: menuAdmin(usuario);
 	            try {
 	                // Abrir la ventana de Administrador (Requiere castear a bll.Administrador)
-	                ui.Administrador frameAdmin = new ui.Administrador();
+	                ui.Administrador frameAdmin = new ui.Administrador(usuario);
 	                frameAdmin.setVisible(true);
 	            } catch (Exception e) {
 	                e.printStackTrace();
