@@ -58,7 +58,7 @@ public class Index extends JFrame {
 
 		JLabel lblNewLabel = new JLabel("Iniciar sesión");
 		lblNewLabel.setFont(new Font("Mongolian Baiti", Font.PLAIN, 30));
-		lblNewLabel.setBounds(305, 76, 165, 37);
+		lblNewLabel.setBounds(305, 76, 311, 37);
 		contentPane.add(lblNewLabel);
 
 		inputUsuario = new JTextField();

@@ -224,13 +224,14 @@ public class Usuario extends Persona {
 	            if (DtoUsuario.chequeoSuspension()) {
 	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
 	            } else {
-	                JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-	                        JOptionPane.INFORMATION_MESSAGE);
 	                // REEMPLAZADO: menuCliente(usuario, cliente);
 	                try {
 	                    // Abrir la ventana de Cliente
-	                    ui.Cliente frameCliente = new ui.Cliente();
-	                    frameCliente.setVisible(true);
+	                	
+	                	Cliente cliente = new Cliente(usuario.getNombre(), usuario.getApellido(), usuario.fecha_nac, usuario.getMail(), usuario.getDni(), usuario.getDireccion(), usuario.getId(), usuario.getUser(), usuario.getPass(), usuario.getPregunta(), usuario.getRespuesta(), usuario.fecha_creacion, usuario.getTipo_usuario(), usuario.getEstado(), null);
+	                	
+	                	 ui.Cliente frameCliente = new ui.Cliente(usuario, cliente);
+	                     frameCliente.setVisible(true);
 	                } catch (Exception e) {
 	                    e.printStackTrace();
 	                    JOptionPane.showMessageDialog(null, "Error al cargar la vista de Cliente.", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -241,8 +242,6 @@ public class Usuario extends Persona {
 	            if (DtoUsuario.chequeoSuspension()) {
 	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
 	            } else {
-	                JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-	                        JOptionPane.INFORMATION_MESSAGE);
 	                // REEMPLAZADO: menuEncargado(usuario);
 	                try {
 	                    // Abrir la ventana de Encargado (Requiere castear a bll.Encargado)
@@ -255,8 +254,6 @@ public class Usuario extends Persona {
 	            }
 	            break;
 	        case "3": // Administrador
-	            JOptionPane.showMessageDialog(null, "¡Bienvenido/a " + usuario.getNombre() + "!", "LOGIN EXITOSO",
-	                    JOptionPane.INFORMATION_MESSAGE);
 	            // REEMPLAZADO: menuAdmin(usuario);
 	            try {
 	                // Abrir la ventana de Administrador (Requiere castear a bll.Administrador)

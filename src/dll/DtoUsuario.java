@@ -11,6 +11,7 @@ import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 import bll.Usuario;
 import bll.Administrador;
+import bll.Cliente;
 import repository.Encriptador;
 
 public class DtoUsuario {
@@ -54,6 +55,8 @@ public class DtoUsuario {
 					} else if (tipo_usuario.equals("3")) {
 						return new Administrador(nombre, apellido, fecha_nac, mail, dni, direccion, id, userDB,
 								passBD_Encriptada, pregunta, respuesta, fecha_creacion, tipo_usuario, estado);
+					} else if (tipo_usuario.equals("1")) {
+						return new Cliente(nombre, apellido, fecha_nac, mail, dni, direccion, id, userDB, passBD_Encriptada, pregunta, respuesta, fecha_creacion, tipo_usuario, estado, null);
 					}
 					return usuario;
 				}

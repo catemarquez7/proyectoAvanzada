@@ -7,27 +7,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
-import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JToolBar;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JDesktopPane;
 import javax.swing.JLabel;
-import javax.swing.JEditorPane;
 
 public class Encargado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField txtReservas;
 
 	/**
 	 * Launch the application.
@@ -65,6 +57,10 @@ public class Encargado extends JFrame {
 		
 		//RESERVAS
 		JPanel panelReservas = new JPanel();
+		
+		
+		
+		
 		panelReservas.setLayout(new java.awt.GridLayout(1, 3, 10, 0));
 		panelReservas.setBackground(Color.WHITE);
 
@@ -72,7 +68,7 @@ public class Encargado extends JFrame {
 		panelTerminadas.setBackground(new Color(255, 255, 255)); 
 		panelTerminadas.setLayout(null);
 		JLabel label = new JLabel("Reservas pendientes");
-		label.setBounds(128, 5, 112, 17);
+		label.setBounds(128, 5, 170, 17);
 		label.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
 		panelTerminadas.add(label);
 
@@ -80,7 +76,7 @@ public class Encargado extends JFrame {
 		panelPendientes.setBackground(new Color(255, 255, 255)); 
 		panelPendientes.setLayout(null);
 		JLabel label_2 = new JLabel("Reservas finalizadas");
-		label_2.setBounds(128, 5, 113, 17);
+		label_2.setBounds(128, 5, 179, 17);
 		label_2.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
 		panelPendientes.add(label_2);
 
@@ -96,7 +92,19 @@ public class Encargado extends JFrame {
 		listfinalizadas.setBounds(10, 27, 349, 321);
 		panelPendientes.add(listfinalizadas);
 
+		
+		
+		
+		
 		Contenidos.addTab("Reservas", null, panelReservas, null);
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		JPanel panelHabitaciones = new JPanel();
 		Contenidos.addTab("Habitaciones", null, panelHabitaciones, null);

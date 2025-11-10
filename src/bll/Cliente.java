@@ -201,6 +201,10 @@ public class Cliente extends Usuario{
 
 		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione el hotel para ver sus paquetes:",
 				"VER PAQUETES", JOptionPane.QUESTION_MESSAGE, null, opcionesHoteles, opcionesHoteles[0]);
+		
+		if (seleccion == null) {
+			return;
+		}
 
 		int idHotel = Integer.parseInt(seleccion.split(" - ")[0]);
 
@@ -395,6 +399,9 @@ public class Cliente extends Usuario{
 	    String seleccion = (String) JOptionPane.showInputDialog(
 	        null, "Seleccione el paquete que desea cancelar:", "Cancelar Paquete", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 	    
+	    if (seleccion == null) {
+	        return; 
+	    }
 	    
 	    Reserva reservaSeleccionada = null;
 	    for (Reserva r : reservas) {
@@ -407,6 +414,10 @@ public class Cliente extends Usuario{
 	    }
 	    
 	    SiNoOpcion opcionEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Está seguro de querer continuar?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());		
+	    
+	    if (opcionEnum == null) {
+	        return; 
+	    }
 		
 	  		String opcion = opcionEnum.toString();
 	  		
@@ -464,6 +475,9 @@ public class Cliente extends Usuario{
 			String seleccion = (String) JOptionPane.showInputDialog(
 					null, "Seleccione la reserva que desea reseñar:", "Reseñar Reserva", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 			
+			if (seleccion == null) {
+		        return false; 
+		    }
 			
 			Reserva reservaSeleccionada = null;
 			for (Reserva r : reservas) {
@@ -534,6 +548,9 @@ public class Cliente extends Usuario{
 			String seleccion = (String) JOptionPane.showInputDialog(
 					null, "Seleccione la reseña que desea eliminar:", "Eliminar Reseña", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
 			
+			if (seleccion == null) {
+		        return; 
+		    }
 			
 			Review reviewSeleccionada = null;
 			for (Review r : reviews) {
