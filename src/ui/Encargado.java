@@ -58,9 +58,6 @@ public class Encargado extends JFrame {
 		//RESERVAS
 		JPanel panelReservas = new JPanel();
 		
-		
-		
-		
 		panelReservas.setLayout(new java.awt.GridLayout(1, 3, 10, 0));
 		panelReservas.setBackground(Color.WHITE);
 

@@ -67,7 +67,9 @@ public class DtoUsuario {
 		}
 		return null;
 	}// fin login
-
+	
+	
+	
 	// Sign_in
 	public static boolean agregarUsuario(Usuario usuario) {
 		try {
@@ -145,63 +147,39 @@ public class DtoUsuario {
 	}
 
 	// Recuperar_contraseña
-	public static boolean recuperarPass() {
-
-		String user = JOptionPane.showInputDialog("Ingrese su nombre de usuario:");
-
-		try {
-
-			PreparedStatement stmt = conx
-					.prepareStatement("SELECT nombre, user, pass, pregunta, respuesta FROM usuario WHERE user = ?");
-			stmt.setString(1, user);
-
-			ResultSet rs = stmt.executeQuery();
-
-			if (rs.next()) {
-				String pregunta = rs.getString("pregunta");
-				String respuesta = rs.getString("respuesta");
-
-				String ans = repository.Validaciones.ValidarLetras(pregunta);
-				if (ans.equals(respuesta)) {
-					JOptionPane.showMessageDialog(null, "Respuesta correcta!");
-					boolean flag = true;
-					boolean actualizado = false;
-					do {
-
-						String pass1 = repository.Validaciones.ValidarContras("Ingrese su nueva contraseña:");
-						String pass2 = repository.Validaciones
-								.ValidarContras("Por favor, ingrese la contraseña nuevamente:");
-
-						if (pass2.equals(pass1)) {
-							flag = true;
-
-							PreparedStatement stmt2 = conx
-									.prepareStatement("UPDATE usuario SET pass = ? WHERE user = ?");
-							stmt2.setString(1, pass2);
-							stmt2.setString(2, user);
-
-							int rs2 = stmt2.executeUpdate();
-
-							actualizado = (rs2 > 0);
-
-							return actualizado;
-						} else {
-							JOptionPane.showMessageDialog(null, "Las contraseñas no coindiden.");
-							flag = false;
-						}
-					} while (!flag);
-
-				} else {
-					return false;
-				}
-
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return false;
+	// busca la pregunta y rta segun usuario
+	public static String[] busquedaPregunta(String user) {
+	    try {
+	        java.sql.PreparedStatement stmt = conx.prepareStatement("SELECT pregunta, respuesta FROM usuario WHERE user = ?");
+	        stmt.setString(1, user);
+	        java.sql.ResultSet rs = stmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            String pregunta = rs.getString("pregunta");
+	            String respuesta = rs.getString("respuesta");
+	            
+	            return new String[]{pregunta, respuesta.trim()}; 
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return null; 
+	}
+	
+	//actualiza la contraseña
+	public static boolean actualizarPass(String user, String newPass) {
+	    try {
+	        PreparedStatement stmt2 = conx.prepareStatement("UPDATE usuario SET pass = ? WHERE user = ?");
+	        
+	        stmt2.setString(1, repository.Encriptador.encriptar(newPass));
+	        stmt2.setString(2, user);
+	        
+	        int rowsUpdated = stmt2.executeUpdate();
+	        return rowsUpdated > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	// Chequeo suspension

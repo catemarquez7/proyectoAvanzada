@@ -4,7 +4,6 @@ import javax.swing.JOptionPane;
 
 import bll.Usuario;
 import dll.Conexion;
-import dll.DtoUsuario;
 
 public class Main {
 
@@ -24,7 +23,7 @@ public class Main {
 			switch (eleccion) {
 			case 0: // iniciar sesion
 
-				inicio = Usuario.login(null, null);
+				//inicio = Usuario.login();
 
 				if (inicio != null) {
 
@@ -40,8 +39,8 @@ public class Main {
 				break;
 			case 2: // recuperar contraseña
 
-				JOptionPane.showMessageDialog(null,
-						DtoUsuario.recuperarPass() == true ? "Su contraseña fue modificada con exito!" : "Su respuesta fue incorrecta. Por favor vuelva a intentarlo");	
+			//	JOptionPane.showMessageDialog(null,
+			//			DtoUsuario.recuperarPass() == true ? "Su contraseña fue modificada con exito!" : "Su respuesta fue incorrecta. Por favor vuelva a intentarlo");	
 				
 				break;
 				

@@ -107,6 +107,7 @@ public class Index extends JFrame {
 
 			}
 		});// fin
+		
 		btnIniciar.setBounds(269, 334, 92, 25);
 		contentPane.add(btnIniciar);
 

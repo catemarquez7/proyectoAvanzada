@@ -135,27 +135,29 @@ public class Usuario extends Persona {
 
 	// metodos
 
-	public static Usuario login(String user, String pass) {
+	public static Usuario login(String user, String pass) { 
 
-		Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
+	    Usuario usuarioEncontrado = DtoUsuario.login(user, pass);
 
-		if (usuarioEncontrado != null) {
+	    if (usuarioEncontrado != null) {
+	        
+	        if (usuarioEncontrado.getEstado().equals("bloqueado")) {
+	              JOptionPane.showMessageDialog(null,
+	                      "Su cuenta ha sido bloqueada. Contacte al administrador.",
+	                      "CUENTA BLOQUEADA",
+	                      JOptionPane.ERROR_MESSAGE);
+	              return null;
+	        } else {
+	            
+	            return usuarioEncontrado;
 
-			if (!DtoUsuario.usuarioBloqueado(usuarioEncontrado)) {
-				JOptionPane.showMessageDialog(null, "Su cuenta ha sido bloqueada. Contacte al administrador.",
-						"CUENTA BLOQUEADA", JOptionPane.ERROR_MESSAGE);
-				return null;
-			} else {
-
-				return usuarioEncontrado;
-
-			}
-
-		} else {
-			JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
-					JOptionPane.ERROR_MESSAGE);
-			return null;
-		}
+	        }
+	        
+	    } else {
+	        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
+	                JOptionPane.ERROR_MESSAGE);
+	        return null;
+	    }
 	}
 
 	public static boolean registrarse(String nombre, String apellido, LocalDate fecha_nac, String mail, int dni,
