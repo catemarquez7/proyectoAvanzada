@@ -44,7 +44,6 @@ public class Administrador extends JFrame {
 		Contenidos.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
 		contentPane.add(Contenidos);
 
-		// ==================== PESTAÑA HOTELES ====================
 		JPanel panelHoteles = new JPanel();
 		panelHoteles.setBackground(Color.WHITE);
 		panelHoteles.setLayout(null);
@@ -55,7 +54,7 @@ public class Administrador extends JFrame {
 		panelHoteles.add(lblHoteles);
 
 		// Tabla de hoteles
-		String[] columnasHoteles = {"ID", "Nombre", "Provincia", "Dirección", "Habitaciones", "Calificación"};
+		String[] columnasHoteles = { "ID", "Nombre", "Provincia", "Dirección", "Habitaciones", "Calificación" };
 		DefaultTableModel modeloHoteles = new DefaultTableModel(columnasHoteles, 0);
 		JTable tablaHoteles = new JTable(modeloHoteles);
 		tablaHoteles.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
@@ -110,7 +109,6 @@ public class Administrador extends JFrame {
 
 		Contenidos.addTab("Hoteles", null, panelHoteles, null);
 
-		// ==================== PESTAÑA PAQUETES ====================
 		JPanel panelPaquetes = new JPanel();
 		panelPaquetes.setBackground(Color.WHITE);
 		panelPaquetes.setLayout(null);
@@ -157,7 +155,6 @@ public class Administrador extends JFrame {
 
 		Contenidos.addTab("Paquetes", null, panelPaquetes, null);
 
-		// ==================== PESTAÑA RESERVAS ====================
 		JPanel panelReservas = new JPanel();
 		panelReservas.setBackground(Color.WHITE);
 		panelReservas.setLayout(null);
@@ -194,7 +191,6 @@ public class Administrador extends JFrame {
 
 		Contenidos.addTab("Reservas", null, panelReservas, null);
 
-		// ==================== PESTAÑA ACTIVIDADES ====================
 		JPanel panelActividades = new JPanel();
 		panelActividades.setBackground(Color.WHITE);
 		panelActividades.setLayout(null);
@@ -221,7 +217,6 @@ public class Administrador extends JFrame {
 
 		Contenidos.addTab("Actividades", null, panelActividades, null);
 
-		// ==================== PESTAÑA CUENTAS ====================
 		JPanel panelCuentas = new JPanel();
 		panelCuentas.setBackground(Color.WHITE);
 		panelCuentas.setLayout(null);
@@ -232,7 +227,7 @@ public class Administrador extends JFrame {
 		panelCuentas.add(lblCuentas);
 
 		// Tabla de usuarios
-		String[] columnasCuentas = {"ID", "Usuario", "Nombre", "Apellido", "DNI", "Tipo", "Estado"};
+		String[] columnasCuentas = { "ID", "Usuario", "Nombre", "Apellido", "DNI", "Tipo", "Estado" };
 		DefaultTableModel modeloCuentas = new DefaultTableModel(columnasCuentas, 0);
 		JTable tablaCuentas = new JTable(modeloCuentas);
 		tablaCuentas.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
@@ -291,15 +286,14 @@ public class Administrador extends JFrame {
 		btnEstadisticas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String stats = DtoAdministrador.obtenerEstadisticas();
-				javax.swing.JOptionPane.showMessageDialog(null, stats, "ESTADÍSTICAS DEL SISTEMA", 
-					javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				javax.swing.JOptionPane.showMessageDialog(null, stats, "ESTADÍSTICAS DEL SISTEMA",
+						javax.swing.JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		panelCuentas.add(btnEstadisticas);
 
 		Contenidos.addTab("Cuentas", null, panelCuentas, null);
 
-		// ==================== PESTAÑA SISTEMA ====================
 		JPanel panelSistema = new JPanel();
 		panelSistema.setBackground(Color.WHITE);
 		panelSistema.setLayout(null);
@@ -326,7 +320,6 @@ public class Administrador extends JFrame {
 
 		Contenidos.addTab("Sistema", null, panelSistema, null);
 
-		// ==================== EXTRAS ====================
 		JButton btnclose = new JButton("Cerrar sesión");
 		btnclose.setBounds(620, 11, 124, 25);
 		btnclose.addActionListener(new ActionListener() {
@@ -372,14 +365,8 @@ public class Administrador extends JFrame {
 		modelo.setRowCount(0);
 		List<Hotel> hoteles = DtoAdministrador.verHoteles();
 		for (Hotel h : hoteles) {
-			Object[] fila = {
-				h.getId(),
-				h.getNombre(),
-				h.getProvincia(),
-				h.getDireccion(),
-				h.getCant_habitaciones(),
-				String.format("%.2f", h.getCalificacion_promedio())
-			};
+			Object[] fila = { h.getId(), h.getNombre(), h.getProvincia(), h.getDireccion(), h.getCant_habitaciones(),
+					String.format("%.2f", h.getCalificacion_promedio()) };
 			modelo.addRow(fila);
 		}
 	}
@@ -391,19 +378,18 @@ public class Administrador extends JFrame {
 		for (Usuario u : usuarios) {
 			String tipoTexto = "";
 			switch (u.getTipo_usuario()) {
-				case "1": tipoTexto = "Cliente"; break;
-				case "2": tipoTexto = "Encargado"; break;
-				case "3": tipoTexto = "Administrador"; break;
+			case "1":
+				tipoTexto = "Cliente";
+				break;
+			case "2":
+				tipoTexto = "Encargado";
+				break;
+			case "3":
+				tipoTexto = "Administrador";
+				break;
 			}
-			Object[] fila = {
-				u.getId(),
-				u.getUser(),
-				u.getNombre(),
-				u.getApellido(),
-				u.getDni(),
-				tipoTexto,
-				u.getEstado()
-			};
+			Object[] fila = { u.getId(), u.getUser(), u.getNombre(), u.getApellido(), u.getDni(), tipoTexto,
+					u.getEstado() };
 			modelo.addRow(fila);
 		}
 	}

@@ -89,52 +89,52 @@ public class Olvido extends JFrame {
 
 		JLabel Usuario = new JLabel("Nombre de usuario");
 		Usuario.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		Usuario.setBounds(195, 142, 179, 14);
+		Usuario.setBounds(196, 178, 179, 14);
 		contentPane.add(Usuario);
 
 		inpuser = new JTextField();
 		inpuser.setColumns(10);
-		inpuser.setBounds(195, 167, 179, 25);
+		inpuser.setBounds(196, 203, 179, 25);
 		contentPane.add(inpuser);
 
 		JLabel preg = new JLabel("Pregunta de recuperación");
 		preg.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		preg.setBounds(51, 238, 179, 14);
+		preg.setBounds(51, 298, 179, 14);
 		contentPane.add(preg);
 
 		JLabel lblRta = new JLabel("Respuesta de recuperación");
 		lblRta.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		lblRta.setBounds(372, 238, 179, 14);
+		lblRta.setBounds(372, 298, 179, 14);
 		contentPane.add(lblRta);
 
 		inpresp = new JTextField();
 		inpresp.setColumns(10);
-		inpresp.setBounds(372, 263, 179, 25);
+		inpresp.setBounds(372, 323, 179, 25);
 		contentPane.add(inpresp);
 
 		JLabel lblPass = new JLabel("Nueva Contraseña (min 8 chars)");
 		lblPass.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		lblPass.setBounds(51, 321, 250, 14);
+		lblPass.setBounds(51, 431, 250, 14);
 		contentPane.add(lblPass);
 
 		inppass = new JPasswordField();
-		inppass.setBounds(51, 346, 179, 25);
+		inppass.setBounds(51, 456, 179, 25);
 		contentPane.add(inppass);
 
 		JLabel Pass2 = new JLabel("Confirmar Contraseña");
 		Pass2.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		Pass2.setBounds(372, 321, 179, 14);
+		Pass2.setBounds(372, 431, 179, 14);
 		contentPane.add(Pass2);
 
 		inppass2 = new JPasswordField();
-		inppass2.setBounds(372, 346, 179, 25);
+		inppass2.setBounds(372, 456, 179, 25);
 		contentPane.add(inppass2);
 
 		JButton btnConf = new JButton("Confirmar contraseña");
 		btnConf.setForeground(Color.BLACK);
 		btnConf.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
 		btnConf.setBackground(Color.WHITE);
-		btnConf.setBounds(562, 346, 167, 25);
+		btnConf.setBounds(562, 456, 167, 25);
 		contentPane.add(btnConf);
 
 		JButton btnAtrs = new JButton("Atrás");
@@ -144,17 +144,17 @@ public class Olvido extends JFrame {
 
 		JLabel preg_1 = new JLabel("...");
 		preg_1.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		preg_1.setBounds(51, 263, 280, 30);
+		preg_1.setBounds(51, 323, 280, 30);
 		contentPane.add(preg_1);
 
 		JButton btnsend = new JButton("Enviar Usuario");
 		btnsend.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		btnsend.setBounds(435, 167, 130, 25);
+		btnsend.setBounds(436, 203, 130, 25);
 		contentPane.add(btnsend);
 
 		JButton btnsend_1 = new JButton("Enviar Respuesta");
 		btnsend_1.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		btnsend_1.setBounds(562, 263, 155, 25);
+		btnsend_1.setBounds(562, 323, 167, 25);
 		contentPane.add(btnsend_1);
 
 		lblMensaje = new JLabel("");
