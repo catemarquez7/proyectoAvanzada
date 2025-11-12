@@ -121,6 +121,7 @@ public class Index extends JFrame {
 				frameRegistro.setVisible(true);
 			}
 		});// fin
+		
 		btnRegistrarse.setBounds(371, 334, 107, 25);
 		contentPane.add(btnRegistrarse);
 
@@ -134,6 +135,7 @@ public class Index extends JFrame {
 				frameOlvido.setVisible(true);
 			}
 		});// fin
+		
 		btnOlvido.setBounds(279, 370, 185, 25);
 		contentPane.add(btnOlvido);
 

@@ -54,84 +54,99 @@ public class DtoEncargado {
 	}// fin
 
 	// check-in
-	public static boolean realizarCheckin(int id_reserva, String dni_cl, String tarjeta, int id_he) {
+	public static boolean realizarCheckin(int id_reserva, String dni_cl, String tarjeta, int id_he, javax.swing.JLabel lblMensaje) {
+	    try {
+	        PreparedStatement stmtVerif = (PreparedStatement) conx
+	            .prepareStatement("SELECT r.*, u.dni, p.id_hotel, p.id_habitacion FROM reserva r "
+	                + "JOIN usuario u ON r.id_usuario = u.id " + "JOIN paquete p ON r.id_paquete = p.id "
+	                + "WHERE r.id = ? AND r.estado = 'pendiente' AND p.id_hotel = ?");
 
-		try {
+	        stmtVerif.setInt(1, id_reserva);
+	        stmtVerif.setInt(2, id_he);
 
-			PreparedStatement stmtVerif = (PreparedStatement) conx
-					.prepareStatement("SELECT r.*, u.dni, p.id_hotel, p.id_habitacion FROM reserva r "
-							+ "JOIN usuario u ON r.id_usuario = u.id " + "JOIN paquete p ON r.id_paquete = p.id "
-							+ "WHERE r.id = ? AND r.estado = 'pendiente' AND p.id_hotel = ?");
+	        ResultSet rs = stmtVerif.executeQuery();
 
-			stmtVerif.setInt(1, id_reserva);
-			stmtVerif.setInt(2, id_he);
+	        if (!rs.next()) {
+	            if (lblMensaje != null) {
+	                lblMensaje.setForeground(java.awt.Color.RED);
+	                lblMensaje.setText("Reserva no encontrada, ya procesada o no pertenece a su hotel");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Reserva no encontrada, ya procesada o no pertenece a su hotel", "ERROR", 0);
+	            }
+	            return false;
+	        }
 
-			ResultSet rs = stmtVerif.executeQuery();
+	        int dni = rs.getInt("dni");
+	        int id_habitacion = rs.getInt("id_habitacion");
 
-			if (!rs.next()) {
-				JOptionPane.showMessageDialog(null, "Reserva no encontrada, ya procesada o no pertenece a su hotel",
-						"ERROR", 0);
-				return false;
-			}
+	        // Verifica DNI
+	        if (dni != Integer.parseInt(dni_cl)) {
+	            if (lblMensaje != null) {
+	                lblMensaje.setForeground(java.awt.Color.RED);
+	                lblMensaje.setText("El DNI no coincide con la reserva");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "El DNI no coincide con la reserva", "ERROR", 0);
+	            }
+	            return false;
+	        }
 
-			int dni = rs.getInt("dni");
-			int id_habitacion = rs.getInt("id_habitacion");
+	        // Cambio a ocupada
+	        PreparedStatement stmtHabEstado = (PreparedStatement) conx
+	            .prepareStatement("UPDATE habitacion SET estado = 'ocupada' WHERE id = ? AND id_hotel = ?");
 
-			// Verifica DNI
-			if (dni != Integer.parseInt(dni_cl)) {
-				JOptionPane.showMessageDialog(null, "El DNI no coincide con la reserva", "ERROR", 0);
-				return false;
-			}
+	        stmtHabEstado.setInt(1, id_habitacion);
+	        stmtHabEstado.setInt(2, id_he);
+	        stmtHabEstado.executeUpdate();
 
-			// Cambio a ocupada
-			PreparedStatement stmtHabEstado = (PreparedStatement) conx
-					.prepareStatement("UPDATE habitacion SET estado = 'ocupada' WHERE id = ? AND id_hotel = ?");
+	        // Actualizar reserva
+	        PreparedStatement stmtReserva = (PreparedStatement) conx.prepareStatement(
+	            "UPDATE reserva SET estado = 'activa', fecha_checkin = ?, tarjeta_resguardo = ? WHERE id = ?");
 
-			stmtHabEstado.setInt(1, id_habitacion);
-			stmtHabEstado.setInt(2, id_he);
-			stmtHabEstado.executeUpdate();
+	        stmtReserva.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
+	        stmtReserva.setString(2, tarjeta);
+	        stmtReserva.setInt(3, id_reserva);
 
-			// Actualizar reserva
-			PreparedStatement stmtReserva = (PreparedStatement) conx.prepareStatement(
-					"UPDATE reserva SET estado = 'activa', fecha_checkin = ?, tarjeta_resguardo = ? WHERE id = ?");
+	        int filas = stmtReserva.executeUpdate();
 
-			stmtReserva.setTimestamp(1, Timestamp.valueOf(LocalDateTime.now()));
-			stmtReserva.setString(2, tarjeta);
-			stmtReserva.setInt(3, id_reserva);
+	        if (filas > 0) {
+	            // Número de habitación
+	            PreparedStatement stmtNumHab = (PreparedStatement) conx
+	                .prepareStatement("SELECT numero FROM habitacion WHERE id = ?");
 
-			int filas = stmtReserva.executeUpdate();
+	            stmtNumHab.setInt(1, id_habitacion);
 
-			if (filas > 0) {
-				// Número de habitación
-				PreparedStatement stmtNumHab = (PreparedStatement) conx
-						.prepareStatement("SELECT numero FROM habitacion WHERE id = ?");
+	            ResultSet rsNum = stmtNumHab.executeQuery();
 
-				stmtNumHab.setInt(1, id_habitacion);
+	            rsNum.next();
+	            int numHabitacion = rsNum.getInt("numero");
 
-				ResultSet rsNum = stmtNumHab.executeQuery();
+	            if (lblMensaje != null) {
+	                lblMensaje.setForeground(new java.awt.Color(0, 128, 0));
+	                lblMensaje.setText("CHECK-IN EXITOSO - Habitación: " + numHabitacion + " - Llave activada");
+	            } else {
+	                JOptionPane.showMessageDialog(null,
+	                    "CHECK-IN REALIZADO\n" + "Habitación asignada: " + numHabitacion + "\n"
+	                        + "Tarjeta de resguardo: " + tarjeta + "\n" + "Llave activada - Bienvenido/a!",
+	                    "CHECK-IN EXITOSO", JOptionPane.INFORMATION_MESSAGE);
+	            }
+	            return true;
+	        }
 
-				rsNum.next();
-				int numHabitacion = rsNum.getInt("numero");
-
-				JOptionPane.showMessageDialog(null,
-						"CHECK-IN REALIZADO\n" + "Habitación asignada: " + numHabitacion + "\n"
-								+ "Tarjeta de resguardo: " + tarjeta + "\n" + "Llave activada - Bienvenido/a!",
-						"CHECK-IN EXITOSO", JOptionPane.INFORMATION_MESSAGE);
-				return true;
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error al realizar check-in: " + e.getMessage(), "ERROR", 0);
-		}
-		return false;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        if (lblMensaje != null) {
+	            lblMensaje.setForeground(java.awt.Color.RED);
+	            lblMensaje.setText("Error al realizar check-in: " + e.getMessage());
+	        } else {
+	            JOptionPane.showMessageDialog(null, "Error al realizar check-in: " + e.getMessage(), "ERROR", 0);
+	        }
+	    }
+	    return false;
 	}// fin
 
 	// check-out
-	public static boolean realizarCheckout(int id_reserva, int id_he) {
-
+	public static boolean realizarCheckout(int id_reserva, int id_he, javax.swing.JLabel lblMensaje) {
 		try {
-
 			PreparedStatement stmt = (PreparedStatement) conx
 					.prepareStatement("SELECT r.*, p.fecha_inicio, p.fecha_fin, p.precio, p.id_habitacion, p.id_hotel "
 							+ "FROM reserva r " + "JOIN paquete p ON r.id_paquete = p.id "
@@ -143,8 +158,13 @@ public class DtoEncargado {
 			ResultSet rs = stmt.executeQuery();
 
 			if (!rs.next()) {
-				JOptionPane.showMessageDialog(null, "Reserva no encontrada, no está activa o no pertenece a su hotel",
-						"ERROR", 0);
+				if (lblMensaje != null) {
+					lblMensaje.setForeground(java.awt.Color.RED);
+					lblMensaje.setText("Reserva no encontrada, no está activa o no pertenece a su hotel");
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Reserva no encontrada, no está activa o no pertenece a su hotel", "ERROR", 0);
+				}
 				return false;
 			}
 
@@ -182,17 +202,28 @@ public class DtoEncargado {
 			int filas = stmtReserva.executeUpdate();
 
 			if (filas > 0) {
-				JOptionPane.showMessageDialog(null,
-						"CHECK-OUT REALIZADO\n\n" + "Días de estadía: " + diasEstadia + "\n" + "Monto total: $"
-								+ String.format("%.2f", montoFinal) + "\n\n" + "Llave desactivada\n"
-								+ "¡Gracias por su visita!",
-						"CHECK-OUT EXITOSO", JOptionPane.INFORMATION_MESSAGE);
+				if (lblMensaje != null) {
+					lblMensaje.setForeground(new java.awt.Color(0, 128, 0));
+					lblMensaje.setText("CHECK-OUT EXITOSO - Días: " + diasEstadia + " - Monto: $"
+							+ String.format("%.2f", montoFinal) + " - Llave desactivada");
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"CHECK-OUT REALIZADO\n\n" + "Días de estadía: " + diasEstadia + "\n" + "Monto total: $"
+									+ String.format("%.2f", montoFinal) + "\n\n" + "Llave desactivada\n"
+									+ "¡Gracias por su visita!",
+							"CHECK-OUT EXITOSO", JOptionPane.INFORMATION_MESSAGE);
+				}
 				return true;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error al realizar check-out: " + e.getMessage(), "ERROR", 0);
+			if (lblMensaje != null) {
+				lblMensaje.setForeground(java.awt.Color.RED);
+				lblMensaje.setText("Error al realizar check-out: " + e.getMessage());
+			} else {
+				JOptionPane.showMessageDialog(null, "Error al realizar check-out: " + e.getMessage(), "ERROR", 0);
+			}
 		}
 		return false;
 	}// fin
@@ -693,99 +724,100 @@ public class DtoEncargado {
 
 		return paquetes;
 	}// fin
-	
-	//Editar
+
+	// Editar
 	public static boolean editarPromocion(int id_promocion, String campo, String nuevoValor, int id_hotel) {
-	    try {
-	        String sql = "";
-	        PreparedStatement stmt = null;
+		try {
+			String sql = "";
+			PreparedStatement stmt = null;
 
-	        switch (campo) {
-	        case "nombre":
-	            sql = "UPDATE promocion SET nombre = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setString(1, nuevoValor);
-	            break;
+			switch (campo) {
+			case "nombre":
+				sql = "UPDATE promocion SET nombre = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setString(1, nuevoValor);
+				break;
 
-	        case "descripcion":
-	            sql = "UPDATE promocion SET descripcion = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setString(1, nuevoValor);
-	            break;
+			case "descripcion":
+				sql = "UPDATE promocion SET descripcion = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setString(1, nuevoValor);
+				break;
 
-	        case "porcentaje":
-	            sql = "UPDATE promocion SET porcentaje_descuento = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setDouble(1, Double.parseDouble(nuevoValor));
-	            break;
+			case "porcentaje":
+				sql = "UPDATE promocion SET porcentaje_descuento = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setDouble(1, Double.parseDouble(nuevoValor));
+				break;
 
-	        case "fecha_inicio":
-	            sql = "UPDATE promocion SET fecha_inicio = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
-	            break;
+			case "fecha_inicio":
+				sql = "UPDATE promocion SET fecha_inicio = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
+				break;
 
-	        case "fecha_fin":
-	            sql = "UPDATE promocion SET fecha_fin = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
-	            break;
+			case "fecha_fin":
+				sql = "UPDATE promocion SET fecha_fin = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setDate(1, java.sql.Date.valueOf(nuevoValor));
+				break;
 
-	        case "estado":
-	            sql = "UPDATE promocion SET estado = ? WHERE id = ? AND id_hotel = ?";
-	            stmt = (PreparedStatement) conx.prepareStatement(sql);
-	            stmt.setString(1, nuevoValor);
-	            break;
+			case "estado":
+				sql = "UPDATE promocion SET estado = ? WHERE id = ? AND id_hotel = ?";
+				stmt = (PreparedStatement) conx.prepareStatement(sql);
+				stmt.setString(1, nuevoValor);
+				break;
 
-	        default:
-	            JOptionPane.showMessageDialog(null, "Campo inválido", "ERROR", 0);
-	            return false;
-	        }
+			default:
+				JOptionPane.showMessageDialog(null, "Campo inválido", "ERROR", 0);
+				return false;
+			}
 
-	        stmt.setInt(2, id_promocion);
-	        stmt.setInt(3, id_hotel);
+			stmt.setInt(2, id_promocion);
+			stmt.setInt(3, id_hotel);
 
-	        int filas = stmt.executeUpdate();
+			int filas = stmt.executeUpdate();
 
-	        if (filas > 0) {
-	            if (campo.equals("porcentaje")) {
-	                actualizarPreciosPaquetesConPromocion(id_promocion, Double.parseDouble(nuevoValor));
-	            }
+			if (filas > 0) {
+				if (campo.equals("porcentaje")) {
+					actualizarPreciosPaquetesConPromocion(id_promocion, Double.parseDouble(nuevoValor));
+				}
 
-	            JOptionPane.showMessageDialog(null, "Promoción actualizada exitosamente", "ÉXITO",
-	                    JOptionPane.INFORMATION_MESSAGE);
-	            return true;
-	        } else {
-	            JOptionPane.showMessageDialog(null, "No se pudo actualizar la promoción", "ERROR", 0);
-	            return false;
-	        }
+				JOptionPane.showMessageDialog(null, "Promoción actualizada exitosamente", "ÉXITO",
+						JOptionPane.INFORMATION_MESSAGE);
+				return true;
+			} else {
+				JOptionPane.showMessageDialog(null, "No se pudo actualizar la promoción", "ERROR", 0);
+				return false;
+			}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);
-	    }
-	    return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);
+		}
+		return false;
 	}// fin
 
-	//Actualizar
+	// Actualizar
 	private static void actualizarPreciosPaquetesConPromocion(int id_promocion, double nuevoPorcentaje) {
-	    try {
-	        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
-	                "UPDATE paquete SET precio = precio_original - (precio_original * ? / 100) WHERE id_promocion = ?");
+		try {
+			PreparedStatement stmt = (PreparedStatement) conx.prepareStatement(
+					"UPDATE paquete SET precio = precio_original - (precio_original * ? / 100) WHERE id_promocion = ?");
 
-	        stmt.setDouble(1, nuevoPorcentaje);
-	        stmt.setInt(2, id_promocion);
+			stmt.setDouble(1, nuevoPorcentaje);
+			stmt.setInt(2, id_promocion);
 
-	        int filasActualizadas = stmt.executeUpdate();
-	        
-	        if (filasActualizadas > 0) {
-	            System.out.println("Se actualizaron " + filasActualizadas + " paquetes con el nuevo porcentaje");
-	        }
+			int filasActualizadas = stmt.executeUpdate();
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        JOptionPane.showMessageDialog(null, "Error al actualizar precios de paquetes: " + e.getMessage(), "ERROR", 0);
-	    }
-	}//fin
+			if (filasActualizadas > 0) {
+				System.out.println("Se actualizaron " + filasActualizadas + " paquetes con el nuevo porcentaje");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error al actualizar precios de paquetes: " + e.getMessage(), "ERROR",
+					0);
+		}
+	}// fin
 
 }// fin clase

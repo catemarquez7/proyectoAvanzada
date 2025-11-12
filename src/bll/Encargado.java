@@ -45,66 +45,78 @@ public class Encargado extends Usuario {
 	// metodos
 
 	// Check-in
-	public static void realizarCheckin(int id_hotel) {
+	public static void realizarCheckin(int id_hotel, javax.swing.JLabel lblMensaje) {
 
-		List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
+	    List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
 
-		if (reservas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay reservas pendientes en su hotel.", "INFO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
+	    if (reservas.isEmpty()) {
+	        if (lblMensaje != null) {
+	            lblMensaje.setForeground(java.awt.Color.RED);
+	            lblMensaje.setText("No hay reservas pendientes en su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay reservas pendientes en su hotel.", "INFO",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        }
+	        return;
+	    }
 
-		String[] opciones = new String[reservas.size()];
-		for (int i = 0; i < reservas.size(); i++) {
-			Reserva r = reservas.get(i);
-			opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido()
-					+ " | Estado: " + r.getEstado();
-		}
+	    String[] opciones = new String[reservas.size()];
+	    for (int i = 0; i < reservas.size(); i++) {
+	        Reserva r = reservas.get(i);
+	        opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido()
+	            + " | Estado: " + r.getEstado();
+	    }
 
-		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-in:",
-				"CHECK-IN", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+	    String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-in:",
+	        "CHECK-IN", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
-		int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
+	    if (seleccion == null) return;
 
-		int dni = Validaciones.ValidarNum("Ingrese DNI del cliente:");
-		String tarjeta = Validaciones.ValidarContras("Ingrese número de tarjeta de resguardo:");
+	    int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
 
-		DtoEncargado.realizarCheckin(idReserva, String.valueOf(dni), tarjeta, id_hotel);
+	    int dni = Validaciones.ValidarNum("Ingrese DNI del cliente:");
+	    String tarjeta = Validaciones.ValidarContras("Ingrese número de tarjeta de resguardo:");
+
+	    DtoEncargado.realizarCheckin(idReserva, String.valueOf(dni), tarjeta, id_hotel, lblMensaje);
 	}// fin
 
 	// Check-out
-	public static void realizarCheckout(int id_hotel) {
-		List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
+	public static void realizarCheckout(int id_hotel, javax.swing.JLabel lblMensaje) {
+	    List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
 
-		// Filtrar solo reservas activas
-		List<Reserva> activas = new ArrayList<>();
-		for (Reserva r : reservas) {
-			if ("activa".equalsIgnoreCase(r.getEstado())) {
-				activas.add(r);
-			}
-		}
+	    // Filtrar solo reservas activas
+	    List<Reserva> activas = new ArrayList<>();
+	    for (Reserva r : reservas) {
+	        if ("activa".equalsIgnoreCase(r.getEstado())) {
+	            activas.add(r);
+	        }
+	    }
 
-		if (activas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay reservas activas para check-out.", "INFO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
+	    if (activas.isEmpty()) {
+	        if (lblMensaje != null) {
+	            lblMensaje.setForeground(java.awt.Color.RED);
+	            lblMensaje.setText("No hay reservas activas para check-out");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay reservas activas para check-out.", "INFO",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        }
+	        return;
+	    }
 
-		String[] opciones = new String[activas.size()];
-		for (int i = 0; i < activas.size(); i++) {
-			Reserva r = activas.get(i);
-			opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido();
-		}
+	    String[] opciones = new String[activas.size()];
+	    for (int i = 0; i < activas.size(); i++) {
+	        Reserva r = activas.get(i);
+	        opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido();
+	    }
 
-		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-out:",
-				"CHECK-OUT", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+	    String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-out:",
+	        "CHECK-OUT", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
-		if (seleccion == null)
-			return;
+	    if (seleccion == null)
+	        return;
 
-		int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
-		DtoEncargado.realizarCheckout(idReserva, id_hotel);
+	    int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
+	    DtoEncargado.realizarCheckout(idReserva, id_hotel, lblMensaje);
 	}// fin
 
 	// Ver reservas
