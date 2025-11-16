@@ -533,7 +533,7 @@ public class DtoCliente {
 				    String categoria = rs.getString("categoria");
 				    String riesgo = rs.getString("riesgo");
 
-				    String texto = "=== MIS PREFERENCIAS ===\n\nDuracion: " + duracion
+				    String texto = "Duracion: " + duracion
 				                 + "\nCategoria: " + categoria
 				                 + "\nRiesgo: " + riesgo;
 
@@ -550,33 +550,33 @@ public class DtoCliente {
 		}
 		
 		
-		//Cancelar paquete
+		//Cancelar reserva
 		public static boolean cancelarReserva(Usuario usuario, Cliente cliente, Reserva reserva) {
-			
-			try {
-				  PreparedStatement stmt = (PreparedStatement) conx.prepareStatement("DELETE FROM reserva WHERE id = ?");
-			        stmt.setInt(1, reserva.getId());
-			        int filas = stmt.executeUpdate();
-			        boolean eliminado = (filas > 0);
-			        
-			        PreparedStatement stmtUpdate = (PreparedStatement) conx.prepareStatement(
-	                	    "UPDATE paquete SET cupo_actual = cupo_actual + 1 WHERE id = ?"
-	                	);
-	                	stmtUpdate.setInt(1, reserva.getPaquete().getId());
-	                	stmtUpdate.executeUpdate();
-			        
-			        
-			        cliente.getReservas().clear();
-			        DtoCliente.cargarReservasExistentes(usuario, cliente);
-			        
-			        return eliminado;
-				
-			} catch (Exception e) {
-	            e.printStackTrace();
-			}
-			
-			
-			return false;
+		    try {
+		        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement("DELETE FROM reserva WHERE id = ?");
+		        stmt.setInt(1, reserva.getId());
+		        int filas = stmt.executeUpdate();
+		        boolean eliminado = (filas > 0);
+		        
+		        if (eliminado) {
+		            PreparedStatement stmtUpdate = (PreparedStatement) conx.prepareStatement(
+		                "UPDATE paquete SET cupo_actual = cupo_actual + 1 WHERE id = ?"
+		            );
+		            stmtUpdate.setInt(1, reserva.getPaquete().getId());
+		            stmtUpdate.executeUpdate();
+		            
+		            cliente.getReservas().clear();
+		            cliente.getReservasPasadas().clear();
+		            DtoCliente.cargarReservasExistentes(usuario, cliente);
+		        }
+		        
+		        return eliminado;
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    
+		    return false;
 		}
 		
 		//Escribir reseña

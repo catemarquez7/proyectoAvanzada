@@ -62,28 +62,28 @@ public class Index extends JFrame {
 		contentPane.add(lblNewLabel);
 
 		inputUsuario = new JTextField();
-		inputUsuario.setBounds(102, 298, 179, 25);
+		inputUsuario.setBounds(291, 300, 179, 25);
 		contentPane.add(inputUsuario);
 		inputUsuario.setColumns(10);
 
 		JLabel Usuario = new JLabel("Usuario");
 		Usuario.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		Usuario.setBounds(102, 273, 83, 14);
+		Usuario.setBounds(291, 274, 83, 14);
 		contentPane.add(Usuario);
 
 		JLabel Pass = new JLabel("Contraseña");
 		Pass.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		Pass.setBounds(466, 273, 83, 14);
+		Pass.setBounds(291, 340, 83, 14);
 		contentPane.add(Pass);
 
 		inputPass = new JPasswordField();
-		inputPass.setBounds(466, 298, 179, 25);
+		inputPass.setBounds(291, 356, 179, 25);
 		contentPane.add(inputPass);
 
 		JLabel lblerror = new JLabel("");
-		lblerror.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblerror.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblerror.setForeground(new Color(0, 0, 0));
-		lblerror.setBounds(279, 406, 191, 25);
+		lblerror.setBounds(291, 382, 225, 44);
 		contentPane.add(lblerror);
 
 		// Botones
@@ -108,7 +108,7 @@ public class Index extends JFrame {
 			}
 		});// fin
 		
-		btnIniciar.setBounds(269, 334, 92, 25);
+		btnIniciar.setBounds(291, 393, 117, 50);
 		contentPane.add(btnIniciar);
 
 		JButton btnRegistrarse = new JButton("Registrarse");
@@ -122,7 +122,7 @@ public class Index extends JFrame {
 			}
 		});// fin
 		
-		btnRegistrarse.setBounds(371, 334, 107, 25);
+		btnRegistrarse.setBounds(74, 534, 124, 38);
 		contentPane.add(btnRegistrarse);
 
 		JButton btnOlvido = new JButton("Olvidé mi contraseña");
@@ -136,7 +136,7 @@ public class Index extends JFrame {
 			}
 		});// fin
 		
-		btnOlvido.setBounds(279, 370, 185, 25);
+		btnOlvido.setBounds(210, 532, 179, 43);
 		contentPane.add(btnOlvido);
 
 		JLabel Logo = new JLabel("");
@@ -161,7 +161,7 @@ public class Index extends JFrame {
 		});
 
 		btnclose.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		btnclose.setBounds(291, 442, 165, 25);
+		btnclose.setBounds(555, 547, 165, 25);
 		contentPane.add(btnclose);
 
 	}

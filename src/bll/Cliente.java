@@ -321,8 +321,15 @@ public class Cliente extends Usuario{
 			
 			Actividades_categoria categoriaEnum = (Actividades_categoria) JOptionPane.showInputDialog(null, "Seleccione la categoria de su interes", "SELECCION", 0, null, repository.Actividades_categoria.values(), repository.Actividades_categoria.values());
 			
+			  if (categoriaEnum == null) {
+			        return false; 
+			    }
+			
 			SiNoOpcion riesgoEnum = (SiNoOpcion)JOptionPane.showInputDialog(null, "Desea un alto nivel de riesgo?", "SELECCION", 0, null, repository.SiNoOpcion.values(), repository.SiNoOpcion.values());
 			
+			if (riesgoEnum == null) {
+		        return false; 
+		    }
 			
 			categoria = categoriaEnum.toString();
 			riesgo = riesgoEnum.toString();

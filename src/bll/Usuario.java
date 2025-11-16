@@ -154,8 +154,6 @@ public class Usuario extends Persona {
 	        }
 	        
 	    } else {
-	        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
-	                JOptionPane.ERROR_MESSAGE);
 	        return null;
 	    }
 	}
