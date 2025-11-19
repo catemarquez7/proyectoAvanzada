@@ -83,7 +83,7 @@ public class Index extends JFrame {
 		JLabel lblerror = new JLabel("");
 		lblerror.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblerror.setForeground(new Color(0, 0, 0));
-		lblerror.setBounds(291, 382, 225, 44);
+		lblerror.setBounds(232, 382, 293, 25);
 		contentPane.add(lblerror);
 
 		// Botones
@@ -108,7 +108,7 @@ public class Index extends JFrame {
 			}
 		});// fin
 		
-		btnIniciar.setBounds(291, 393, 117, 50);
+		btnIniciar.setBounds(291, 418, 179, 25);
 		contentPane.add(btnIniciar);
 
 		JButton btnRegistrarse = new JButton("Registrarse");
@@ -136,7 +136,7 @@ public class Index extends JFrame {
 			}
 		});// fin
 		
-		btnOlvido.setBounds(210, 532, 179, 43);
+		btnOlvido.setBounds(208, 535, 172, 37);
 		contentPane.add(btnOlvido);
 
 		JLabel Logo = new JLabel("");
@@ -161,7 +161,7 @@ public class Index extends JFrame {
 		});
 
 		btnclose.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
-		btnclose.setBounds(555, 547, 165, 25);
+		btnclose.setBounds(522, 541, 165, 25);
 		contentPane.add(btnclose);
 
 	}

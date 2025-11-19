@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -372,10 +373,52 @@ public class Encargado extends JFrame {
 
 		Contenidos.addTab("Check-out", null, panelCheckout, null);
 
-		// PANEL VISTAS
+		//PANEL VISTAS
 		JPanel panelVista = new JPanel();
 		panelVista.setLayout(null);
 		panelVista.setBackground(Color.WHITE);
+
+		JLabel lblTituloVistas = new JLabel("PAQUETES Y ACTIVIDADES");
+		lblTituloVistas.setBounds(250, 10, 300, 30);
+		lblTituloVistas.setFont(new Font("Mongolian Baiti", Font.BOLD, 20));
+		panelVista.add(lblTituloVistas);
+
+		javax.swing.JTextArea txtAreaVistas = new javax.swing.JTextArea();
+		txtAreaVistas.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		txtAreaVistas.setEditable(false);
+		txtAreaVistas.setLineWrap(true);
+		txtAreaVistas.setWrapStyleWord(true);
+		txtAreaVistas.setText("Seleccione una opción para ver la información...");
+
+		JScrollPane scrollVistas = new JScrollPane(txtAreaVistas);
+		scrollVistas.setBounds(61, 55, 600, 250);
+		panelVista.add(scrollVistas);
+
+		//Botón Ver Paquetes
+		JButton btnverPaquetes = new JButton("VER PAQUETES");
+		btnverPaquetes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (encargado != null) {
+					bll.Encargado.verPaquetesDelHotel(encargado.getId_hotel(), txtAreaVistas);
+				}
+			}
+		});
+		btnverPaquetes.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
+		btnverPaquetes.setBounds(61, 325, 250, 40);
+		panelVista.add(btnverPaquetes);
+
+		//Botón Ver Actividades
+		JButton btnverActividades = new JButton("VER ACTIVIDADES");
+		btnverActividades.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (encargado != null) {
+					bll.Encargado.verActividades(encargado.getId_hotel(), txtAreaVistas);
+				}
+			}
+		});
+		btnverActividades.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
+		btnverActividades.setBounds(411, 325, 250, 40);
+		panelVista.add(btnverActividades);
 
 		Contenidos.addTab("Vistas", null, panelVista, null);
 
@@ -383,6 +426,261 @@ public class Encargado extends JFrame {
 		JPanel panelPromociones = new JPanel();
 		panelPromociones.setLayout(null);
 		panelPromociones.setBackground(Color.WHITE);
+
+		// Título principal
+		JLabel lblTituloPromociones = new JLabel("GESTIÓN DE PROMOCIONES");
+		lblTituloPromociones.setBounds(230, 10, 350, 35);
+		lblTituloPromociones.setFont(new Font("Mongolian Baiti", Font.BOLD, 20));
+		panelPromociones.add(lblTituloPromociones);
+
+		JLabel lblSubtitulo = new JLabel("Administre las promociones y descuentos de su hotel");
+		lblSubtitulo.setBounds(200, 45, 400, 25);
+		lblSubtitulo.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
+		lblSubtitulo.setForeground(new Color(100, 100, 100));
+		panelPromociones.add(lblSubtitulo);
+
+		// Área de texto para mostrar información
+		javax.swing.JTextArea txtAreaPromociones = new javax.swing.JTextArea();
+		txtAreaPromociones.setFont(new Font("Mongolian Baiti", Font.PLAIN, 12));
+		txtAreaPromociones.setEditable(false);
+		txtAreaPromociones.setLineWrap(true);
+		txtAreaPromociones.setWrapStyleWord(true);
+		txtAreaPromociones.setText("Seleccione una opción para gestionar promociones...");
+		txtAreaPromociones.setBackground(new Color(250, 250, 250));
+
+		JScrollPane scrollPromociones = new JScrollPane(txtAreaPromociones);
+		scrollPromociones.setBounds(30, 85, 690, 180);
+		scrollPromociones.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(200, 200, 200)));
+		panelPromociones.add(scrollPromociones);
+
+		// Mensajes de estado
+		JLabel lblMensajePromo = new JLabel("");
+		lblMensajePromo.setBounds(30, 275, 690, 25);
+		lblMensajePromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		lblMensajePromo.setForeground(Color.BLUE);
+		lblMensajePromo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		panelPromociones.add(lblMensajePromo);
+
+		// FILA 1 DE BOTONES
+		// Botón Crear Promoción
+		JButton btnCrearPromocion = new JButton("CREAR PROMOCIÓN");
+		btnCrearPromocion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					txtAreaPromociones.setText("Creando nueva promoción...\n\n");
+					try {
+						// Llamar al método estático del BLL
+						bll.Encargado.crearPromocion(encargado.getId_hotel());
+						
+						// Actualizar la vista
+						lblMensajePromo.setForeground(new Color(0, 150, 0));
+						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
+					} catch (Exception ex) {
+						lblMensajePromo.setForeground(Color.RED);
+						lblMensajePromo.setText("Error al crear promoción");
+						txtAreaPromociones.setText("Error: " + ex.getMessage());
+					}
+				}
+			}
+		});
+		btnCrearPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnCrearPromocion.setBounds(30, 310, 220, 35);
+		btnCrearPromocion.setFocusPainted(false);
+		panelPromociones.add(btnCrearPromocion);
+
+		// Botón Ver Promociones
+		JButton btnVerPromociones = new JButton("VER PROMOCIONES");
+		btnVerPromociones.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+					
+					if (promociones.isEmpty()) {
+						txtAreaPromociones.setText("No hay promociones registradas para su hotel.\n\n"
+								+ "Use el botón 'CREAR PROMOCIÓN' para agregar una nueva.");
+						lblMensajePromo.setForeground(new Color(200, 100, 0));
+						lblMensajePromo.setText("No hay promociones disponibles");
+					} else {
+						String texto = "PROMOCIONES DE MI HOTEL\n";
+						
+						for (bll.Promocion p : promociones) {
+							texto += "ID: " + p.getId() + "\n";
+							texto += "Nombre: " + p.getNombre() + "\n";
+							texto += "Descuento: " + p.getPorcentajeDescuento() + "%\n";
+							texto += "Vigencia: " + p.getFechaInicio() + " al " + p.getFechaFin() + "\n";
+							texto += "Estado: " + p.getEstado();
+							
+							if (p.estaVigente()) {
+								texto += "VIGENTE\n";
+							} else if (p.getEstado().equals("activa")) {
+								LocalDate hoy = LocalDate.now();
+								if (hoy.isBefore(p.getFechaInicio())) {
+									texto += " (Aún no comenzó)\n";
+								} else {
+									texto += " (Expirada)\n";
+								}
+							} else {
+								texto += "\n";
+							}
+							
+							if (p.getDescripcion() != null && !p.getDescripcion().isEmpty()) {
+								texto += "Descripción: " + p.getDescripcion() + "\n";
+							}
+							texto += "\n";
+						}
+						
+						txtAreaPromociones.setText(texto);
+						txtAreaPromociones.setCaretPosition(0);
+						lblMensajePromo.setForeground(new Color(0, 100, 200));
+						lblMensajePromo.setText("Mostrando " + promociones.size() + " promoción(es)");
+					}
+				}
+			}
+		});
+		btnVerPromociones.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnVerPromociones.setBounds(265, 310, 220, 35);
+		btnVerPromociones.setFocusPainted(false);
+		panelPromociones.add(btnVerPromociones);
+
+		// Botón Aplicar Promoción
+		JButton btnAplicarPromocion = new JButton("APLICAR A PAQUETE");
+		btnAplicarPromocion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					txtAreaPromociones.setText("Aplicando promoción a paquete...\n\n");
+					try {
+						// Llamar al método estático del BLL
+						bll.Encargado.aplicarPromocionAPaquete(encargado.getId_hotel());
+						
+						lblMensajePromo.setForeground(new Color(0, 150, 0));
+						lblMensajePromo.setText("✓ Operación completada");
+					} catch (Exception ex) {
+						lblMensajePromo.setForeground(Color.RED);
+						lblMensajePromo.setText("Error al aplicar promoción");
+						txtAreaPromociones.setText("Error: " + ex.getMessage());
+					}
+				}
+			}
+		});
+		btnAplicarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnAplicarPromocion.setBounds(500, 310, 220, 35);
+		btnAplicarPromocion.setFocusPainted(false);
+		panelPromociones.add(btnAplicarPromocion);
+
+		// FILA 2 DE BOTONES
+		// Botón Editar Promoción
+		JButton btnEditarPromocion = new JButton("EDITAR PROMOCIÓN");
+		btnEditarPromocion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					txtAreaPromociones.setText("Editando promoción...\n\n");
+					try {
+						// Llamar al método estático del BLL
+						bll.Encargado.editarPromocion(encargado.getId_hotel());
+						
+						lblMensajePromo.setForeground(new Color(0, 150, 0));
+						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
+					} catch (Exception ex) {
+						lblMensajePromo.setForeground(Color.RED);
+						lblMensajePromo.setText("Error al editar promoción");
+						txtAreaPromociones.setText("Error: " + ex.getMessage());
+					}
+				}
+			}
+		});
+		btnEditarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnEditarPromocion.setBounds(30, 355, 220, 35);
+		btnEditarPromocion.setFocusPainted(false);
+		panelPromociones.add(btnEditarPromocion);
+
+		// Botón Eliminar Promoción
+		JButton btnEliminarPromocion = new JButton("ELIMINAR PROMOCIÓN");
+		btnEliminarPromocion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					txtAreaPromociones.setText("Eliminando promoción...\n\n");
+					try {
+						// Llamar al método estático del BLL
+						bll.Encargado.eliminarPromocion(encargado.getId_hotel());
+						
+						lblMensajePromo.setForeground(new Color(0, 150, 0));
+						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
+					} catch (Exception ex) {
+						lblMensajePromo.setForeground(Color.RED);
+						lblMensajePromo.setText("Error al eliminar promoción");
+						txtAreaPromociones.setText("Error: " + ex.getMessage());
+					}
+				}
+			}
+		});
+		btnEliminarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnEliminarPromocion.setBounds(265, 355, 220, 35);
+		btnEliminarPromocion.setFocusPainted(false);
+		panelPromociones.add(btnEliminarPromocion);
+
+		// Botón Ver Paquetes con Promociones
+		JButton btnVerPaquetesPromo = new JButton("VER PAQUETES + PROMOS");
+		btnVerPaquetesPromo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblMensajePromo.setText("");
+				if (encargado != null) {
+					List<bll.Paquete> paquetes = DtoEncargado.verPaquetesConPromociones(encargado.getId_hotel());
+					
+					if (paquetes.isEmpty()) {
+						txtAreaPromociones.setText("No hay paquetes disponibles en su hotel.");
+						lblMensajePromo.setForeground(new Color(200, 100, 0));
+						lblMensajePromo.setText("No hay paquetes disponibles");
+					} else {
+						String texto = "PAQUETES CON INFORMACIÓN DE PROMOCIONES\n";
+						
+						for (bll.Paquete p : paquetes) {
+							texto += "ID Paquete: " + p.getId() + "\n";
+							texto += "Fecha: " + p.getInicioDate() + " al " + p.getFinDate() + "\n";
+							
+							if (p.getHabitacion() != null) {
+								texto += "Habitación: Nro " + p.getHabitacion().getNumero() + "\n";
+							}
+							
+							if (p.getActividad() != null) {
+								texto += "Actividad: " + p.getActividad().getNombre() + "\n";
+							}
+							
+							if (p.getPromocion() != null) {
+								texto += "\n★ PROMOCIÓN APLICADA: " + p.getPromocion().getNombre() + "\n";
+								texto += "  Descuento: " + p.getPromocion().getPorcentajeDescuento() + "%\n";
+								texto += "  Precio original: $" + String.format("%.2f", p.getPrecioOriginal()) + "\n";
+								texto += "  Precio con descuento: $" + String.format("%.2f", p.getPrecio()) + "\n";
+								
+								if (p.getPromocion().estaVigente()) {
+									texto += "  Estado: VIGENTE\n";
+								} else {
+									texto += "  Estado: NO VIGENTE\n";
+								}
+							} else {
+								texto += "\nSin promoción aplicada\n";
+								texto += "Precio: $" + String.format("%.2f", p.getPrecio()) + "\n";
+							}
+							
+							texto += "\n";
+						}
+						
+						txtAreaPromociones.setText(texto);
+						txtAreaPromociones.setCaretPosition(0);
+						lblMensajePromo.setForeground(new Color(0, 100, 200));
+						lblMensajePromo.setText("Mostrando " + paquetes.size() + " paquete(s)");
+					}
+				}
+			}
+		});
+		btnVerPaquetesPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnVerPaquetesPromo.setBounds(500, 355, 220, 35);
+		btnVerPaquetesPromo.setFocusPainted(false);
+		panelPromociones.add(btnVerPaquetesPromo);
 
 		Contenidos.addTab("Promociones", null, panelPromociones, null);
 

@@ -178,11 +178,11 @@ public class Encargado extends Usuario {
 			switch (opcion) {
 			case 0:
 				// Ver actividades
-				Encargado.verActividades(id_hotel);
+				Encargado.verActividades(id_hotel, null);
 				break;
 			case 1:
 				// Ver paquetes
-				Encargado.verPaquetesDelHotel(id_hotel);
+				Encargado.verPaquetesDelHotel(id_hotel, null);
 				break;
 			case 2:
 				// Atrás
@@ -264,69 +264,87 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Ver paquetes por hotel
-	public static void verPaquetesDelHotel(int id_hotel) {
-		List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
+	public static void verPaquetesDelHotel(int id_hotel, javax.swing.JTextArea txtArea) {
+	    List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
 
-		if (paquetes.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay paquetes disponibles en su hotel", "INFO", 1);
-			return;
-		}
+	    if (paquetes.isEmpty()) {
+	        if (txtArea != null) {
+	            txtArea.setText("No hay paquetes disponibles en su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay paquetes disponibles en su hotel", "INFO", 1);
+	        }
+	        return;
+	    }
 
-		String texto = "=== PAQUETES DE MI HOTEL ===\n\n";
+	    String texto = "=== PAQUETES DE MI HOTEL ===\n\n";
 
-		for (Paquete p : paquetes) {
-			texto += "ID: " + p.getId() + "\n" + "Hotel: " + p.getHotel().getNombre() + "\n" + "Fecha inicio: "
-					+ p.getInicioDate() + "\n" + "Fecha fin: " + p.getFinDate() + "\n" + "Precio: $"
-					+ String.format("%.2f", p.getPrecio()) + "\n";
+	    for (Paquete p : paquetes) {
+	        texto += "ID: " + p.getId() + "\n" + "Hotel: " + p.getHotel().getNombre() + "\n" + "Fecha inicio: "
+	            + p.getInicioDate() + "\n" + "Fecha fin: " + p.getFinDate() + "\n" + "Precio: $"
+	            + String.format("%.2f", p.getPrecio()) + "\n";
 
-			if (p.getHabitacion() != null) {
-				texto += "Habitación: Nro " + p.getHabitacion().getNumero() + " - Tipo: " + p.getHabitacion().getTipo()
-						+ " - Camas: " + p.getHabitacion().getCant_camas() + " - Estado: "
-						+ p.getHabitacion().getEstado() + "\n";
-			} else {
-				texto += "Habitación: Sin asignar\n";
-			}
+	        if (p.getHabitacion() != null) {
+	            texto += "Habitación: Nro " + p.getHabitacion().getNumero() + " - Tipo: " + p.getHabitacion().getTipo()
+	                + " - Camas: " + p.getHabitacion().getCant_camas() + " - Estado: "
+	                + p.getHabitacion().getEstado() + "\n";
+	        } else {
+	            texto += "Habitación: Sin asignar\n";
+	        }
 
-			if (p.getActividad() != null) {
-				texto += "Actividad: " + p.getActividad().getNombre() + " - Categoría: "
-						+ p.getActividad().getCategoria() + "\n" + "Duración: " + p.getActividad().getDuracion() + " hs"
-						+ " - Ubicación: " + p.getActividad().getLocacion() + "\n";
-			} else {
-				texto += "Actividad: Sin asignar\n";
-			}
+	        if (p.getActividad() != null) {
+	            texto += "Actividad: " + p.getActividad().getNombre() + " - Categoría: "
+	                + p.getActividad().getCategoria() + "\n" + "Duración: " + p.getActividad().getDuracion() + " hs"
+	                + " - Ubicación: " + p.getActividad().getLocacion() + "\n";
+	        } else {
+	            texto += "Actividad: Sin asignar\n";
+	        }
 
-			texto += "========================\n\n";
-		}
+	        texto += "========================\n\n";
+	    }
 
-		JOptionPane.showMessageDialog(null, texto, "PAQUETES DEL HOTEL", JOptionPane.INFORMATION_MESSAGE);
+	    if (txtArea != null) {
+	        txtArea.setText(texto);
+	        txtArea.setCaretPosition(0); // Scroll al inicio
+	    } else {
+	        JOptionPane.showMessageDialog(null, texto, "PAQUETES DEL HOTEL", JOptionPane.INFORMATION_MESSAGE);
+	    }
 	}// fin
 
 	// Ver actividades
-	public static void verActividades(int id_hotel) {
-		List<Actividad> actividades = DtoEncargado.verActividadesPorHotel(id_hotel);
+	public static void verActividades(int id_hotel, javax.swing.JTextArea txtArea) {
+	    List<Actividad> actividades = DtoEncargado.verActividadesPorHotel(id_hotel);
 
-		if (actividades.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay actividades disponibles para su hotel", "INFO", 1);
-			return;
-		}
+	    if (actividades.isEmpty()) {
+	        if (txtArea != null) {
+	            txtArea.setText("No hay actividades disponibles para su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay actividades disponibles para su hotel", "INFO", 1);
+	        }
+	        return;
+	    }
 
-		String texto = "=== ACTIVIDADES DE MI HOTEL ===\n\n";
+	    String texto = "=== ACTIVIDADES DE MI HOTEL ===\n\n";
 
-		for (Actividad a : actividades) {
-			texto += "ID: " + a.getId() + "\n" + "Nombre: " + a.getNombre() + "\n" + "Categoría: " + a.getCategoria()
-					+ "\n" + "Ubicación: " + a.getLocacion() + "\n" + "Duración: " + a.getDuracion() + " horas\n"
-					+ "Precio: $" + String.format("%.2f", a.getPrecio()) + "\n" + "Edad: " + a.getEdad_minima() + " - "
-					+ a.getEdad_maxima() + " años\n" + "Vigencia: " + a.getInicioDate() + " al " + a.getFinDate()
-					+ "\n";
+	    for (Actividad a : actividades) {
+	        texto += "ID: " + a.getId() + "\n" + "Nombre: " + a.getNombre() + "\n" + "Categoría: " + a.getCategoria()
+	            + "\n" + "Ubicación: " + a.getLocacion() + "\n" + "Duración: " + a.getDuracion() + " horas\n"
+	            + "Precio: $" + String.format("%.2f", a.getPrecio()) + "\n" + "Edad: " + a.getEdad_minima() + " - "
+	            + a.getEdad_maxima() + " años\n" + "Vigencia: " + a.getInicioDate() + " al " + a.getFinDate()
+	            + "\n";
 
-			if (a.getRiesgo() != null) {
-				texto += "Nivel de riesgo: " + a.getRiesgo() + "\n";
-			}
+	        if (a.getRiesgo() != null) {
+	            texto += "Nivel de riesgo: " + a.getRiesgo() + "\n";
+	        }
 
-			texto += "------------------------\n";
-		}
+	        texto += "------------------------\n";
+	    }
 
-		JOptionPane.showMessageDialog(null, texto, "ACTIVIDADES", JOptionPane.INFORMATION_MESSAGE);
+	    if (txtArea != null) {
+	        txtArea.setText(texto);
+	        txtArea.setCaretPosition(0); // Scroll al inicio
+	    } else {
+	        JOptionPane.showMessageDialog(null, texto, "ACTIVIDADES", JOptionPane.INFORMATION_MESSAGE);
+	    }
 	}// fin
 
 	// Menu promociones
@@ -373,44 +391,97 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Crear
-	private static void crearPromocion(int id_hotel) {
+	public static void crearPromocion(int id_hotel) {
 		try {
-			String nombre = Validaciones.ValidarContras("Ingrese el nombre de la promoción:");
-			if (nombre == null)
-				return;
+			// Nombre
+			String nombre = null;
+			while (nombre == null || nombre.trim().isEmpty()) {
+				nombre = JOptionPane.showInputDialog(null, "Ingrese el nombre de la promoción:");
+				if (nombre == null) return; // Usuario canceló
+				if (nombre.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+			}
 
-			String descripcion = JOptionPane.showInputDialog(null,
-					"Ingrese la descripción (opcional - puede dejar vacío):");
+			// Descripción (opcional)
+			String descripcion = JOptionPane.showInputDialog(null, "Ingrese la descripción (opcional - puede dejar vacío):");
 			if (descripcion == null) {
 				descripcion = "";
 			}
 
+			// Porcentaje
 			int porcentaje = 0;
 			boolean porcentajeValido = false;
-
 			while (!porcentajeValido) {
-				porcentaje = Validaciones.ValidarNum("Ingrese el porcentaje de descuento (1-100):");
-
-				if (porcentaje > 0 && porcentaje <= 100) {
-					porcentajeValido = true;
+				String porcentajeStr = JOptionPane.showInputDialog(null, "Ingrese el porcentaje de descuento (1-100):");
+				if (porcentajeStr == null) return; // Usuario canceló
+				
+				if (repository.Utilidades.contieneSoloNumeros(porcentajeStr)) {
+					porcentaje = Integer.parseInt(porcentajeStr);
+					if (porcentaje > 0 && porcentaje <= 100) {
+						porcentajeValido = true;
+					} else {
+						JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", JOptionPane.ERROR_MESSAGE);
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
+					JOptionPane.showMessageDialog(null, "Debe ingresar solo números", "ERROR", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 
-			LocalDate fechaInicio = Validaciones.ValidarFecha("Fecha de INICIO de la promoción");
-			LocalDate fechaFin = Validaciones.ValidarFecha("Fecha de FIN de la promoción");
+			// Fecha inicio con JCalendar
+			javax.swing.JPanel panelInicio = new javax.swing.JPanel();
+			panelInicio.setLayout(new java.awt.BorderLayout());
+			javax.swing.JLabel lblInicio = new javax.swing.JLabel("Seleccione la fecha de INICIO de la promoción:");
+			com.toedter.calendar.JDateChooser dateChooserInicio = new com.toedter.calendar.JDateChooser();
+			dateChooserInicio.setDateFormatString("yyyy-MM-dd");
+			dateChooserInicio.setMinSelectableDate(new java.util.Date());
+			panelInicio.add(lblInicio, java.awt.BorderLayout.NORTH);
+			panelInicio.add(dateChooserInicio, java.awt.BorderLayout.CENTER);
+			
+			int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio, "Fecha de Inicio", 
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			
+			if (resultInicio != JOptionPane.OK_OPTION || dateChooserInicio.getDate() == null) {
+				JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha de inicio", "ERROR", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			LocalDate fechaInicio = dateChooserInicio.getDate().toInstant()
+					.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+			// Fecha fin con JCalendar
+			javax.swing.JPanel panelFin = new javax.swing.JPanel();
+			panelFin.setLayout(new java.awt.BorderLayout());
+			javax.swing.JLabel lblFin = new javax.swing.JLabel("Seleccione la fecha de FIN de la promoción:");
+			com.toedter.calendar.JDateChooser dateChooserFin = new com.toedter.calendar.JDateChooser();
+			dateChooserFin.setDateFormatString("yyyy-MM-dd");
+			dateChooserFin.setMinSelectableDate(java.util.Date.from(
+					fechaInicio.plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()));
+			panelFin.add(lblFin, java.awt.BorderLayout.NORTH);
+			panelFin.add(dateChooserFin, java.awt.BorderLayout.CENTER);
+			
+			int resultFin = JOptionPane.showConfirmDialog(null, panelFin, "Fecha de Fin", 
+					JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+			
+			if (resultFin != JOptionPane.OK_OPTION || dateChooserFin.getDate() == null) {
+				JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha de fin", "ERROR", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+			
+			LocalDate fechaFin = dateChooserFin.getDate().toInstant()
+					.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
 
 			if (fechaFin.isBefore(fechaInicio) || fechaFin.isEqual(fechaInicio)) {
-				JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio", "ERROR",
-						0);
+				JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio", 
+						"ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			DtoEncargado.crearPromocion(nombre, descripcion, porcentaje, fechaInicio, fechaFin, id_hotel);
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al crear promoción: " + e.getMessage(), "ERROR", 0);
+			JOptionPane.showMessageDialog(null, "Error al crear promoción: " + e.getMessage(), 
+					"ERROR", JOptionPane.ERROR_MESSAGE);
 		}
 	}// fin
 
@@ -454,7 +525,7 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Aplicar
-	private static void aplicarPromocionAPaquete(int id_hotel) {
+	public static void aplicarPromocionAPaquete(int id_hotel) {
 		List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
 		List<Promocion> activas = new ArrayList<>();
 
@@ -465,7 +536,8 @@ public class Encargado extends Usuario {
 		}
 
 		if (activas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay promociones activas. Cree una primero.", "INFO", 1);
+			JOptionPane.showMessageDialog(null, "No hay promociones activas. Cree una primero.", 
+					"INFO", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
@@ -487,7 +559,8 @@ public class Encargado extends Usuario {
 		List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
 
 		if (paquetes.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay paquetes en su hotel", "INFO", 1);
+			JOptionPane.showMessageDialog(null, "No hay paquetes en su hotel", 
+					"INFO", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
@@ -510,11 +583,12 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Eliminar
-	private static void eliminarPromocion(int id_hotel) {
+	public static void eliminarPromocion(int id_hotel) {
 		List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
 
 		if (promociones.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay promociones para eliminar", "INFO", 1);
+			JOptionPane.showMessageDialog(null, "No hay promociones para eliminar", 
+					"INFO", JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
@@ -588,13 +662,13 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Editar
-	private static void editarPromocion(int id_hotel) {
+	public static void editarPromocion(int id_hotel) {
 		try {
-
 			List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
 
 			if (promociones.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "No hay promociones para editar", "INFO", 1);
+				JOptionPane.showMessageDialog(null, "No hay promociones para editar", 
+						"INFO", JOptionPane.INFORMATION_MESSAGE);
 				return;
 			}
 
@@ -623,7 +697,8 @@ public class Encargado extends Usuario {
 			}
 
 			if (promoSeleccionada == null) {
-				JOptionPane.showMessageDialog(null, "Error: No se encontró la promoción", "ERROR", 0);
+				JOptionPane.showMessageDialog(null, "Error: No se encontró la promoción", 
+						"ERROR", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
@@ -632,101 +707,139 @@ public class Encargado extends Usuario {
 					"EDITAR PROMOCIÓN - Paso 2/2", 0, JOptionPane.QUESTION_MESSAGE, null,
 					repository.Editarpromo.values(), repository.Editarpromo.values()[0]);
 
-			if (atributoSeleccionado == -1) // Si cancela
+			if (atributoSeleccionado == -1)
 				return;
 
-			do {
-
-				switch (atributoSeleccionado) {
-				case 0: // Nombre
-					String nuevoNombre = Validaciones.ValidarContras(
+			switch (atributoSeleccionado) {
+			case 0: // Nombre
+				String nuevoNombre = null;
+				while (nuevoNombre == null || nuevoNombre.trim().isEmpty()) {
+					nuevoNombre = JOptionPane.showInputDialog(null,
 							"Nombre actual: " + promoSeleccionada.getNombre() + "\n\nIngrese el nuevo nombre:");
-					if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-						DtoEncargado.editarPromocion(idPromocion, "nombre", nuevoNombre, id_hotel);
+					if (nuevoNombre == null) return;
+					if (nuevoNombre.trim().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "El nombre no puede estar vacío", 
+								"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
-					break;
+				}
+				DtoEncargado.editarPromocion(idPromocion, "nombre", nuevoNombre, id_hotel);
+				break;
 
-				case 1: // Descripción
-					String nuevaDescripcion = JOptionPane.showInputDialog(null,
-							"Descripción actual: "
-									+ (promoSeleccionada.getDescripcion() != null ? promoSeleccionada.getDescripcion()
-											: "Sin descripción")
-									+ "\n\nIngrese la nueva descripción:");
-					if (nuevaDescripcion != null) {
-						DtoEncargado.editarPromocion(idPromocion, "descripcion", nuevaDescripcion, id_hotel);
-					}
-					break;
+			case 1: // Descripción
+				String nuevaDescripcion = JOptionPane.showInputDialog(null,
+						"Descripción actual: "
+								+ (promoSeleccionada.getDescripcion() != null ? promoSeleccionada.getDescripcion()
+										: "Sin descripción")
+								+ "\n\nIngrese la nueva descripción:");
+				if (nuevaDescripcion != null) {
+					DtoEncargado.editarPromocion(idPromocion, "descripcion", nuevaDescripcion, id_hotel);
+				}
+				break;
 
-				case 2: // Porcentaje_de_descuento
-					int nuevoPorcentaje = 0;
-					boolean porcentajeValido = false;
-
-					while (!porcentajeValido) {
-						nuevoPorcentaje = Validaciones
-								.ValidarNum("Porcentaje actual: " + promoSeleccionada.getPorcentajeDescuento()
-										+ "%\n\nIngrese el nuevo porcentaje (1-100):");
-
+			case 2: // Porcentaje
+				int nuevoPorcentaje = 0;
+				boolean porcentajeValido = false;
+				while (!porcentajeValido) {
+					String porcentajeStr = JOptionPane.showInputDialog(null,
+							"Porcentaje actual: " + promoSeleccionada.getPorcentajeDescuento()
+									+ "%\n\nIngrese el nuevo porcentaje (1-100):");
+					if (porcentajeStr == null) return;
+					
+					if (repository.Utilidades.contieneSoloNumeros(porcentajeStr)) {
+						nuevoPorcentaje = Integer.parseInt(porcentajeStr);
 						if (nuevoPorcentaje > 0 && nuevoPorcentaje <= 100) {
 							porcentajeValido = true;
 							DtoEncargado.editarPromocion(idPromocion, "porcentaje", String.valueOf(nuevoPorcentaje),
 									id_hotel);
 						} else {
-							JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
+							JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", 
+									"ERROR", JOptionPane.ERROR_MESSAGE);
 						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Debe ingresar solo números", 
+								"ERROR", JOptionPane.ERROR_MESSAGE);
 					}
-					break;
-
-				case 3: // Inicio
-					LocalDate nuevaFechaInicio = Validaciones.ValidarFecha(
-							"Fecha actual: " + promoSeleccionada.getFechaInicio() + "\n\nNueva fecha de INICIO");
-					if (nuevaFechaInicio != null) {
-						if (nuevaFechaInicio.isAfter(promoSeleccionada.getFechaFin())
-								|| nuevaFechaInicio.isEqual(promoSeleccionada.getFechaFin())) {
-							JOptionPane.showMessageDialog(null,
-									"La fecha de inicio debe ser anterior a la fecha de fin ("
-											+ promoSeleccionada.getFechaFin() + ")",
-									"ERROR", 0);
-						} else {
-							DtoEncargado.editarPromocion(idPromocion, "fecha_inicio", nuevaFechaInicio.toString(),
-									id_hotel);
-						}
-					}
-					break;
-
-				case 4: // Fin
-					LocalDate nuevaFechaFin = Validaciones.ValidarFecha(
-							"Fecha actual: " + promoSeleccionada.getFechaFin() + "\n\nNueva fecha de FIN");
-					if (nuevaFechaFin != null) {
-						if (nuevaFechaFin.isBefore(promoSeleccionada.getFechaInicio())
-								|| nuevaFechaFin.isEqual(promoSeleccionada.getFechaInicio())) {
-							JOptionPane.showMessageDialog(null,
-									"La fecha de fin debe ser posterior a la fecha de inicio ("
-											+ promoSeleccionada.getFechaInicio() + ")",
-									"ERROR", 0);
-						} else {
-							DtoEncargado.editarPromocion(idPromocion, "fecha_fin", nuevaFechaFin.toString(), id_hotel);
-						}
-					}
-					break;
-
-				case 5: // Estado
-					String[] estados = { "activa", "inactiva" };
-					String nuevoEstado = (String) JOptionPane.showInputDialog(null,
-							"Estado actual: " + promoSeleccionada.getEstado() + "\n\nSeleccione el nuevo estado:",
-							"CAMBIAR ESTADO", JOptionPane.QUESTION_MESSAGE, null, estados, estados[0]);
-
-					if (nuevoEstado != null) {
-						DtoEncargado.editarPromocion(idPromocion, "estado", nuevoEstado, id_hotel);
-					}
-					break;
 				}
+				break;
 
-			} while (atributoSeleccionado != 6);
+			case 3: // Fecha Inicio
+				javax.swing.JPanel panelInicio = new javax.swing.JPanel();
+				panelInicio.setLayout(new java.awt.BorderLayout());
+				javax.swing.JLabel lblInicio = new javax.swing.JLabel(
+						"Fecha actual: " + promoSeleccionada.getFechaInicio() + "\n\nSeleccione la nueva fecha de INICIO:");
+				com.toedter.calendar.JDateChooser dateChooserInicio = new com.toedter.calendar.JDateChooser();
+				dateChooserInicio.setDateFormatString("yyyy-MM-dd");
+				dateChooserInicio.setDate(java.sql.Date.valueOf(promoSeleccionada.getFechaInicio()));
+				panelInicio.add(lblInicio, java.awt.BorderLayout.NORTH);
+				panelInicio.add(dateChooserInicio, java.awt.BorderLayout.CENTER);
+				
+				int resultInicio = JOptionPane.showConfirmDialog(null, panelInicio, "Nueva Fecha de Inicio", 
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				
+				if (resultInicio == JOptionPane.OK_OPTION && dateChooserInicio.getDate() != null) {
+					LocalDate nuevaFechaInicio = dateChooserInicio.getDate().toInstant()
+							.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+					
+					if (nuevaFechaInicio.isAfter(promoSeleccionada.getFechaFin())
+							|| nuevaFechaInicio.isEqual(promoSeleccionada.getFechaFin())) {
+						JOptionPane.showMessageDialog(null,
+								"La fecha de inicio debe ser anterior a la fecha de fin ("
+										+ promoSeleccionada.getFechaFin() + ")",
+								"ERROR", JOptionPane.ERROR_MESSAGE);
+					} else {
+						DtoEncargado.editarPromocion(idPromocion, "fecha_inicio", nuevaFechaInicio.toString(),
+								id_hotel);
+					}
+				}
+				break;
+
+			case 4: // Fecha Fin
+				javax.swing.JPanel panelFin = new javax.swing.JPanel();
+				panelFin.setLayout(new java.awt.BorderLayout());
+				javax.swing.JLabel lblFin = new javax.swing.JLabel(
+						"Fecha actual: " + promoSeleccionada.getFechaFin() + "\n\nSeleccione la nueva fecha de FIN:");
+				com.toedter.calendar.JDateChooser dateChooserFin = new com.toedter.calendar.JDateChooser();
+				dateChooserFin.setDateFormatString("yyyy-MM-dd");
+				dateChooserFin.setDate(java.sql.Date.valueOf(promoSeleccionada.getFechaFin()));
+				dateChooserFin.setMinSelectableDate(java.sql.Date.valueOf(promoSeleccionada.getFechaInicio().plusDays(1)));
+				panelFin.add(lblFin, java.awt.BorderLayout.NORTH);
+				panelFin.add(dateChooserFin, java.awt.BorderLayout.CENTER);
+				
+				int resultFin = JOptionPane.showConfirmDialog(null, panelFin, "Nueva Fecha de Fin", 
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				
+				if (resultFin == JOptionPane.OK_OPTION && dateChooserFin.getDate() != null) {
+					LocalDate nuevaFechaFin = dateChooserFin.getDate().toInstant()
+							.atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+					
+					if (nuevaFechaFin.isBefore(promoSeleccionada.getFechaInicio())
+							|| nuevaFechaFin.isEqual(promoSeleccionada.getFechaInicio())) {
+						JOptionPane.showMessageDialog(null,
+								"La fecha de fin debe ser posterior a la fecha de inicio ("
+										+ promoSeleccionada.getFechaInicio() + ")",
+								"ERROR", JOptionPane.ERROR_MESSAGE);
+					} else {
+						DtoEncargado.editarPromocion(idPromocion, "fecha_fin", nuevaFechaFin.toString(), id_hotel);
+					}
+				}
+				break;
+
+			case 5: // Estado
+				String[] estados = { "activa", "inactiva" };
+				String nuevoEstado = (String) JOptionPane.showInputDialog(null,
+						"Estado actual: " + promoSeleccionada.getEstado() + "\n\nSeleccione el nuevo estado:",
+						"CAMBIAR ESTADO", JOptionPane.QUESTION_MESSAGE, null, estados, estados[0]);
+
+				if (nuevoEstado != null) {
+					DtoEncargado.editarPromocion(idPromocion, "estado", nuevoEstado, id_hotel);
+				}
+				break;
+			}
 
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);
+			JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), 
+					"ERROR", JOptionPane.ERROR_MESSAGE);
 		}
-
 	}// fin
 
 }// final clase
