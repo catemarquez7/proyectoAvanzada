@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,7 +37,6 @@ public class Encargado extends JFrame {
 	private DefaultTableModel modelHabitaciones;
 	private javax.swing.JComboBox<String> comboReservasCheckin;
 	private javax.swing.JComboBox<String> comboReservasCheckout;
-
 	/**
 	 * Launch the application.
 	 */
@@ -194,9 +194,9 @@ public class Encargado extends JFrame {
 				if (!isSelected) {
 					String estado = (String) table.getValueAt(row, 5);
 					if ("disponible".equalsIgnoreCase(estado)) {
-						c.setBackground(new Color(200, 255, 200)); // Verde
+						c.setBackground(new Color(200, 255, 200)); 
 					} else if ("ocupada".equalsIgnoreCase(estado)) {
-						c.setBackground(new Color(255, 200, 200)); // Rojo
+						c.setBackground(new Color(255, 200, 200)); 
 					} else {
 						c.setBackground(Color.WHITE);
 					}
@@ -266,7 +266,7 @@ public class Encargado extends JFrame {
 		lblMensajeCheckin.setForeground(Color.RED);
 		panelCheckin.add(lblMensajeCheckin);
 
-		JButton btnRealizarCheckin = new JButton("REALIZAR CHECK-IN");
+		JButton btnRealizarCheckin = new JButton("Realizar Check-in");
 		btnRealizarCheckin.setBounds(250, 310, 250, 40);
 		btnRealizarCheckin.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
 		btnRealizarCheckin.addActionListener(new ActionListener() {
@@ -342,7 +342,7 @@ public class Encargado extends JFrame {
 		lblMensajeCheckout.setForeground(Color.RED);
 		panelCheckout.add(lblMensajeCheckout);
 
-		JButton btnRealizarCheckout = new JButton("REALIZAR CHECK-OUT");
+		JButton btnRealizarCheckout = new JButton("Realizar check-out");
 		btnRealizarCheckout.setBounds(250, 220, 250, 40);
 		btnRealizarCheckout.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
 		btnRealizarCheckout.addActionListener(new ActionListener() {
@@ -374,314 +374,798 @@ public class Encargado extends JFrame {
 		Contenidos.addTab("Check-out", null, panelCheckout, null);
 
 		//PANEL VISTAS
-		JPanel panelVista = new JPanel();
-		panelVista.setLayout(null);
-		panelVista.setBackground(Color.WHITE);
-
-		JLabel lblTituloVistas = new JLabel("PAQUETES Y ACTIVIDADES");
-		lblTituloVistas.setBounds(250, 10, 300, 30);
-		lblTituloVistas.setFont(new Font("Mongolian Baiti", Font.BOLD, 20));
-		panelVista.add(lblTituloVistas);
-
-		javax.swing.JTextArea txtAreaVistas = new javax.swing.JTextArea();
-		txtAreaVistas.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
-		txtAreaVistas.setEditable(false);
-		txtAreaVistas.setLineWrap(true);
-		txtAreaVistas.setWrapStyleWord(true);
-		txtAreaVistas.setText("Seleccione una opción para ver la información...");
-
-		JScrollPane scrollVistas = new JScrollPane(txtAreaVistas);
-		scrollVistas.setBounds(61, 55, 600, 250);
-		panelVista.add(scrollVistas);
-
-		//Botón Ver Paquetes
-		JButton btnverPaquetes = new JButton("VER PAQUETES");
-		btnverPaquetes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (encargado != null) {
-					bll.Encargado.verPaquetesDelHotel(encargado.getId_hotel(), txtAreaVistas);
-				}
-			}
-		});
-		btnverPaquetes.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
-		btnverPaquetes.setBounds(61, 325, 250, 40);
-		panelVista.add(btnverPaquetes);
-
-		//Botón Ver Actividades
-		JButton btnverActividades = new JButton("VER ACTIVIDADES");
-		btnverActividades.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (encargado != null) {
-					bll.Encargado.verActividades(encargado.getId_hotel(), txtAreaVistas);
-				}
-			}
-		});
-		btnverActividades.setFont(new Font("Mongolian Baiti", Font.BOLD, 16));
-		btnverActividades.setBounds(411, 325, 250, 40);
-		panelVista.add(btnverActividades);
-
-		Contenidos.addTab("Vistas", null, panelVista, null);
-
-		// PANEL PROMOCIONES
 		JPanel panelPromociones = new JPanel();
 		panelPromociones.setLayout(null);
 		panelPromociones.setBackground(Color.WHITE);
 
-		// Título principal
-		JLabel lblTituloPromociones = new JLabel("GESTIÓN DE PROMOCIONES");
-		lblTituloPromociones.setBounds(230, 10, 350, 35);
-		lblTituloPromociones.setFont(new Font("Mongolian Baiti", Font.BOLD, 20));
-		panelPromociones.add(lblTituloPromociones);
+		//sub-pestañas 
+		JTabbedPane tabsPromociones = new JTabbedPane(JTabbedPane.LEFT);
+		tabsPromociones.setBounds(10, 10, 730, 385);
+		tabsPromociones.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		panelPromociones.add(tabsPromociones);
 
-		JLabel lblSubtitulo = new JLabel("Administre las promociones y descuentos de su hotel");
-		lblSubtitulo.setBounds(200, 45, 400, 25);
-		lblSubtitulo.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
-		lblSubtitulo.setForeground(new Color(100, 100, 100));
-		panelPromociones.add(lblSubtitulo);
+		//VER PROMOCIONES
+		JPanel subPanelVer = new JPanel();
+		subPanelVer.setLayout(null);
+		subPanelVer.setBackground(Color.WHITE);
 
-		// Área de texto para mostrar información
-		javax.swing.JTextArea txtAreaPromociones = new javax.swing.JTextArea();
-		txtAreaPromociones.setFont(new Font("Mongolian Baiti", Font.PLAIN, 12));
-		txtAreaPromociones.setEditable(false);
-		txtAreaPromociones.setLineWrap(true);
-		txtAreaPromociones.setWrapStyleWord(true);
-		txtAreaPromociones.setText("Seleccione una opción para gestionar promociones...");
-		txtAreaPromociones.setBackground(new Color(250, 250, 250));
+		JLabel lblTituloVer = new JLabel("PROMOCIONES ACTIVAS");
+		lblTituloVer.setBounds(20, 10, 300, 30);
+		lblTituloVer.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelVer.add(lblTituloVer);
 
-		JScrollPane scrollPromociones = new JScrollPane(txtAreaPromociones);
-		scrollPromociones.setBounds(30, 85, 690, 180);
-		scrollPromociones.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(200, 200, 200)));
-		panelPromociones.add(scrollPromociones);
+		//Tabla de promociones
+		String[] columnasPromo = {"ID", "Nombre", "Descuento %", "Fecha Inicio", "Fecha Fin", "Estado"};
+		DefaultTableModel modelPromo = new DefaultTableModel(columnasPromo, 0) {
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
-		// Mensajes de estado
-		JLabel lblMensajePromo = new JLabel("");
-		lblMensajePromo.setBounds(30, 275, 690, 25);
-		lblMensajePromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		lblMensajePromo.setForeground(Color.BLUE);
-		lblMensajePromo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-		panelPromociones.add(lblMensajePromo);
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+		JTable tablePromociones = new JTable(modelPromo);
+		tablePromociones.setFont(new Font("Mongolian Baiti", Font.PLAIN, 12));
+		tablePromociones.getTableHeader().setFont(new Font("Mongolian Baiti", Font.BOLD, 12));
+		tablePromociones.setRowHeight(25);
 
-		// FILA 1 DE BOTONES
-		// Botón Crear Promoción
-		JButton btnCrearPromocion = new JButton("CREAR PROMOCIÓN");
-		btnCrearPromocion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					txtAreaPromociones.setText("Creando nueva promoción...\n\n");
-					try {
-						// Llamar al método estático del BLL
-						bll.Encargado.crearPromocion(encargado.getId_hotel());
-						
-						// Actualizar la vista
-						lblMensajePromo.setForeground(new Color(0, 150, 0));
-						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
-					} catch (Exception ex) {
-						lblMensajePromo.setForeground(Color.RED);
-						lblMensajePromo.setText("Error al crear promoción");
-						txtAreaPromociones.setText("Error: " + ex.getMessage());
-					}
-				}
-			}
+		tablePromociones.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+		    /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public java.awt.Component getTableCellRendererComponent(JTable table, Object value, 
+		            boolean isSelected, boolean hasFocus, int row, int column) {
+		        java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        
+		        if (!isSelected && column == 5) {
+		            String estado = (String) value;
+		            if ("VIGENTE".equalsIgnoreCase(estado)) {
+		                c.setBackground(new Color(200, 255, 200));
+		                c.setForeground(new Color(0, 100, 0));
+		            } else if ("Expirada".equalsIgnoreCase(estado)) {
+		                c.setBackground(new Color(255, 200, 200));
+		                c.setForeground(new Color(150, 0, 0));
+		            } else {
+		                c.setBackground(new Color(255, 255, 200));
+		                c.setForeground(new Color(100, 100, 0));
+		            }
+		        } else if (!isSelected) {
+		            c.setBackground(Color.WHITE);
+		            c.setForeground(Color.BLACK);
+		        }
+		        
+		        return c;
+		    }
 		});
-		btnCrearPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnCrearPromocion.setBounds(30, 310, 220, 35);
-		btnCrearPromocion.setFocusPainted(false);
-		panelPromociones.add(btnCrearPromocion);
 
-		// Botón Ver Promociones
-		JButton btnVerPromociones = new JButton("VER PROMOCIONES");
-		btnVerPromociones.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
-					
-					if (promociones.isEmpty()) {
-						txtAreaPromociones.setText("No hay promociones registradas para su hotel.\n\n"
-								+ "Use el botón 'CREAR PROMOCIÓN' para agregar una nueva.");
-						lblMensajePromo.setForeground(new Color(200, 100, 0));
-						lblMensajePromo.setText("No hay promociones disponibles");
-					} else {
-						String texto = "PROMOCIONES DE MI HOTEL\n";
-						
-						for (bll.Promocion p : promociones) {
-							texto += "ID: " + p.getId() + "\n";
-							texto += "Nombre: " + p.getNombre() + "\n";
-							texto += "Descuento: " + p.getPorcentajeDescuento() + "%\n";
-							texto += "Vigencia: " + p.getFechaInicio() + " al " + p.getFechaFin() + "\n";
-							texto += "Estado: " + p.getEstado();
-							
-							if (p.estaVigente()) {
-								texto += "VIGENTE\n";
-							} else if (p.getEstado().equals("activa")) {
-								LocalDate hoy = LocalDate.now();
-								if (hoy.isBefore(p.getFechaInicio())) {
-									texto += " (Aún no comenzó)\n";
-								} else {
-									texto += " (Expirada)\n";
-								}
-							} else {
-								texto += "\n";
-							}
-							
-							if (p.getDescripcion() != null && !p.getDescripcion().isEmpty()) {
-								texto += "Descripción: " + p.getDescripcion() + "\n";
-							}
-							texto += "\n";
-						}
-						
-						txtAreaPromociones.setText(texto);
-						txtAreaPromociones.setCaretPosition(0);
-						lblMensajePromo.setForeground(new Color(0, 100, 200));
-						lblMensajePromo.setText("Mostrando " + promociones.size() + " promoción(es)");
-					}
-				}
-			}
+		JScrollPane scrollPromo = new JScrollPane(tablePromociones);
+		scrollPromo.setBounds(20, 50, 540, 250);
+		subPanelVer.add(scrollPromo);
+
+		JButton btnRefrescarPromo = new JButton("Actualizar lista");
+		btnRefrescarPromo.setBounds(20, 310, 200, 35);
+		btnRefrescarPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		btnRefrescarPromo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        modelPromo.setRowCount(0);
+		        if (encargado != null) {
+		            List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+		            
+		            for (bll.Promocion p : promociones) {
+		                String estado;
+		                if (p.estaVigente()) {
+		                    estado = "VIGENTE";
+		                } else if (p.getEstado().equals("activa")) {
+		                    LocalDate hoy = LocalDate.now();
+		                    estado = hoy.isBefore(p.getFechaInicio()) ? "Pendiente" : "Expirada";
+		                } else {
+		                    estado = "Inactiva";
+		                }
+		                
+		                Object[] fila = {p.getId(), p.getNombre(), p.getPorcentajeDescuento() + "%", 
+		                               p.getFechaInicio(), p.getFechaFin(), estado};
+		                modelPromo.addRow(fila);
+		            }
+		        }
+		    }
 		});
-		btnVerPromociones.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnVerPromociones.setBounds(265, 310, 220, 35);
-		btnVerPromociones.setFocusPainted(false);
-		panelPromociones.add(btnVerPromociones);
+		subPanelVer.add(btnRefrescarPromo);
 
-		// Botón Aplicar Promoción
-		JButton btnAplicarPromocion = new JButton("APLICAR A PAQUETE");
-		btnAplicarPromocion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					txtAreaPromociones.setText("Aplicando promoción a paquete...\n\n");
-					try {
-						// Llamar al método estático del BLL
-						bll.Encargado.aplicarPromocionAPaquete(encargado.getId_hotel());
-						
-						lblMensajePromo.setForeground(new Color(0, 150, 0));
-						lblMensajePromo.setText("✓ Operación completada");
-					} catch (Exception ex) {
-						lblMensajePromo.setForeground(Color.RED);
-						lblMensajePromo.setText("Error al aplicar promoción");
-						txtAreaPromociones.setText("Error: " + ex.getMessage());
-					}
-				}
-			}
+		JLabel lblInfoVer = new JLabel("Total: 0 promociones");
+		lblInfoVer.setBounds(240, 315, 300, 25);
+		lblInfoVer.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelVer.add(lblInfoVer);
+
+		// Actualizar contador
+		btnRefrescarPromo.addActionListener(e -> {
+		    lblInfoVer.setText("Total: " + modelPromo.getRowCount() + " promociones");
 		});
-		btnAplicarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnAplicarPromocion.setBounds(500, 310, 220, 35);
-		btnAplicarPromocion.setFocusPainted(false);
-		panelPromociones.add(btnAplicarPromocion);
 
-		// FILA 2 DE BOTONES
-		// Botón Editar Promoción
-		JButton btnEditarPromocion = new JButton("EDITAR PROMOCIÓN");
-		btnEditarPromocion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					txtAreaPromociones.setText("Editando promoción...\n\n");
-					try {
-						// Llamar al método estático del BLL
-						bll.Encargado.editarPromocion(encargado.getId_hotel());
-						
-						lblMensajePromo.setForeground(new Color(0, 150, 0));
-						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
-					} catch (Exception ex) {
-						lblMensajePromo.setForeground(Color.RED);
-						lblMensajePromo.setText("Error al editar promoción");
-						txtAreaPromociones.setText("Error: " + ex.getMessage());
-					}
-				}
-			}
+		tabsPromociones.addTab("Ver Promociones", subPanelVer);
+
+		//CREAR PROMOCIÓN 
+		JPanel subPanelCrear = new JPanel();
+		subPanelCrear.setLayout(null);
+		subPanelCrear.setBackground(Color.WHITE);
+
+		JLabel lblTituloCrear = new JLabel("CREAR NUEVA PROMOCIÓN");
+		lblTituloCrear.setBounds(20, 10, 350, 30);
+		lblTituloCrear.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelCrear.add(lblTituloCrear);
+
+		// Campos del formulario
+		JLabel lblNombrePromo = new JLabel("Nombre de la promoción:");
+		lblNombrePromo.setBounds(50, 60, 200, 25);
+		lblNombrePromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelCrear.add(lblNombrePromo);
+
+		javax.swing.JTextField txtNombrePromo = new javax.swing.JTextField();
+		txtNombrePromo.setBounds(50, 90, 450, 30);
+		txtNombrePromo.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelCrear.add(txtNombrePromo);
+
+		JLabel lblDescripcionPromo = new JLabel("Descripción:");
+		lblDescripcionPromo.setBounds(50, 130, 200, 25);
+		lblDescripcionPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelCrear.add(lblDescripcionPromo);
+
+		javax.swing.JTextArea txtDescripcionPromo = new javax.swing.JTextArea();
+		txtDescripcionPromo.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		txtDescripcionPromo.setLineWrap(true);
+		txtDescripcionPromo.setWrapStyleWord(true);
+		JScrollPane scrollDesc = new JScrollPane(txtDescripcionPromo);
+		scrollDesc.setBounds(50, 160, 450, 60);
+		subPanelCrear.add(scrollDesc);
+
+		JLabel lblDescuentoPromo = new JLabel("Porcentaje de descuento (%):");
+		lblDescuentoPromo.setBounds(50, 230, 220, 25);
+		lblDescuentoPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelCrear.add(lblDescuentoPromo);
+
+		javax.swing.JSpinner spinnerDescuento = new javax.swing.JSpinner(
+		    new javax.swing.SpinnerNumberModel(10, 1, 100, 1));
+		spinnerDescuento.setBounds(280, 230, 80, 30);
+		spinnerDescuento.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelCrear.add(spinnerDescuento);
+
+		JLabel lblFechaInicio = new JLabel("Fecha de inicio:");
+		lblFechaInicio.setBounds(50, 270, 150, 25);
+		lblFechaInicio.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelCrear.add(lblFechaInicio);
+
+		// DatePicker simple con JSpinner
+		javax.swing.JSpinner spinnerFechaInicio = new javax.swing.JSpinner(
+		    new javax.swing.SpinnerDateModel());
+		javax.swing.JSpinner.DateEditor editorInicio = new javax.swing.JSpinner.DateEditor(
+		    spinnerFechaInicio, "dd/MM/yyyy");
+		spinnerFechaInicio.setEditor(editorInicio);
+		spinnerFechaInicio.setBounds(200, 270, 150, 30);
+		spinnerFechaInicio.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelCrear.add(spinnerFechaInicio);
+
+		JLabel lblFechaFin = new JLabel("Fecha de fin:");
+		lblFechaFin.setBounds(50, 310, 150, 25);
+		lblFechaFin.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelCrear.add(lblFechaFin);
+
+		javax.swing.JSpinner spinnerFechaFin = new javax.swing.JSpinner(
+		    new javax.swing.SpinnerDateModel());
+		javax.swing.JSpinner.DateEditor editorFin = new javax.swing.JSpinner.DateEditor(
+		    spinnerFechaFin, "dd/MM/yyyy");
+		spinnerFechaFin.setEditor(editorFin);
+		spinnerFechaFin.setBounds(200, 310, 150, 30);
+		spinnerFechaFin.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelCrear.add(spinnerFechaFin);
+
+		// Mensaje de resultado
+		JLabel lblMensajeCrear = new JLabel("");
+		lblMensajeCrear.setBounds(50, 350, 450, 25);
+		lblMensajeCrear.setFont(new Font("Mongolian Baiti", Font.BOLD, 12));
+		lblMensajeCrear.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		subPanelCrear.add(lblMensajeCrear);
+
+		// Botones
+		JButton btnGuardarPromo = new JButton("CREAR PROMOCIÓN");
+		btnGuardarPromo.setBounds(370, 270, 180, 40);
+		btnGuardarPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		btnGuardarPromo.setBackground(new Color(255, 255, 255));
+		btnGuardarPromo.setForeground(Color.WHITE);
+		btnGuardarPromo.setFocusPainted(false);
+		btnGuardarPromo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeCrear.setText("");
+		        
+		        String nombre = txtNombrePromo.getText().trim();
+		        String descripcion = txtDescripcionPromo.getText().trim();
+		        int descuento = (Integer) spinnerDescuento.getValue();
+		        
+		        if (nombre.isEmpty()) {
+		            lblMensajeCrear.setForeground(Color.RED);
+		            lblMensajeCrear.setText("El nombre es obligatorio");
+		            return;
+		        }
+		        
+		        try {
+		            java.util.Date dateInicio = (java.util.Date) spinnerFechaInicio.getValue();
+		            java.util.Date dateFin = (java.util.Date) spinnerFechaFin.getValue();
+		            
+		            LocalDate fechaInicio = dateInicio.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+		            LocalDate fechaFin = dateFin.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+		            
+		            if (fechaFin.isBefore(fechaInicio)) {
+		                lblMensajeCrear.setForeground(Color.RED);
+		                lblMensajeCrear.setText("La fecha de fin debe ser posterior a la fecha de inicio");
+		                return;
+		            }
+		            
+		            // Crear la promoción usando el método BLL modificado
+		            boolean exito = bll.Encargado.crearPromocion(
+		                encargado.getId_hotel(), nombre, descripcion, descuento, fechaInicio, fechaFin);
+		            
+		            if (exito) {
+		                lblMensajeCrear.setForeground(new Color(0, 150, 0));
+		                lblMensajeCrear.setText("Promoción creada exitosamente");
+		                
+		                // Limpiar formulario
+		                txtNombrePromo.setText("");
+		                txtDescripcionPromo.setText("");
+		                spinnerDescuento.setValue(10);
+		                
+		                // Actualizar tabla en la primera pestaña
+		                btnRefrescarPromo.doClick();
+		            } else {
+		                lblMensajeCrear.setForeground(Color.RED);
+		                lblMensajeCrear.setText("Error al crear la promoción");
+		            }
+		            
+		        } catch (Exception ex) {
+		            lblMensajeCrear.setForeground(Color.RED);
+		            lblMensajeCrear.setText("Error: " + ex.getMessage());
+		        }
+		    }
 		});
-		btnEditarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnEditarPromocion.setBounds(30, 355, 220, 35);
-		btnEditarPromocion.setFocusPainted(false);
-		panelPromociones.add(btnEditarPromocion);
+		subPanelCrear.add(btnGuardarPromo);
 
-		// Botón Eliminar Promoción
-		JButton btnEliminarPromocion = new JButton("ELIMINAR PROMOCIÓN");
-		btnEliminarPromocion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					txtAreaPromociones.setText("Eliminando promoción...\n\n");
-					try {
-						// Llamar al método estático del BLL
-						bll.Encargado.eliminarPromocion(encargado.getId_hotel());
-						
-						lblMensajePromo.setForeground(new Color(0, 150, 0));
-						lblMensajePromo.setText("Operación completada. Use 'Ver Promociones' para verificar.");
-					} catch (Exception ex) {
-						lblMensajePromo.setForeground(Color.RED);
-						lblMensajePromo.setText("Error al eliminar promoción");
-						txtAreaPromociones.setText("Error: " + ex.getMessage());
-					}
-				}
-			}
+		JButton btnLimpiarForm = new JButton("Limpiar");
+		btnLimpiarForm.setBounds(370, 315, 180, 30);
+		btnLimpiarForm.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		btnLimpiarForm.addActionListener(e -> {
+		    txtNombrePromo.setText("");
+		    txtDescripcionPromo.setText("");
+		    spinnerDescuento.setValue(10);
+		    lblMensajeCrear.setText("");
 		});
-		btnEliminarPromocion.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnEliminarPromocion.setBounds(265, 355, 220, 35);
-		btnEliminarPromocion.setFocusPainted(false);
-		panelPromociones.add(btnEliminarPromocion);
+		subPanelCrear.add(btnLimpiarForm);
 
-		// Botón Ver Paquetes con Promociones
-		JButton btnVerPaquetesPromo = new JButton("VER PAQUETES + PROMOS");
-		btnVerPaquetesPromo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				lblMensajePromo.setText("");
-				if (encargado != null) {
-					List<bll.Paquete> paquetes = DtoEncargado.verPaquetesConPromociones(encargado.getId_hotel());
-					
-					if (paquetes.isEmpty()) {
-						txtAreaPromociones.setText("No hay paquetes disponibles en su hotel.");
-						lblMensajePromo.setForeground(new Color(200, 100, 0));
-						lblMensajePromo.setText("No hay paquetes disponibles");
-					} else {
-						String texto = "PAQUETES CON INFORMACIÓN DE PROMOCIONES\n";
-						
-						for (bll.Paquete p : paquetes) {
-							texto += "ID Paquete: " + p.getId() + "\n";
-							texto += "Fecha: " + p.getInicioDate() + " al " + p.getFinDate() + "\n";
-							
-							if (p.getHabitacion() != null) {
-								texto += "Habitación: Nro " + p.getHabitacion().getNumero() + "\n";
-							}
-							
-							if (p.getActividad() != null) {
-								texto += "Actividad: " + p.getActividad().getNombre() + "\n";
-							}
-							
-							if (p.getPromocion() != null) {
-								texto += "\n★ PROMOCIÓN APLICADA: " + p.getPromocion().getNombre() + "\n";
-								texto += "  Descuento: " + p.getPromocion().getPorcentajeDescuento() + "%\n";
-								texto += "  Precio original: $" + String.format("%.2f", p.getPrecioOriginal()) + "\n";
-								texto += "  Precio con descuento: $" + String.format("%.2f", p.getPrecio()) + "\n";
-								
-								if (p.getPromocion().estaVigente()) {
-									texto += "  Estado: VIGENTE\n";
-								} else {
-									texto += "  Estado: NO VIGENTE\n";
-								}
-							} else {
-								texto += "\nSin promoción aplicada\n";
-								texto += "Precio: $" + String.format("%.2f", p.getPrecio()) + "\n";
-							}
-							
-							texto += "\n";
-						}
-						
-						txtAreaPromociones.setText(texto);
-						txtAreaPromociones.setCaretPosition(0);
-						lblMensajePromo.setForeground(new Color(0, 100, 200));
-						lblMensajePromo.setText("Mostrando " + paquetes.size() + " paquete(s)");
-					}
-				}
-			}
+		tabsPromociones.addTab("Crear Promoción", subPanelCrear);
+
+		//EDITAR PROMOCIÓN
+		JPanel subPanelEditar = new JPanel();
+		subPanelEditar.setLayout(null);
+		subPanelEditar.setBackground(Color.WHITE);
+
+		JLabel lblTituloEditar = new JLabel("EDITAR PROMOCIÓN");
+		lblTituloEditar.setBounds(20, 10, 300, 30);
+		lblTituloEditar.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelEditar.add(lblTituloEditar);
+
+		JLabel lblSeleccionarPromo = new JLabel("Seleccionar promoción:");
+		lblSeleccionarPromo.setBounds(50, 50, 200, 25);
+		lblSeleccionarPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelEditar.add(lblSeleccionarPromo);
+
+		javax.swing.JComboBox<String> comboPromocionesEditar = new javax.swing.JComboBox<>();
+		comboPromocionesEditar.setBounds(50, 80, 450, 30);
+		comboPromocionesEditar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelEditar.add(comboPromocionesEditar);
+
+		//Campos de edición 
+		JLabel lblEditNombre = new JLabel("Nombre:");
+		lblEditNombre.setBounds(50, 125, 200, 25);
+		lblEditNombre.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelEditar.add(lblEditNombre);
+
+		javax.swing.JTextField txtEditNombre = new javax.swing.JTextField();
+		txtEditNombre.setBounds(50, 155, 450, 30);
+		txtEditNombre.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		txtEditNombre.setEnabled(false);
+		subPanelEditar.add(txtEditNombre);
+
+		JLabel lblEditDescripcion = new JLabel("Descripción:");
+		lblEditDescripcion.setBounds(50, 195, 200, 25);
+		lblEditDescripcion.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelEditar.add(lblEditDescripcion);
+
+		javax.swing.JTextArea txtEditDescripcion = new javax.swing.JTextArea();
+		txtEditDescripcion.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		txtEditDescripcion.setLineWrap(true);
+		txtEditDescripcion.setWrapStyleWord(true);
+		txtEditDescripcion.setEnabled(false);
+		JScrollPane scrollEditDesc = new JScrollPane(txtEditDescripcion);
+		scrollEditDesc.setBounds(50, 225, 450, 50);
+		subPanelEditar.add(scrollEditDesc);
+
+		JLabel lblEditDescuento = new JLabel("Descuento (%):");
+		lblEditDescuento.setBounds(50, 285, 150, 25);
+		lblEditDescuento.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelEditar.add(lblEditDescuento);
+
+		javax.swing.JSpinner spinnerEditDescuento = new javax.swing.JSpinner(
+		    new javax.swing.SpinnerNumberModel(10, 1, 100, 1));
+		spinnerEditDescuento.setBounds(200, 285, 80, 30);
+		spinnerEditDescuento.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		spinnerEditDescuento.setEnabled(false);
+		subPanelEditar.add(spinnerEditDescuento);
+
+		// Mensaje
+		JLabel lblMensajeEditar = new JLabel("");
+		lblMensajeEditar.setBounds(50, 325, 450, 25);
+		lblMensajeEditar.setFont(new Font("Mongolian Baiti", Font.BOLD, 12));
+		lblMensajeEditar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		subPanelEditar.add(lblMensajeEditar);
+
+		// Botón cargar
+		JButton btnCargarPromo = new JButton("Cargar");
+		btnCargarPromo.setBounds(510, 80, 89, 30);
+		btnCargarPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnCargarPromo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeEditar.setText("");
+		        
+		        if (comboPromocionesEditar.getSelectedItem() == null || 
+		            comboPromocionesEditar.getSelectedItem().toString().equals("No hay promociones")) {
+		            return;
+		        }
+		        
+		        String seleccion = comboPromocionesEditar.getSelectedItem().toString();
+		        int idPromo = Integer.parseInt(seleccion.split(" - ")[0].replace("ID: ", ""));
+		        
+		        // Obtener la promoción
+		        List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+		        bll.Promocion promoSeleccionada = null;
+		        
+		        for (bll.Promocion p : promociones) {
+		            if (p.getId() == idPromo) {
+		                promoSeleccionada = p;
+		                break;
+		            }
+		        }
+		        
+		        if (promoSeleccionada != null) {
+		            txtEditNombre.setText(promoSeleccionada.getNombre());
+		            txtEditDescripcion.setText(promoSeleccionada.getDescripcion());
+		            spinnerEditDescuento.setValue((int)promoSeleccionada.getPorcentajeDescuento());
+		            
+		            //Habilita
+		            txtEditNombre.setEnabled(true);
+		            txtEditDescripcion.setEnabled(true);
+		            spinnerEditDescuento.setEnabled(true);
+		        }
+		    }
 		});
-		btnVerPaquetesPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
-		btnVerPaquetesPromo.setBounds(500, 355, 220, 35);
-		btnVerPaquetesPromo.setFocusPainted(false);
-		panelPromociones.add(btnVerPaquetesPromo);
+		subPanelEditar.add(btnCargarPromo);
 
+		// Botón guardar cambios
+		JButton btnGuardarEdicion = new JButton("Guardar cambios");
+		btnGuardarEdicion.setBounds(300, 285, 200, 40);
+		btnGuardarEdicion.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		btnGuardarEdicion.setBackground(new Color(210, 225, 240));
+		btnGuardarEdicion.setForeground(new Color(30, 30, 30));
+		btnGuardarEdicion.setFocusPainted(false);
+		btnGuardarEdicion.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeEditar.setText("");
+		        
+		        if (comboPromocionesEditar.getSelectedItem() == null || 
+		            comboPromocionesEditar.getSelectedItem().toString().equals("No hay promociones")) {
+		            lblMensajeEditar.setForeground(Color.RED);
+		            lblMensajeEditar.setText("Seleccione una promoción primero");
+		            return;
+		        }
+		        
+		        String nombre = txtEditNombre.getText().trim();
+		        String descripcion = txtEditDescripcion.getText().trim();
+		        int descuento = (Integer) spinnerEditDescuento.getValue();
+		        
+		        if (nombre.isEmpty()) {
+		            lblMensajeEditar.setForeground(Color.RED);
+		            lblMensajeEditar.setText("El nombre no puede estar vacío");
+		            return;
+		        }
+		        
+		        String seleccion = comboPromocionesEditar.getSelectedItem().toString();
+		        int idPromo = Integer.parseInt(seleccion.split(" - ")[0].replace("ID: ", ""));
+		        
+		        boolean exitoNombre = DtoEncargado.editarPromocion(idPromo, "nombre", nombre, encargado.getId_hotel());
+		        boolean exitoDesc = DtoEncargado.editarPromocion(idPromo, "descripcion", descripcion, encargado.getId_hotel());
+		        boolean exitoPorc = DtoEncargado.editarPromocion(idPromo, "porcentaje", String.valueOf(descuento), encargado.getId_hotel());
+		        
+		        if (exitoNombre && exitoDesc && exitoPorc) {
+		            lblMensajeEditar.setForeground(new Color(0, 150, 0));
+		            lblMensajeEditar.setText("✓ Promoción actualizada exitosamente");
+		            
+		            //Actualizar combo y tabla
+		            cargarComboPromociones(comboPromocionesEditar);
+		            btnRefrescarPromo.doClick();
+		        } else {
+		            lblMensajeEditar.setForeground(Color.RED);
+		            lblMensajeEditar.setText("Error al actualizar la promoción");
+		        }
+		    }
+		});
+		subPanelEditar.add(btnGuardarEdicion);
+
+		//Cargar inicial
+		cargarComboPromociones(comboPromocionesEditar);
+
+		tabsPromociones.addTab("Editar Promoción", subPanelEditar);
+		
+		//APLICAR PROMOCIÓN 
+		JPanel subPanelAplicar = new JPanel();
+		subPanelAplicar.setLayout(null);
+		subPanelAplicar.setBackground(Color.WHITE);
+
+		JLabel lblTituloAplicar = new JLabel("APLICAR PROMOCIÓN A RESERVA ACTIVA/PENDIENTE");
+		lblTituloAplicar.setBounds(20, 10, 500, 30);
+		lblTituloAplicar.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelAplicar.add(lblTituloAplicar);
+
+		JLabel lblSelReserva = new JLabel("Seleccionar Reserva:");
+		lblSelReserva.setBounds(50, 50, 350, 25);
+		lblSelReserva.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelAplicar.add(lblSelReserva);
+
+		javax.swing.JComboBox<String> comboReservasAplicar = new javax.swing.JComboBox<>();
+		comboReservasAplicar.setBounds(50, 80, 550, 30);
+		comboReservasAplicar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelAplicar.add(comboReservasAplicar);
+
+		JLabel lblSelPromo = new JLabel("Seleccionar Promoción VIGENTE:");
+		lblSelPromo.setBounds(50, 130, 350, 25);
+		lblSelPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelAplicar.add(lblSelPromo);
+
+		javax.swing.JComboBox<String> comboPromoAplicar = new javax.swing.JComboBox<>();
+		comboPromoAplicar.setBounds(50, 160, 550, 30);
+		comboPromoAplicar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelAplicar.add(comboPromoAplicar);
+
+		// Mensaje
+		JLabel lblMensajeAplicar = new JLabel("");
+		lblMensajeAplicar.setBounds(50, 210, 550, 25);
+		lblMensajeAplicar.setFont(new Font("Mongolian Baiti", Font.BOLD, 12));
+		lblMensajeAplicar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		subPanelAplicar.add(lblMensajeAplicar);
+
+		JButton btnAplicarPromo = new JButton("Aplicar descuento");
+		btnAplicarPromo.setEnabled(false);
+		btnAplicarPromo.setBounds(200, 250, 250, 40);
+		btnAplicarPromo.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		btnAplicarPromo.setBackground(new Color(210, 225, 240));
+		btnAplicarPromo.setForeground(new Color(30, 30, 30));
+		btnAplicarPromo.setFocusPainted(false);
+		btnAplicarPromo.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeAplicar.setText("");
+
+		        if (comboReservasAplicar.getSelectedItem() == null || 
+		            comboReservasAplicar.getSelectedItem().toString().contains("No hay reservas")) {
+		            lblMensajeAplicar.setForeground(Color.RED);
+		            lblMensajeAplicar.setText("Seleccione una reserva válida.");
+		            return;
+		        }
+
+		        if (comboPromoAplicar.getSelectedItem() == null || 
+		            comboPromoAplicar.getSelectedItem().toString().contains("No hay promociones")) {
+		            lblMensajeAplicar.setForeground(Color.RED);
+		            lblMensajeAplicar.setText("Seleccione una promoción vigente.");
+		            return;
+		        }
+
+		        try {
+		            
+		            String selReserva = comboReservasAplicar.getSelectedItem().toString();
+		            
+		            int idReserva = Integer.parseInt(selReserva.split(" \\|")[0].replace("ID: ", ""));
+		           
+		            bll.Reserva reservaSeleccionada = null;
+		            List<bll.Reserva> todasReservas = DtoEncargado.verReservas(encargado.getId_hotel());
+		            for (bll.Reserva r : todasReservas) {
+		                if (r.getId() == idReserva) {
+		                    reservaSeleccionada = r;
+		                    break;
+		                }
+		            }
+		            
+		            if (reservaSeleccionada == null || reservaSeleccionada.getPaquete() == null) {
+		                lblMensajeAplicar.setForeground(Color.RED);
+		                lblMensajeAplicar.setText("Error: No se pudo encontrar el paquete asociado a la reserva.");
+		                return;
+		            }
+		            int idPaquete = reservaSeleccionada.getPaquete().getId();
+
+		            String selPromo = comboPromoAplicar.getSelectedItem().toString();
+		            int idPromocion = Integer.parseInt(selPromo.split(" - ")[0].replace("ID: ", ""));
+
+		            boolean exito = bll.Encargado.aplicarPromocionAPaquete(
+		                                encargado.getId_hotel(), 
+		                                idPromocion, 
+		                                idPaquete, 
+		                                lblMensajeAplicar);
+
+		            if (exito) {
+		                
+		                cargarReservas();
+		                btnRefrescarPromo.doClick(); 
+		               
+		                cargarReservasParaAplicarPromo(comboReservasAplicar);
+		            }
+		            
+
+		        } catch (NumberFormatException ex) {
+		            lblMensajeAplicar.setForeground(Color.RED);
+		            lblMensajeAplicar.setText("Error al leer el ID: Formato de selección incorrecto.");
+		        } catch (Exception ex) {
+		            lblMensajeAplicar.setForeground(Color.RED);
+		            lblMensajeAplicar.setText("Error inesperado: " + ex.getMessage());
+		        }
+		    }
+		});
+		subPanelAplicar.add(btnAplicarPromo);
+
+		//Cargar inicial
+		cargarReservasParaAplicarPromo(comboReservasAplicar);
+		cargarPromocionesVigentesEnCombo(comboPromoAplicar);
+
+		tabsPromociones.addTab("Aplicar Promo", subPanelAplicar);
+		
+		
+		
+		//ELIMINAR PROMOCIÓN 
+		JPanel subPanelEliminar = new JPanel();
+		subPanelEliminar.setLayout(null);
+		subPanelEliminar.setBackground(Color.WHITE);
+
+		JLabel lblTituloEliminar = new JLabel("ELIMINAR PROMOCIÓN");
+		lblTituloEliminar.setBounds(20, 10, 300, 30);
+		lblTituloEliminar.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelEliminar.add(lblTituloEliminar);
+
+		JLabel lblAdvertencia = new JLabel("Esta acción no se puede deshacer");
+		lblAdvertencia.setBounds(20, 45, 300, 25);
+		lblAdvertencia.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		subPanelEliminar.add(lblAdvertencia);
+
+		JLabel lblSelEliminar = new JLabel("Seleccionar promoción a eliminar:");
+		lblSelEliminar.setBounds(50, 90, 300, 25);
+		lblSelEliminar.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		subPanelEliminar.add(lblSelEliminar);
+
+		javax.swing.JComboBox<String> comboEliminar = new javax.swing.JComboBox<>();
+		comboEliminar.setBounds(50, 120, 450, 30);
+		comboEliminar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelEliminar.add(comboEliminar);
+
+		// Detalles de la promoción seleccionada
+		javax.swing.JTextArea txtDetallesEliminar = new javax.swing.JTextArea();
+		txtDetallesEliminar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 12));
+		txtDetallesEliminar.setEditable(false);
+		txtDetallesEliminar.setLineWrap(true);
+		txtDetallesEliminar.setWrapStyleWord(true);
+		txtDetallesEliminar.setText("Seleccione una promoción para ver sus detalles...");
+		txtDetallesEliminar.setBackground(new Color(255, 250, 240));
+		JScrollPane scrollDetalles = new JScrollPane(txtDetallesEliminar);
+		scrollDetalles.setBounds(50, 165, 450, 120);
+		subPanelEliminar.add(scrollDetalles);
+
+		// Mensaje
+		JLabel lblMensajeEliminar = new JLabel("");
+		lblMensajeEliminar.setBounds(50, 295, 450, 25);
+		lblMensajeEliminar.setFont(new Font("Mongolian Baiti", Font.BOLD, 12));
+		lblMensajeEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+		subPanelEliminar.add(lblMensajeEliminar);
+
+		// Botón eliminar
+		JButton btnEliminar = new JButton("Eliminar promoción");
+		btnEliminar.setBounds(50, 313, 450, 40);
+		btnEliminar.setFont(new Font("Mongolian Baiti", Font.BOLD, 14));
+		btnEliminar.setBackground(new Color(210, 225, 240));
+		btnEliminar.setForeground(new Color(30, 30, 30));
+		btnEliminar.setFocusPainted(false);
+		btnEliminar.setEnabled(false);
+
+		btnEliminar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeEliminar.setText("");
+		        
+		        if (comboEliminar.getSelectedItem() == null || 
+		            comboEliminar.getSelectedItem().toString().equals("No hay promociones")) {
+		            return;
+		        }
+		        
+		        //Confirmación de eliminación
+		        int confirmar = javax.swing.JOptionPane.showConfirmDialog(
+		            subPanelEliminar,
+		            "¿Está seguro que desea eliminar esta promoción?\n" +
+		            "Esta acción no se puede deshacer.",
+		            "Confirmar eliminación",
+		            javax.swing.JOptionPane.YES_NO_OPTION,
+		            javax.swing.JOptionPane.WARNING_MESSAGE
+		        );
+		        
+		        if (confirmar != javax.swing.JOptionPane.YES_OPTION) {
+		            return;
+		        }
+		        
+		        String seleccion = comboEliminar.getSelectedItem().toString();
+		        int idPromo = Integer.parseInt(seleccion.split(" - ")[0].replace("ID: ", ""));
+		        
+		        boolean exito = bll.Encargado.eliminarPromocion(encargado.getId_hotel(), idPromo);
+		        
+		        if (exito) {
+		            lblMensajeEliminar.setForeground(new Color(0, 150, 0));
+		            lblMensajeEliminar.setText("Promoción eliminada exitosamente");
+		            
+		            
+		            cargarComboEliminar(comboEliminar);
+		            txtDetallesEliminar.setText("Promoción eliminada. Seleccione otra si desea continuar.");
+		            btnEliminar.setEnabled(false);
+		            
+		            
+		            btnRefrescarPromo.doClick();
+		        } else {
+		            lblMensajeEliminar.setText("Error al eliminar la promoción");
+		        }
+		    }
+		});
+		subPanelEliminar.add(btnEliminar);
+
+		
+		comboEliminar.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        lblMensajeEliminar.setText("");
+		        
+		        if (comboEliminar.getSelectedItem() == null || 
+		            comboEliminar.getSelectedItem().toString().equals("No hay promociones")) {
+		            txtDetallesEliminar.setText("No hay promociones disponibles para eliminar.");
+		            btnEliminar.setEnabled(false);
+		            return;
+		        }
+		        
+		        String seleccion = comboEliminar.getSelectedItem().toString();
+		        int idPromo = Integer.parseInt(seleccion.split(" - ")[0].replace("ID: ", ""));
+		        
+		        List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+		        
+		        for (bll.Promocion p : promociones) {
+		            if (p.getId() == idPromo) {
+		                String detalles = "DETALLES DE LA PROMOCIÓN\n\n";
+		                detalles += "ID: " + p.getId() + "\n";
+		                detalles += "Nombre: " + p.getNombre() + "\n";
+		                detalles += "Descuento: " + p.getPorcentajeDescuento() + "%\n";
+		                detalles += "Vigencia: " + p.getFechaInicio() + " al " + p.getFechaFin() + "\n";
+		                detalles += "Estado: " + (p.estaVigente() ? "VIGENTE" : "No vigente") + "\n\n";
+		                
+		                if (p.getDescripcion() != null && !p.getDescripcion().isEmpty()) {
+		                    detalles += "Descripción:\n" + p.getDescripcion();
+		                }
+		                
+		                txtDetallesEliminar.setText(detalles);
+		                btnEliminar.setEnabled(true);
+		                break;
+		            }
+		        }
+		    }
+		});
+
+		// Cargar inicial
+		cargarComboEliminar(comboEliminar);
+
+		tabsPromociones.addTab("Eliminar", subPanelEliminar);
+
+		//VER PAQUETES CON PROMOCIONES 
+		JPanel subPanelPaquetes = new JPanel();
+		subPanelPaquetes.setLayout(null);
+		subPanelPaquetes.setBackground(Color.WHITE);
+
+		JLabel lblTituloPaquetes = new JLabel("PAQUETES CON PROMOCIONES");
+		lblTituloPaquetes.setBounds(20, 10, 350, 30);
+		lblTituloPaquetes.setFont(new Font("Mongolian Baiti", Font.BOLD, 18));
+		subPanelPaquetes.add(lblTituloPaquetes);
+
+		String[] columnasPaquetes = { "ID Paquete", "Habitación", "Fecha", "Precio Original", "Promoción", "Precio Final" };
+		DefaultTableModel modelPaquetes = new DefaultTableModel(columnasPaquetes, 0) {
+		    private static final long serialVersionUID = 1L;
+		    
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		        return false;
+		    }
+		};
+
+		JTable tablePaquetes = new JTable(modelPaquetes);
+		tablePaquetes.setFont(new Font("Mongolian Baiti", Font.PLAIN, 11));
+		tablePaquetes.getTableHeader().setFont(new Font("Mongolian Baiti", Font.BOLD, 11));
+		tablePaquetes.setRowHeight(25);
+
+		tablePaquetes.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+		    private static final long serialVersionUID = 1L;
+		    
+		    @Override
+		    public java.awt.Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+		            boolean hasFocus, int row, int column) {
+		        java.awt.Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+		        
+		        if (!isSelected) {
+		            String promocion = (String) table.getValueAt(row, 4);
+		            if (promocion != null && !promocion.equals("-")) {
+		                c.setBackground(new Color(255, 250, 200));
+		            } else {
+		                c.setBackground(Color.WHITE);
+		            }
+		        }
+		        
+		        return c;
+		    }
+		});
+
+		JScrollPane scrollPaquetes = new JScrollPane(tablePaquetes);
+		scrollPaquetes.setBounds(20, 50, 540, 280);
+		subPanelPaquetes.add(scrollPaquetes);
+
+		JLabel lblInfoPaquetes = new JLabel("Total: 0 paquetes");
+		lblInfoPaquetes.setBounds(220, 345, 300, 25);
+		lblInfoPaquetes.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
+		subPanelPaquetes.add(lblInfoPaquetes);
+
+		JButton btnRefrescarPaquetes = new JButton("Refresh");
+		btnRefrescarPaquetes.setBounds(20, 340, 180, 35);
+		btnRefrescarPaquetes.setFont(new Font("Mongolian Baiti", Font.BOLD, 13));
+		btnRefrescarPaquetes.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        modelPaquetes.setRowCount(0);
+		        if (encargado != null) {
+		            List<bll.Paquete> paquetes = DtoEncargado.verPaquetesConPromociones(encargado.getId_hotel());
+		            
+		            for (bll.Paquete p : paquetes) {
+		                String habitacion = p.getHabitacion() != null ? "Nro " + p.getHabitacion().getNumero() : "N/A";
+		                String fecha = p.getInicioDate() + " - " + p.getFinDate();
+		                
+		                String promocion = "-";
+		                double precioOriginal = p.getPrecioOriginal();
+		                double precioFinal = p.getPrecio();
+		                
+		                if (p.getPromocion() != null) {
+		                    promocion = p.getPromocion().getNombre() + " (" + p.getPromocion().getPorcentajeDescuento() + "%)";
+		                }
+		                
+		                Object[] fila = { 
+		                    p.getId(), 
+		                    habitacion, 
+		                    fecha, 
+		                    "$" + String.format("%.2f", precioOriginal),
+		                    promocion, 
+		                    "$" + String.format("%.2f", precioFinal) 
+		                };
+		                modelPaquetes.addRow(fila);
+		            }
+		            lblInfoPaquetes.setText("Total: " + modelPaquetes.getRowCount() + " paquetes");
+		        }
+		    }
+		});
+		subPanelPaquetes.add(btnRefrescarPaquetes);
+
+		tabsPromociones.addTab("Paquetes", subPanelPaquetes);
+		
+		Contenidos.addTab("Promociones", null, panelPromociones, null);
+
+		
 		Contenidos.addTab("Promociones", null, panelPromociones, null);
 
 		// BOTÓN CERRAR SESIÓN
@@ -724,6 +1208,43 @@ public class Encargado extends JFrame {
 		contentPane.add(lblHotel);
 	}
 
+	private void cargarPromocionesEnCombo(JComboBox<String> combo) {
+	    if (encargado == null || combo == null) {
+	        return;
+	    }
+
+	    //Limpia elementos existentes
+	    combo.removeAllItems();
+
+	    //promociones del hotel
+	    List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+
+	    if (promociones == null || promociones.isEmpty()) {
+	        combo.addItem("No hay promociones");
+	        return;
+	    }
+
+	    for (bll.Promocion p : promociones) {
+	    	String item = String.format("ID: %d - %s (%d%%)", 
+                    p.getId(), 
+                    p.getNombre(), 
+                    (int) p.getPorcentajeDescuento());
+	        combo.addItem(item);
+	    }
+	}
+	
+	private void cargarComboPromociones(JComboBox<String> comboPromocionesEditar) {
+		cargarPromocionesEnCombo(comboPromocionesEditar);
+	}
+
+	private void cargarComboEliminar(JComboBox<String> comboEliminar) {
+		cargarPromocionesEnCombo(comboEliminar);
+		if (comboEliminar.getItemCount() > 0 && 
+		        !comboEliminar.getItemAt(0).equals("No hay promociones")) {
+		         comboEliminar.setSelectedIndex(0); 
+		    }
+	}
+
 	private JLabel lblbienvenido;
 	private JLabel lblHotel;
 
@@ -741,7 +1262,7 @@ public class Encargado extends JFrame {
 			return;
 		}
 
-		// Separar por estado
+		
 		for (Reserva r : reservas) {
 			String nombreCliente = r.getCliente().getNombre() + " " + r.getCliente().getApellido();
 			int dni = r.getCliente().getDni();
@@ -835,5 +1356,65 @@ public class Encargado extends JFrame {
 		if (!hayReservas) {
 			combo.addItem("No hay reservas activas");
 		}
+	}
+	
+	private void cargarReservasParaAplicarPromo(javax.swing.JComboBox<String> combo) {
+	    if (encargado == null || combo == null) {
+	        return;
+	    }
+
+	    combo.removeAllItems();
+
+	    
+	    List<bll.Reserva> reservas = DtoEncargado.verReservas(encargado.getId_hotel());
+
+	    boolean hayReservas = false;
+	    for (bll.Reserva r : reservas) {
+	        
+	        if ("pendiente".equalsIgnoreCase(r.getEstado()) || "activa".equalsIgnoreCase(r.getEstado())) {
+	            
+	            String promoActual = (r.getPaquete().getPromocion() != null) ? 
+	                                 " (PROMO: " + r.getPaquete().getPromocion().getNombre() + ")" : "";
+	            
+	            String item = "ID: " + r.getId() + " | Cliente: " + r.getCliente().getNombre() + " "
+	                    + r.getCliente().getApellido() + " | Hab: "
+	                    + r.getPaquete().getHabitacion().getNumero() + " | Estado: " + r.getEstado() + promoActual;
+	            combo.addItem(item);
+	            hayReservas = true;
+	        }
+	    }
+
+	    if (!hayReservas) {
+	        combo.addItem("No hay reservas Pendientes/Activas");
+	    }
+	}
+
+	private void cargarPromocionesVigentesEnCombo(JComboBox<String> combo) {
+	    if (encargado == null || combo == null) {
+	        return;
+	    }
+
+	    combo.removeAllItems();
+
+	    List<bll.Promocion> promociones = DtoEncargado.verPromocionesDelHotel(encargado.getId_hotel());
+
+	    boolean hayVigentes = false;
+	    if (promociones != null) {
+	        for (bll.Promocion p : promociones) {
+	            // Solo agrega si está VIGENTE
+	            if (p.estaVigente()) {
+	                String item = String.format("ID: %d - %s (%d%%)", 
+	                                            p.getId(), 
+	                                            p.getNombre(), 
+	                                            (int) p.getPorcentajeDescuento());
+	                combo.addItem(item);
+	                hayVigentes = true;
+	            }
+	        }
+	    }
+	    
+	    if (!hayVigentes) {
+	        combo.addItem("No hay promociones vigentes");
+	    }
 	}
 }
