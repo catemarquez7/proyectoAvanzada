@@ -18,6 +18,8 @@ public class Preferencias {
 		this.id_cliente = id_cliente;
 	}
 	
+	public Preferencias() {};
+	
 	
 	//getters y setters
 	public String getRiesgo() {

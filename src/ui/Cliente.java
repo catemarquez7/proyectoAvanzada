@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -138,6 +137,7 @@ public class Cliente extends JFrame {
         contentPane.add(lblHotel);
     }
 
+
     // PANEL PAQUETES RECOMENDADOS 
     private JPanel crearPanelPaquetesRecomendados() {
         JPanel panel = new JPanel();
@@ -153,7 +153,7 @@ public class Cliente extends JFrame {
         JLabel lblError = new JLabel("");
         lblError.setFont(new Font("Tahoma", Font.PLAIN, 13));
         lblError.setForeground(Color.RED);
-        lblError.setBounds(250, 370, 300, 20);
+        lblError.setBounds(150, 200, 500, 20);
         panel.add(lblError);
 
         final List<Paquete> paquetes;
@@ -165,6 +165,26 @@ public class Cliente extends JFrame {
             return panel;
         }
 
+        // Verificar si no tiene preferencias (null)
+        if (paquetes == null) {
+            lblError.setForeground(new Color(100, 100, 100));
+            lblError.setText("Para ver recomendaciones personalizadas, configure sus preferencias.");
+            
+            JButton btnIrPreferencias = new JButton("Configurar Preferencias");
+            btnIrPreferencias.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
+            btnIrPreferencias.setBounds(250, 250, 250, 35);
+            btnIrPreferencias.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Cliente.this.setVisible(false);
+                    DialogPreferencias dialog = new DialogPreferencias(usuario, cliente, Cliente.this);
+                    dialog.setVisible(true);
+                }
+            });
+            panel.add(btnIrPreferencias);
+            
+            return panel;
+        }
+
         String[] columnas = {"Hotel", "Actividad", "Precio", "Inicio", "Fin", "Cupo"};
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0) {
             @Override
@@ -173,8 +193,9 @@ public class Cliente extends JFrame {
             }
         };
 
+        // Verificar si tiene preferencias pero no hay paquetes disponibles
         if (paquetes.isEmpty()) {
-            lblError.setText("No hay paquetes disponibles en este momento.");
+            lblError.setText("No hay paquetes disponibles en este momento para sus preferencias.");
         }
 
         for (Paquete p : paquetes) {
@@ -196,7 +217,7 @@ public class Cliente extends JFrame {
         scroll.setBounds(20, 40, 700, 280);
         panel.add(scroll);
 
-        // Botón para reservar paquete recomendado
+        // reservar paquete recomendado
         JButton btnReservar = new JButton("Reservar Paquete");
         btnReservar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
         btnReservar.setBounds(280, 335, 180, 30);
@@ -243,7 +264,6 @@ public class Cliente extends JFrame {
             }
         });
         panel.add(btnReservar);
-
 
         return panel;
     }
@@ -621,84 +641,23 @@ public class Cliente extends JFrame {
         btnEscribir.setBounds(180, 220, 160, 30);
         btnEscribir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
                 lblError.setText(""); 
                 lblError.setForeground(Color.RED);
-                
+
                 if (cliente.getReservasPasadas().isEmpty()) {
                     lblError.setText("No tiene reservas finalizadas para reseñar.");
                     return;
                 }
 
-                try {
-                    // Seleccionar reserva para reseñar
-                    String[] opciones = new String[cliente.getReservasPasadas().size()];
-                    for (int i = 0; i < cliente.getReservasPasadas().size(); i++) {
-                        Reserva r = cliente.getReservasPasadas().get(i);
-                        opciones[i] = r.getPaquete().getHotel().getNombre() + " - " + r.getPaquete().getActividad().getNombre();
-                    }
+                Cliente.this.setVisible(false);
 
-                    String seleccion = (String) JOptionPane.showInputDialog(panel, "Seleccione la reserva:", "Reseñar", JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
-                    if (seleccion != null) {
-                        Reserva reservaSeleccionada = null;
-                        for (Reserva r : cliente.getReservasPasadas()) {
-                            String texto = r.getPaquete().getHotel().getNombre() + " - " + r.getPaquete().getActividad().getNombre();
-                            if (texto.equals(seleccion)) {
-                                reservaSeleccionada = r;
-                                break;
-                            }
-                        }
-
-                        if (DtoCliente.reviewExistente(usuario, reservaSeleccionada)) {
-                            lblError.setText("Ya realizó una reseña para esta reserva.");
-                        } else {
-                            String puntajeStr = JOptionPane.showInputDialog(panel, "Puntaje (1-5):");
-                            if (puntajeStr == null || puntajeStr.trim().isEmpty()) {
-                                lblError.setText("Operación cancelada.");
-                                return;
-                            }
-
-                            String descripcion = JOptionPane.showInputDialog(panel, "Descripción:");
-                            if (descripcion == null || descripcion.trim().isEmpty()) {
-                                lblError.setText("Operación cancelada.");
-                                return;
-                            }
-
-                            try {
-                                double puntaje = Double.parseDouble(puntajeStr);
-                                if (puntaje < 1 || puntaje > 5) {
-                                    lblError.setText("El puntaje debe estar entre 1 y 5.");
-                                    return;
-                                }
-
-                                boolean guardado = DtoCliente.escribirReview(usuario, cliente, reservaSeleccionada, descripcion, puntaje);
-                                if (guardado) {
-                                    lblError.setForeground(new Color(0, 128, 0));
-                                    lblError.setText("Reseña guardada exitosamente!");
-                                    new Thread(() -> {
-                                        try {
-                                            Thread.sleep(1000);
-                                            contentPane.removeAll();
-                                            iniciar(usuario, cliente);
-                                            contentPane.revalidate();
-                                            contentPane.repaint();
-                                        } catch (InterruptedException ex) {
-                                            ex.printStackTrace();
-                                        }
-                                    }).start();
-                                } else {
-                                    lblError.setText("No se pudo guardar la reseña.");
-                                }
-                            } catch (NumberFormatException nfe) {
-                                lblError.setText("Puntaje inválido. Ingrese un número.");
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    lblError.setText("Error al procesar la reseña.");
-                    ex.printStackTrace();
-                }
+                DialogEscribirResena dialog = new DialogEscribirResena(usuario, cliente, Cliente.this);
+                dialog.setVisible(true);
             }
         });
+
+
         panel.add(btnEscribir);
 
         JButton btnEliminar = new JButton("Eliminar Reseña");
@@ -800,28 +759,19 @@ public class Cliente extends JFrame {
         JButton btnModificar = new JButton("Modificar Preferencias");
         btnModificar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
         btnModificar.setBounds(250, 240, 250, 35);
+
         btnModificar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 lblError.setText(""); 
                 lblError.setForeground(Color.RED);
                 
-                try {
-                    boolean resultado = bll.Cliente.ingresarPreferencias(usuario);
-                    if (resultado) {
-                        lblError.setForeground(new Color(0, 128, 0));
-                        lblError.setText("Preferencias actualizadas exitosamente!");
-                        // Recargar texto
-                        String nuevasPreferencias = DtoCliente.mostrarPreferencias(usuario);
-                        textArea.setText(nuevasPreferencias);
-                    } else {
-                        lblError.setText("No se pudieron actualizar las preferencias.");
-                    }
-                } catch (Exception ex) {
-                    lblError.setText("Error al modificar preferencias.");
-                    ex.printStackTrace();
-                }
+                Cliente.this.setVisible(false);
+                
+                DialogPreferencias dialog = new DialogPreferencias(usuario, cliente, Cliente.this);
+                dialog.setVisible(true);
             }
         });
+
         panel.add(btnModificar);
 
         JLabel lblInfo = new JLabel("Las preferencias ayudan a recomendar paquetes personalizados.");
