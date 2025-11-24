@@ -73,7 +73,7 @@ public class Cliente extends JFrame {
             DtoCliente.cargarReservasExistentes(usuario, cliente);
             DtoCliente.cargarReviewsExistentes(usuario, cliente);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Error al cargar datos del usuario: " + ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        	MessageDialog.mostrar("Error al cargar datos del usuario.", MessageDialog.ERROR);
             ex.printStackTrace();
         }
 
@@ -202,7 +202,7 @@ public class Cliente extends JFrame {
         btnReservar.setBounds(280, 335, 180, 30);
         btnReservar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                lblError.setText(""); // limpiar error previo
+                lblError.setText(""); 
                 lblError.setForeground(Color.RED);
                 
                 int filaSeleccionada = tabla.getSelectedRow();
@@ -210,11 +210,15 @@ public class Cliente extends JFrame {
                     lblError.setText("Seleccione un paquete de la tabla.");
                 } else {
                     try {
+                        boolean confirm = Confirmar.mostrar("¿Está seguro de que desea reservar este paquete?");
+                        if (!confirm) return;
+
                         Paquete paqueteSeleccionado = paquetes.get(filaSeleccionada);
                         boolean reservado = DtoCliente.reservarPaquete(usuario, paqueteSeleccionado, cliente);
                         if (reservado) {
                             lblError.setForeground(new Color(0, 128, 0));
                             lblError.setText("Paquete reservado exitosamente!");
+                            
                             new Thread(() -> {
                                 try {
                                     Thread.sleep(1000);
@@ -239,6 +243,7 @@ public class Cliente extends JFrame {
             }
         });
         panel.add(btnReservar);
+
 
         return panel;
     }
@@ -340,7 +345,7 @@ public class Cliente extends JFrame {
         });
         panel.add(btnCargar);
 
-        // boton para reservar
+     // boton para reservar
         JButton btnReservar = new JButton("Reservar Paquete");
         btnReservar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 14));
         btnReservar.setBounds(280, 335, 180, 30);
@@ -359,11 +364,15 @@ public class Cliente extends JFrame {
                     lblError.setText("Seleccione un paquete de la tabla.");
                 } else {
                     try {
+                        boolean confirm = Confirmar.mostrar("¿Está seguro de que desea reservar este paquete?");
+                        if (!confirm) return;
+
                         Paquete paqueteSeleccionado = paquetesArray[0].get(filaSeleccionada);
                         boolean reservado = DtoCliente.reservarPaquete(usuario, paqueteSeleccionado, cliente);
                         if (reservado) {
                             lblError.setForeground(new Color(0, 128, 0));
                             lblError.setText("Paquete reservado exitosamente!");
+                            
                             new Thread(() -> {
                                 try {
                                     Thread.sleep(1000);
@@ -387,6 +396,7 @@ public class Cliente extends JFrame {
         });
         panel.add(btnReservar);
 
+
         return panel;
     }
 
@@ -405,13 +415,12 @@ public class Cliente extends JFrame {
             cliente.setReservasPasadas(new java.util.LinkedList<Reserva>());
         }
 
-        // ============ LADO IZQUIERDO: RESERVAS ACTIVAS ============
+        // Reservas activas
         JLabel labelActivas = new JLabel("Mis Reservas Activas");
         labelActivas.setBounds(100, 10, 200, 20);
         labelActivas.setFont(new Font("Mongolian Baiti", Font.BOLD, 15));
         panel.add(labelActivas);
 
-        // Tabla de reservas activas
         String[] columnasActivas = {"Hotel", "Actividad", "Precio"};
         DefaultTableModel modeloActivas = new DefaultTableModel(columnasActivas, 0) {
             @Override
@@ -440,7 +449,7 @@ public class Cliente extends JFrame {
         scrollActivas.setBounds(20, 40, 340, 250);
         panel.add(scrollActivas);
 
-        // Botón cancelar (izquierda)
+        // Botón cancelar 
         JButton btnCancelar = new JButton("Cancelar Reserva");
         btnCancelar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 13));
         btnCancelar.setBounds(90, 300, 180, 30);
@@ -457,7 +466,7 @@ public class Cliente extends JFrame {
             lblErrorActivas.setText("No tiene reservas activas.");
         }
 
-        // ============ LADO DERECHO: HISTORIAL ============
+        // Historial
         JLabel labelHistorial = new JLabel("Historial de Reservas");
         labelHistorial.setBounds(480, 10, 200, 20);
         labelHistorial.setFont(new Font("Mongolian Baiti", Font.BOLD, 15));
@@ -504,10 +513,10 @@ public class Cliente extends JFrame {
             lblInfoHistorial.setText("Total finalizadas: " + cliente.getReservasPasadas().size());
         }
 
-        // ============ ACCIÓN DEL BOTÓN CANCELAR ============
+        // Boton cancelar
         btnCancelar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                lblErrorActivas.setText(""); // Limpiar error previo
+                lblErrorActivas.setText(""); 
                 lblErrorActivas.setForeground(Color.RED);
                 
                 if (cliente.getReservas().isEmpty()) {
@@ -519,31 +528,32 @@ public class Cliente extends JFrame {
                 if (filaSeleccionada == -1) {
                     lblErrorActivas.setText("Seleccione una reserva.");
                 } else {
-                    int confirm = JOptionPane.showConfirmDialog(panel, "¿Está seguro de cancelar esta reserva?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        try {
-                            Reserva reservaSeleccionada = cliente.getReservas().get(filaSeleccionada);
-                            boolean cancelada = DtoCliente.cancelarReserva(usuario, cliente, reservaSeleccionada);
-                            if (cancelada) {
-                                lblErrorActivas.setForeground(new Color(0, 128, 0));
-                                lblErrorActivas.setText("¡Reserva cancelada exitosamente!");
-                                
-                                // Remover de la tabla visualmente
-                                modeloActivas.removeRow(filaSeleccionada);
-                                
-                                // Actualizar mensaje si quedó vacío
-                                if (cliente.getReservas().isEmpty()) {
-                                    lblErrorActivas.setForeground(Color.RED);
-                                    lblErrorActivas.setText("No tiene reservas activas.");
-                                }
-                            } else {
-                                lblErrorActivas.setText("No se pudo cancelar la reserva.");
-                            }
-                        } catch (Exception ex) {
-                            lblErrorActivas.setText("Error al cancelar la reserva.");
-                            ex.printStackTrace();
-                        }
-                    }
+                	boolean confirm = Confirmar.mostrar("¿Está seguro de cancelar esta reserva?");
+                	if (confirm) {
+                	    try {
+                	        Reserva reservaSeleccionada = cliente.getReservas().get(filaSeleccionada);
+                	        boolean cancelada = DtoCliente.cancelarReserva(usuario, cliente, reservaSeleccionada);
+                	        if (cancelada) {
+                	            lblErrorActivas.setForeground(new Color(0, 128, 0));
+                	            lblErrorActivas.setText("¡Reserva cancelada exitosamente!");
+                	            
+                	            // Remover de la tabla visualmente
+                	            modeloActivas.removeRow(filaSeleccionada);
+                	            
+                	            // Actualizar mensaje si quedó vacío
+                	            if (cliente.getReservas().isEmpty()) {
+                	                lblErrorActivas.setForeground(Color.RED);
+                	                lblErrorActivas.setText("No tiene reservas activas.");
+                	            }
+                	        } else {
+                	            lblErrorActivas.setText("No se pudo cancelar la reserva.");
+                	        }
+                	    } catch (Exception ex) {
+                	        lblErrorActivas.setText("Error al cancelar la reserva.");
+                	        ex.printStackTrace();
+                	    }
+                	}
+
                 }
             }
         });
@@ -611,7 +621,7 @@ public class Cliente extends JFrame {
         btnEscribir.setBounds(180, 220, 160, 30);
         btnEscribir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                lblError.setText(""); // Limpiar error previo
+                lblError.setText(""); 
                 lblError.setForeground(Color.RED);
                 
                 if (cliente.getReservasPasadas().isEmpty()) {
@@ -708,33 +718,36 @@ public class Cliente extends JFrame {
                 if (filaSeleccionada == -1) {
                     lblError.setText("Seleccione una reseña.");
                 } else {
-                    int confirm = JOptionPane.showConfirmDialog(panel, "¿Eliminar esta reseña?", "Confirmar", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        try {
-                            Review reviewSeleccionada = cliente.getReviews().get(filaSeleccionada);
-                            boolean eliminada = DtoCliente.borrarReview(usuario, cliente, reviewSeleccionada);
-                            if (eliminada) {
-                                lblError.setForeground(new Color(0, 128, 0));
-                                lblError.setText("Reseña eliminada!");
-                                new Thread(() -> {
-                                    try {
-                                        Thread.sleep(1000);
-                                        contentPane.removeAll();
-                                        iniciar(usuario, cliente);
-                                        contentPane.revalidate();
-                                        contentPane.repaint();
-                                    } catch (InterruptedException ex) {
-                                        ex.printStackTrace();
-                                    }
-                                }).start();
-                            } else {
-                                lblError.setText("No se pudo eliminar la reseña.");
-                            }
-                        } catch (Exception ex) {
-                            lblError.setText("Error al eliminar la reseña.");
-                            ex.printStackTrace();
-                        }
-                    }
+                	boolean confirm = Confirmar.mostrar("¿Eliminar esta reseña?");
+                	if (confirm) {
+                	    try {
+                	        Review reviewSeleccionada = cliente.getReviews().get(filaSeleccionada);
+                	        boolean eliminada = DtoCliente.borrarReview(usuario, cliente, reviewSeleccionada);
+                	        if (eliminada) {
+                	            lblError.setForeground(new Color(0, 128, 0));
+                	            lblError.setText("Reseña eliminada!");
+                	            
+                	            new Thread(() -> {
+                	                try {
+                	                    Thread.sleep(1000);
+                	                    contentPane.removeAll();
+                	                    iniciar(usuario, cliente);
+                	                    contentPane.revalidate();
+                	                    contentPane.repaint();
+                	                } catch (InterruptedException ex) {
+                	                    ex.printStackTrace();
+                	                }
+                	            }).start();
+                	            
+                	        } else {
+                	            lblError.setText("No se pudo eliminar la reseña.");
+                	        }
+                	    } catch (Exception ex) {
+                	        lblError.setText("Error al eliminar la reseña.");
+                	        ex.printStackTrace();
+                	    }
+                	}
+
                 }
             }
         });

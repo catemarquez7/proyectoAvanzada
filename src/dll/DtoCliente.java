@@ -234,16 +234,9 @@ public class DtoCliente {
 	                reserva.setEstado("pendiente");
 	                
 	                cliente.getReservas().add(reserva);
-
-	                JOptionPane.showMessageDialog(null, 
-	                        "Reserva creada con éxito:\n"
-	                        + "Paquete: " + paquete.getHotel().getNombre()
-	                        + " | " + paquete.getActividad().getNombre()
-	                        + "\nPrecio: $" + String.format("%.2f", paquete.getPrecio())
-	                    );	                
+       
 	                return true;
 	            } else {
-	                JOptionPane.showMessageDialog(null, "Error al crear la reserva.");
 	                return false;
 	            }
 
