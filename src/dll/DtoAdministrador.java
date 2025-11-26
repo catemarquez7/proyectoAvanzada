@@ -544,13 +544,13 @@ public class DtoAdministrador {
 
 			int filas = stmt.executeUpdate();
 			if (filas > 0) {
-				JOptionPane.showMessageDialog(null, "Cuenta bloqueada exitosamente", "ÉXITO", 1);
+				//JOptionPane.showMessageDialog(null, "Cuenta bloqueada exitosamente", "ÉXITO", 1);
 				return true;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error al bloquear cuenta: " + e.getMessage(), "ERROR", 0);
+			//JOptionPane.showMessageDialog(null, "Error al bloquear cuenta: " + e.getMessage(), "ERROR", 0);
 		}
 		return false;
 	}
@@ -563,13 +563,13 @@ public class DtoAdministrador {
 
 			int filas = stmt.executeUpdate();
 			if (filas > 0) {
-				JOptionPane.showMessageDialog(null, "Cuenta desbloqueada exitosamente", "ÉXITO", 1);
+				//JOptionPane.showMessageDialog(null, "Cuenta desbloqueada exitosamente", "ÉXITO", 1);
 				return true;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error al desbloquear cuenta: " + e.getMessage(), "ERROR", 0);
+			//JOptionPane.showMessageDialog(null, "Error al desbloquear cuenta: " + e.getMessage(), "ERROR", 0);
 		}
 		return false;
 	}
@@ -662,15 +662,15 @@ public class DtoAdministrador {
 
 			int filas = stmt.executeUpdate();
 			if (filas > 0) {
-				JOptionPane.showMessageDialog(null, "Sistema en modo Suspensión", "ÉXITO", 1);
+				//JOptionPane.showMessageDialog(null, "Sistema en modo Suspensión", "ÉXITO", 1);
 				
 			} else {
-				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+				//JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+			//JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
 		}
 	}
 	
@@ -683,15 +683,15 @@ public class DtoAdministrador {
 
 			int filas = stmt.executeUpdate();
 			if (filas > 0) {
-				JOptionPane.showMessageDialog(null, "Sistema reactivado correctamente", "ÉXITO", 1);
+				//JOptionPane.showMessageDialog(null, "Sistema reactivado correctamente", "ÉXITO", 1);
 				
 			} else {
-				JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
+				//JOptionPane.showMessageDialog(null, "ERROR " , "ERROR", 0);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
+			//JOptionPane.showMessageDialog(null, "ERROR " + e.getMessage(), "ERROR", 0);
 		}
 	}
 	
