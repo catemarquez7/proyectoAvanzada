@@ -27,9 +27,6 @@ public class Index extends JFrame {
 	private JTextField inputUsuario;
 	private JPasswordField inputPass;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -43,9 +40,6 @@ public class Index extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public Index() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 770, 650);
@@ -82,16 +76,16 @@ public class Index extends JFrame {
 
 		JLabel lblerror = new JLabel("");
 		lblerror.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblerror.setForeground(new Color(0, 0, 0));
-		lblerror.setBounds(232, 382, 293, 25);
+		lblerror.setForeground(Color.RED); 
+		lblerror.setBounds(232, 382, 350, 25);
 		contentPane.add(lblerror);
 
-		// Botones
 		JButton btnIniciar = new JButton("Ingresar");
 		btnIniciar.setFont(new Font("Mongolian Baiti", Font.PLAIN, 15));
 
 		btnIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblerror.setText(""); 
 				
 				char[] passwordChars = inputPass.getPassword();
 				String password = new String(passwordChars);
@@ -99,14 +93,21 @@ public class Index extends JFrame {
 				Usuario encontrado = bll.Usuario.login(inputUsuario.getText(), password);
 
 				if (encontrado != null) {
-					dispose();
-					bll.Usuario.redirigir(encontrado);
+					
+					boolean sistemaSuspendido = dll.DtoUsuario.chequeoSuspension();
+					
+					if (sistemaSuspendido && !encontrado.getTipo_usuario().equals("3")) {
+						lblerror.setText("El sistema se encuentra temporalmente suspendido.");
+					} else {
+						dispose();
+						bll.Usuario.redirigir(encontrado);
+					}
+					
 				} else {
-					lblerror.setText("Error, intente nuevamente.");
+					lblerror.setText("Usuario o contraseña incorrectos.");
 				}
-
 			}
-		});// fin
+		});
 		
 		btnIniciar.setBounds(291, 418, 179, 25);
 		contentPane.add(btnIniciar);
@@ -120,7 +121,7 @@ public class Index extends JFrame {
 				Registro frameRegistro = new Registro();
 				frameRegistro.setVisible(true);
 			}
-		});// fin
+		});
 		
 		btnRegistrarse.setBounds(74, 534, 124, 38);
 		contentPane.add(btnRegistrarse);
@@ -134,7 +135,7 @@ public class Index extends JFrame {
 				Olvido frameOlvido = new Olvido();
 				frameOlvido.setVisible(true);
 			}
-		});// fin
+		});
 		
 		btnOlvido.setBounds(208, 535, 172, 37);
 		contentPane.add(btnOlvido);
@@ -142,14 +143,15 @@ public class Index extends JFrame {
 		JLabel Logo = new JLabel("");
 		Logo.setBackground(new Color(255, 255, 255));
 		java.net.URL imageUrl = getClass().getResource("/img/househ.png");
-		ImageIcon originalIcon;
-		originalIcon = new ImageIcon(imageUrl);
-		Image originalImage = originalIcon.getImage();
-		int newWidth = 300;
-		int newHeight = 200;
-		Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-		originalIcon.setImage(scaledImage);
-		Logo.setIcon(originalIcon);
+		if (imageUrl != null) {
+			ImageIcon originalIcon = new ImageIcon(imageUrl);
+			Image originalImage = originalIcon.getImage();
+			int newWidth = 300;
+			int newHeight = 200;
+			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+			originalIcon.setImage(scaledImage);
+			Logo.setIcon(originalIcon);
+		}
 		Logo.setBounds(232, 123, 293, 139);
 		contentPane.add(Logo);
 

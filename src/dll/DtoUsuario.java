@@ -18,7 +18,6 @@ public class DtoUsuario {
 
 	private static Connection conx = Conexion.getInstance().getConnection();
 
-	// Log_in
 	public static Usuario login(String user, String password) {
 		Usuario usuario = null;
 		try {
@@ -66,11 +65,8 @@ public class DtoUsuario {
 			e.printStackTrace();
 		}
 		return null;
-	}// fin login
+	}
 	
-	
-	
-	// Sign_in
 	public static boolean agregarUsuario(Usuario usuario) {
 		try {
 			PreparedStatement statement = conx.prepareStatement(
@@ -117,9 +113,8 @@ public class DtoUsuario {
 		}
 
 		return false;
-	}// fin sign in
+	}
 
-	// Usuario_bloqueado
 	public static boolean usuarioBloqueado(Usuario usuario) {
 		try {
 
@@ -130,9 +125,7 @@ public class DtoUsuario {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-
 				String estado = rs.getString("estado");
-
 				if (estado.equals("bloqueado")) {
 					return false;
 				} else {
@@ -146,61 +139,54 @@ public class DtoUsuario {
 		return false;
 	}
 
-	// Recuperar_contraseña
-	// busca la pregunta y rta segun usuario
 	public static String[] busquedaPregunta(String user) {
-	    try {
-	        java.sql.PreparedStatement stmt = conx.prepareStatement("SELECT pregunta, respuesta FROM usuario WHERE user = ?");
-	        stmt.setString(1, user);
-	        java.sql.ResultSet rs = stmt.executeQuery();
-	        
-	        if (rs.next()) {
-	            String pregunta = rs.getString("pregunta");
-	            String respuesta = rs.getString("respuesta");
-	            
-	            return new String[]{pregunta, respuesta.trim()}; 
-	        }
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return null; 
+		try {
+			java.sql.PreparedStatement stmt = conx.prepareStatement("SELECT pregunta, respuesta FROM usuario WHERE user = ?");
+			stmt.setString(1, user);
+			java.sql.ResultSet rs = stmt.executeQuery();
+			
+			if (rs.next()) {
+				String pregunta = rs.getString("pregunta");
+				String respuesta = rs.getString("respuesta");
+				
+				return new String[]{pregunta, respuesta.trim()};
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
-	//actualiza la contraseña
 	public static boolean actualizarPass(String user, String newPass) {
-	    try {
-	        PreparedStatement stmt2 = conx.prepareStatement("UPDATE usuario SET pass = ? WHERE user = ?");
-	        
-	        stmt2.setString(1, repository.Encriptador.encriptar(newPass));
-	        stmt2.setString(2, user);
-	        
-	        int rowsUpdated = stmt2.executeUpdate();
-	        return rowsUpdated > 0;
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return false;
-	    }
+		try {
+			PreparedStatement stmt2 = conx.prepareStatement("UPDATE usuario SET pass = ? WHERE user = ?");
+			
+			stmt2.setString(1, repository.Encriptador.encriptar(newPass));
+			stmt2.setString(2, user);
+			
+			int rowsUpdated = stmt2.executeUpdate();
+			return rowsUpdated > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
-	// Chequeo suspension
 	public static boolean chequeoSuspension() {
 		try {
-			PreparedStatement stmt = conx.prepareStatement("SELECT * FROM sistema");
+			PreparedStatement stmt = conx.prepareStatement("SELECT estado FROM sistema WHERE id = 1");
 			ResultSet rs = stmt.executeQuery();
 
-			while (rs.next()) {
+			if (rs.next()) {
 				int estadoSuspension = rs.getInt("estado");
 				if (estadoSuspension == 0) {
 					return true;
-				} else {
-					return false;
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error al cargar cuentas: " + e.getMessage(), "ERROR", 0);
 		}
 		return false;
 	}
-}// fin clase
+}
