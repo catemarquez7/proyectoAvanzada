@@ -45,66 +45,78 @@ public class Encargado extends Usuario {
 	// metodos
 
 	// Check-in
-	public static void realizarCheckin(int id_hotel) {
+	public static void realizarCheckin(int id_hotel, javax.swing.JLabel lblMensaje) {
 
-		List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
+	    List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
 
-		if (reservas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay reservas pendientes en su hotel.", "INFO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
+	    if (reservas.isEmpty()) {
+	        if (lblMensaje != null) {
+	            lblMensaje.setForeground(java.awt.Color.RED);
+	            lblMensaje.setText("No hay reservas pendientes en su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay reservas pendientes en su hotel.", "INFO",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        }
+	        return;
+	    }
 
-		String[] opciones = new String[reservas.size()];
-		for (int i = 0; i < reservas.size(); i++) {
-			Reserva r = reservas.get(i);
-			opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido()
-					+ " | Estado: " + r.getEstado();
-		}
+	    String[] opciones = new String[reservas.size()];
+	    for (int i = 0; i < reservas.size(); i++) {
+	        Reserva r = reservas.get(i);
+	        opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido()
+	            + " | Estado: " + r.getEstado();
+	    }
 
-		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-in:",
-				"CHECK-IN", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+	    String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-in:",
+	        "CHECK-IN", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
-		int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
+	    if (seleccion == null) return;
 
-		int dni = Validaciones.ValidarNum("Ingrese DNI del cliente:");
-		String tarjeta = Validaciones.ValidarContras("Ingrese número de tarjeta de resguardo:");
+	    int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
 
-		DtoEncargado.realizarCheckin(idReserva, String.valueOf(dni), tarjeta, id_hotel);
+	    int dni = Validaciones.ValidarNum("Ingrese DNI del cliente:");
+	    String tarjeta = Validaciones.ValidarContras("Ingrese número de tarjeta de resguardo:");
+
+	    DtoEncargado.realizarCheckin(idReserva, String.valueOf(dni), tarjeta, id_hotel, lblMensaje);
 	}// fin
 
 	// Check-out
-	public static void realizarCheckout(int id_hotel) {
-		List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
+	public static void realizarCheckout(int id_hotel, javax.swing.JLabel lblMensaje) {
+	    List<Reserva> reservas = DtoEncargado.verReservas(id_hotel);
 
-		// Filtrar solo reservas activas
-		List<Reserva> activas = new ArrayList<>();
-		for (Reserva r : reservas) {
-			if ("activa".equalsIgnoreCase(r.getEstado())) {
-				activas.add(r);
-			}
-		}
+	    // Filtrar solo reservas activas
+	    List<Reserva> activas = new ArrayList<>();
+	    for (Reserva r : reservas) {
+	        if ("activa".equalsIgnoreCase(r.getEstado())) {
+	            activas.add(r);
+	        }
+	    }
 
-		if (activas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay reservas activas para check-out.", "INFO",
-					JOptionPane.INFORMATION_MESSAGE);
-			return;
-		}
+	    if (activas.isEmpty()) {
+	        if (lblMensaje != null) {
+	            lblMensaje.setForeground(java.awt.Color.RED);
+	            lblMensaje.setText("No hay reservas activas para check-out");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay reservas activas para check-out.", "INFO",
+	                JOptionPane.INFORMATION_MESSAGE);
+	        }
+	        return;
+	    }
 
-		String[] opciones = new String[activas.size()];
-		for (int i = 0; i < activas.size(); i++) {
-			Reserva r = activas.get(i);
-			opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido();
-		}
+	    String[] opciones = new String[activas.size()];
+	    for (int i = 0; i < activas.size(); i++) {
+	        Reserva r = activas.get(i);
+	        opciones[i] = "ID: " + r.getId() + " | " + r.getCliente().getNombre() + " " + r.getCliente().getApellido();
+	    }
 
-		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-out:",
-				"CHECK-OUT", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+	    String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la reserva para check-out:",
+	        "CHECK-OUT", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
-		if (seleccion == null)
-			return;
+	    if (seleccion == null)
+	        return;
 
-		int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
-		DtoEncargado.realizarCheckout(idReserva, id_hotel);
+	    int idReserva = Integer.parseInt(seleccion.split(" ")[1].replace("ID:", ""));
+	    DtoEncargado.realizarCheckout(idReserva, id_hotel, lblMensaje);
 	}// fin
 
 	// Ver reservas
@@ -166,11 +178,11 @@ public class Encargado extends Usuario {
 			switch (opcion) {
 			case 0:
 				// Ver actividades
-				Encargado.verActividades(id_hotel);
+				Encargado.verActividades(id_hotel, null);
 				break;
 			case 1:
 				// Ver paquetes
-				Encargado.verPaquetesDelHotel(id_hotel);
+				Encargado.verPaquetesDelHotel(id_hotel, null);
 				break;
 			case 2:
 				// Atrás
@@ -252,69 +264,87 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Ver paquetes por hotel
-	public static void verPaquetesDelHotel(int id_hotel) {
-		List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
+	public static void verPaquetesDelHotel(int id_hotel, javax.swing.JTextArea txtArea) {
+	    List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
 
-		if (paquetes.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay paquetes disponibles en su hotel", "INFO", 1);
-			return;
-		}
+	    if (paquetes.isEmpty()) {
+	        if (txtArea != null) {
+	            txtArea.setText("No hay paquetes disponibles en su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay paquetes disponibles en su hotel", "INFO", 1);
+	        }
+	        return;
+	    }
 
-		String texto = "=== PAQUETES DE MI HOTEL ===\n\n";
+	    String texto = "=== PAQUETES DE MI HOTEL ===\n\n";
 
-		for (Paquete p : paquetes) {
-			texto += "ID: " + p.getId() + "\n" + "Hotel: " + p.getHotel().getNombre() + "\n" + "Fecha inicio: "
-					+ p.getInicioDate() + "\n" + "Fecha fin: " + p.getFinDate() + "\n" + "Precio: $"
-					+ String.format("%.2f", p.getPrecio()) + "\n";
+	    for (Paquete p : paquetes) {
+	        texto += "ID: " + p.getId() + "\n" + "Hotel: " + p.getHotel().getNombre() + "\n" + "Fecha inicio: "
+	            + p.getInicioDate() + "\n" + "Fecha fin: " + p.getFinDate() + "\n" + "Precio: $"
+	            + String.format("%.2f", p.getPrecio()) + "\n";
 
-			if (p.getHabitacion() != null) {
-				texto += "Habitación: Nro " + p.getHabitacion().getNumero() + " - Tipo: " + p.getHabitacion().getTipo()
-						+ " - Camas: " + p.getHabitacion().getCant_camas() + " - Estado: "
-						+ p.getHabitacion().getEstado() + "\n";
-			} else {
-				texto += "Habitación: Sin asignar\n";
-			}
+	        if (p.getHabitacion() != null) {
+	            texto += "Habitación: Nro " + p.getHabitacion().getNumero() + " - Tipo: " + p.getHabitacion().getTipo()
+	                + " - Camas: " + p.getHabitacion().getCant_camas() + " - Estado: "
+	                + p.getHabitacion().getEstado() + "\n";
+	        } else {
+	            texto += "Habitación: Sin asignar\n";
+	        }
 
-			if (p.getActividad() != null) {
-				texto += "Actividad: " + p.getActividad().getNombre() + " - Categoría: "
-						+ p.getActividad().getCategoria() + "\n" + "Duración: " + p.getActividad().getDuracion() + " hs"
-						+ " - Ubicación: " + p.getActividad().getLocacion() + "\n";
-			} else {
-				texto += "Actividad: Sin asignar\n";
-			}
+	        if (p.getActividad() != null) {
+	            texto += "Actividad: " + p.getActividad().getNombre() + " - Categoría: "
+	                + p.getActividad().getCategoria() + "\n" + "Duración: " + p.getActividad().getDuracion() + " hs"
+	                + " - Ubicación: " + p.getActividad().getLocacion() + "\n";
+	        } else {
+	            texto += "Actividad: Sin asignar\n";
+	        }
 
-			texto += "========================\n\n";
-		}
+	        texto += "========================\n\n";
+	    }
 
-		JOptionPane.showMessageDialog(null, texto, "PAQUETES DEL HOTEL", JOptionPane.INFORMATION_MESSAGE);
+	    if (txtArea != null) {
+	        txtArea.setText(texto);
+	        txtArea.setCaretPosition(0); // Scroll al inicio
+	    } else {
+	        JOptionPane.showMessageDialog(null, texto, "PAQUETES DEL HOTEL", JOptionPane.INFORMATION_MESSAGE);
+	    }
 	}// fin
 
 	// Ver actividades
-	public static void verActividades(int id_hotel) {
-		List<Actividad> actividades = DtoEncargado.verActividadesPorHotel(id_hotel);
+	public static void verActividades(int id_hotel, javax.swing.JTextArea txtArea) {
+	    List<Actividad> actividades = DtoEncargado.verActividadesPorHotel(id_hotel);
 
-		if (actividades.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay actividades disponibles para su hotel", "INFO", 1);
-			return;
-		}
+	    if (actividades.isEmpty()) {
+	        if (txtArea != null) {
+	            txtArea.setText("No hay actividades disponibles para su hotel");
+	        } else {
+	            JOptionPane.showMessageDialog(null, "No hay actividades disponibles para su hotel", "INFO", 1);
+	        }
+	        return;
+	    }
 
-		String texto = "=== ACTIVIDADES DE MI HOTEL ===\n\n";
+	    String texto = "=== ACTIVIDADES DE MI HOTEL ===\n\n";
 
-		for (Actividad a : actividades) {
-			texto += "ID: " + a.getId() + "\n" + "Nombre: " + a.getNombre() + "\n" + "Categoría: " + a.getCategoria()
-					+ "\n" + "Ubicación: " + a.getLocacion() + "\n" + "Duración: " + a.getDuracion() + " horas\n"
-					+ "Precio: $" + String.format("%.2f", a.getPrecio()) + "\n" + "Edad: " + a.getEdad_minima() + " - "
-					+ a.getEdad_maxima() + " años\n" + "Vigencia: " + a.getInicioDate() + " al " + a.getFinDate()
-					+ "\n";
+	    for (Actividad a : actividades) {
+	        texto += "ID: " + a.getId() + "\n" + "Nombre: " + a.getNombre() + "\n" + "Categoría: " + a.getCategoria()
+	            + "\n" + "Ubicación: " + a.getLocacion() + "\n" + "Duración: " + a.getDuracion() + " horas\n"
+	            + "Precio: $" + String.format("%.2f", a.getPrecio()) + "\n" + "Edad: " + a.getEdad_minima() + " - "
+	            + a.getEdad_maxima() + " años\n" + "Vigencia: " + a.getInicioDate() + " al " + a.getFinDate()
+	            + "\n";
 
-			if (a.getRiesgo() != null) {
-				texto += "Nivel de riesgo: " + a.getRiesgo() + "\n";
-			}
+	        if (a.getRiesgo() != null) {
+	            texto += "Nivel de riesgo: " + a.getRiesgo() + "\n";
+	        }
 
-			texto += "------------------------\n";
-		}
+	        texto += "------------------------\n";
+	    }
 
-		JOptionPane.showMessageDialog(null, texto, "ACTIVIDADES", JOptionPane.INFORMATION_MESSAGE);
+	    if (txtArea != null) {
+	        txtArea.setText(texto);
+	        txtArea.setCaretPosition(0); // Scroll al inicio
+	    } else {
+	        JOptionPane.showMessageDialog(null, texto, "ACTIVIDADES", JOptionPane.INFORMATION_MESSAGE);
+	    }
 	}// fin
 
 	// Menu promociones
@@ -329,7 +359,7 @@ public class Encargado extends Usuario {
 			switch (opcion) {
 			case 0:
 				// Nueva promocion
-				crearPromocion(id_hotel);
+				//crearPromocion(id_hotel);
 				break;
 			case 1:
 				// Promociones activas
@@ -337,15 +367,15 @@ public class Encargado extends Usuario {
 				break;
 			case 2:
 				// Aplicar promocion
-				aplicarPromocionAPaquete(id_hotel);
+				//aplicarPromocionAPaquete(id_hotel);
 				break;
 			case 3:
 				// Editar promocion
-				editarPromocion(id_hotel);
+				//editarPromocion(id_hotel);
 				break;
 			case 4:
 				// Eliminar promocion
-				eliminarPromocion(id_hotel);
+				//eliminarPromocion(id_hotel);
 				break;
 			case 5:
 				// Ver paquetes
@@ -361,45 +391,32 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Crear
-	private static void crearPromocion(int id_hotel) {
-		try {
-			String nombre = Validaciones.ValidarContras("Ingrese el nombre de la promoción:");
-			if (nombre == null)
-				return;
-
-			String descripcion = JOptionPane.showInputDialog(null,
-					"Ingrese la descripción (opcional - puede dejar vacío):");
-			if (descripcion == null) {
-				descripcion = "";
-			}
-
-			int porcentaje = 0;
-			boolean porcentajeValido = false;
-
-			while (!porcentajeValido) {
-				porcentaje = Validaciones.ValidarNum("Ingrese el porcentaje de descuento (1-100):");
-
-				if (porcentaje > 0 && porcentaje <= 100) {
-					porcentajeValido = true;
-				} else {
-					JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
-				}
-			}
-
-			LocalDate fechaInicio = Validaciones.ValidarFecha("Fecha de INICIO de la promoción");
-			LocalDate fechaFin = Validaciones.ValidarFecha("Fecha de FIN de la promoción");
-
-			if (fechaFin.isBefore(fechaInicio) || fechaFin.isEqual(fechaInicio)) {
-				JOptionPane.showMessageDialog(null, "La fecha de fin debe ser posterior a la fecha de inicio", "ERROR",
-						0);
-				return;
-			}
-
-			DtoEncargado.crearPromocion(nombre, descripcion, porcentaje, fechaInicio, fechaFin, id_hotel);
-
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al crear promoción: " + e.getMessage(), "ERROR", 0);
-		}
+	public static boolean crearPromocion(int idHotel, String nombre, String descripcion, 
+	        int porcentaje, LocalDate fechaInicio, LocalDate fechaFin) {
+	    try {
+	        if (nombre == null || nombre.trim().isEmpty()) {
+	            return false;
+	        }
+	        
+	        if (porcentaje < 1 || porcentaje > 100) {
+	            return false;
+	        }
+	        
+	        if (fechaFin.isBefore(fechaInicio) || fechaFin.isEqual(fechaInicio)) {
+	            return false;
+	        }
+	        
+	        if (descripcion == null) {
+	            descripcion = "";
+	        }
+	        
+	        DtoEncargado.crearPromocion(nombre, descripcion, porcentaje, fechaInicio, fechaFin, idHotel);
+	        return true;
+	        
+	    } catch (Exception e) {
+	        System.err.println("Error al crear promoción: " + e.getMessage());
+	        return false;
+	    }
 	}// fin
 
 	// Ver promos
@@ -441,95 +458,57 @@ public class Encargado extends Usuario {
 		JOptionPane.showMessageDialog(null, texto, "PROMOCIONES", JOptionPane.INFORMATION_MESSAGE);
 	}// fin
 
+	// Sobrecarga
+	public static boolean editarPromocionAtributo(int idPromocion, String atributo, 
+	        String nuevoValor, int idHotel) {
+	    try {
+	        DtoEncargado.editarPromocion(idPromocion, atributo, nuevoValor, idHotel);
+	        return true;
+	    } catch (Exception e) {
+	        System.err.println("Error al editar atributo: " + e.getMessage());
+	        return false;
+	    }
+	}
+	
 	// Aplicar
-	private static void aplicarPromocionAPaquete(int id_hotel) {
-		List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
-		List<Promocion> activas = new ArrayList<>();
-
-		for (Promocion p : promociones) {
-			if (p.getEstado().equals("activa")) {
-				activas.add(p);
-			}
-		}
-
-		if (activas.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay promociones activas. Cree una primero.", "INFO", 1);
-			return;
-		}
-
-		String[] opcionesPromo = new String[activas.size()];
-		for (int i = 0; i < activas.size(); i++) {
-			Promocion p = activas.get(i);
-			opcionesPromo[i] = "ID: " + p.getId() + " | " + p.getNombre() + " (" + p.getPorcentajeDescuento()
-					+ "% OFF)";
-		}
-
-		String seleccionPromo = (String) JOptionPane.showInputDialog(null, "Seleccione la promoción a aplicar:",
-				"SELECCIONAR PROMOCIÓN", JOptionPane.QUESTION_MESSAGE, null, opcionesPromo, opcionesPromo[0]);
-
-		if (seleccionPromo == null)
-			return;
-
-		int idPromocion = Integer.parseInt(seleccionPromo.split(" ")[1]);
-
-		List<Paquete> paquetes = DtoEncargado.verPaquetesDelHotel(id_hotel);
-
-		if (paquetes.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay paquetes en su hotel", "INFO", 1);
-			return;
-		}
-
-		String[] opcionesPaq = new String[paquetes.size()];
-		for (int i = 0; i < paquetes.size(); i++) {
-			Paquete paq = paquetes.get(i);
-			opcionesPaq[i] = "ID: " + paq.getId() + " | " + paq.getInicioDate() + " al " + paq.getFinDate() + " | $"
-					+ String.format("%.2f", paq.getPrecio());
-		}
-
-		String seleccionPaq = (String) JOptionPane.showInputDialog(null, "Seleccione el paquete:",
-				"SELECCIONAR PAQUETE", JOptionPane.QUESTION_MESSAGE, null, opcionesPaq, opcionesPaq[0]);
-
-		if (seleccionPaq == null)
-			return;
-
-		int idPaquete = Integer.parseInt(seleccionPaq.split(" ")[1]);
-
-		DtoEncargado.aplicarPromocionAPaquete(idPaquete, idPromocion, id_hotel);
+	public static boolean aplicarPromocionAPaquete(int idHotel, int idPromocion, int idPaquete, javax.swing.JLabel lblMensaje) {
+	    try {
+	        
+	        return DtoEncargado.aplicarPromocionAPaquete(idPaquete, idPromocion, idHotel, lblMensaje);
+	        
+	    } catch (Exception e) {
+	        lblMensaje.setForeground(java.awt.Color.RED);
+	        lblMensaje.setText("Error BLL al aplicar promoción: " + e.getMessage());
+	        System.err.println("Error al aplicar promoción: " + e.getMessage());
+	        return false;
+	    }
 	}// fin
 
 	// Eliminar
-	private static void eliminarPromocion(int id_hotel) {
-		List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
+	public static boolean eliminarPromocion(int idHotel, int idPromocion) {
+	    try {
 
-		if (promociones.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay promociones para eliminar", "INFO", 1);
-			return;
-		}
-
-		String[] opciones = new String[promociones.size()];
-		for (int i = 0; i < promociones.size(); i++) {
-			Promocion p = promociones.get(i);
-			opciones[i] = "ID: " + p.getId() + " | " + p.getNombre() + " (" + p.getPorcentajeDescuento() + "% OFF) - "
-					+ p.getEstado();
-		}
-
-		String seleccion = (String) JOptionPane.showInputDialog(null, "Seleccione la promoción a ELIMINAR:",
-				"ELIMINAR PROMOCIÓN", JOptionPane.WARNING_MESSAGE, null, opciones, opciones[0]);
-
-		if (seleccion == null)
-			return;
-
-		int idPromocion = Integer.parseInt(seleccion.split(" ")[1]);
-
-		int confirm = JOptionPane.showConfirmDialog(null,
-				"¿Está seguro de ELIMINAR esta promoción?\n"
-						+ "Esto eliminará la promoción de todos los paquetes que la tengan\n"
-						+ "y la eliminará permanentemente de la base de datos.",
-				"CONFIRMAR ELIMINACIÓN", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-
-		if (confirm == JOptionPane.YES_OPTION) {
-			DtoEncargado.eliminarPromocion(idPromocion, id_hotel);
-		}
+	        List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(idHotel);
+	        boolean existe = false;
+	        
+	        for (Promocion p : promociones) {
+	            if (p.getId() == idPromocion) {
+	                existe = true;
+	                break;
+	            }
+	        }
+	        
+	        if (!existe) {
+	            return false;
+	        }
+	        
+	        DtoEncargado.eliminarPromocion(idPromocion, idHotel);
+	        return true;
+	        
+	    } catch (Exception e) {
+	        System.err.println("Error al eliminar promoción: " + e.getMessage());
+	        return false;
+	    }
 	}// fin
 
 	// Ver
@@ -576,145 +555,55 @@ public class Encargado extends Usuario {
 	}// fin
 
 	// Editar
-	private static void editarPromocion(int id_hotel) {
-		try {
+	public static boolean editarPromocion(int idHotel, int idPromocion, String nombre, 
+	        String descripcion, int porcentaje) {
+	    try {
+	        if (nombre == null || nombre.trim().isEmpty()) {
+	            return false;
+	        }
+	        
+	        if (porcentaje < 1 || porcentaje > 100) {
+	            return false;
+	        }
+	        
+	        if (descripcion == null) {
+	            descripcion = "";
+	        }
 
-			List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(id_hotel);
-
-			if (promociones.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "No hay promociones para editar", "INFO", 1);
-				return;
-			}
-
-			String[] opcionesPromo = new String[promociones.size()];
-			for (int i = 0; i < promociones.size(); i++) {
-				Promocion p = promociones.get(i);
-				opcionesPromo[i] = "ID: " + p.getId() + " | " + p.getNombre() + " (" + p.getPorcentajeDescuento()
-						+ "% OFF) - " + p.getEstado();
-			}
-
-			String seleccionPromo = (String) JOptionPane.showInputDialog(null,
-					"Seleccione la promoción que desea EDITAR:", "EDITAR PROMOCIÓN - Paso 1/2",
-					JOptionPane.QUESTION_MESSAGE, null, opcionesPromo, opcionesPromo[0]);
-
-			if (seleccionPromo == null)
-				return;
-
-			int idPromocion = Integer.parseInt(seleccionPromo.split(" ")[1]);
-
-			Promocion promoSeleccionada = null;
-			for (Promocion p : promociones) {
-				if (p.getId() == idPromocion) {
-					promoSeleccionada = p;
-					break;
-				}
-			}
-
-			if (promoSeleccionada == null) {
-				JOptionPane.showMessageDialog(null, "Error: No se encontró la promoción", "ERROR", 0);
-				return;
-			}
-
-			int atributoSeleccionado = JOptionPane.showOptionDialog(null,
-					"¿Qué atributo desea modificar?\n\n" + "Promoción seleccionada: " + promoSeleccionada.getNombre(),
-					"EDITAR PROMOCIÓN - Paso 2/2", 0, JOptionPane.QUESTION_MESSAGE, null,
-					repository.Editarpromo.values(), repository.Editarpromo.values()[0]);
-
-			if (atributoSeleccionado == -1) // Si cancela
-				return;
-
-			do {
-
-				switch (atributoSeleccionado) {
-				case 0: // Nombre
-					String nuevoNombre = Validaciones.ValidarContras(
-							"Nombre actual: " + promoSeleccionada.getNombre() + "\n\nIngrese el nuevo nombre:");
-					if (nuevoNombre != null && !nuevoNombre.trim().isEmpty()) {
-						DtoEncargado.editarPromocion(idPromocion, "nombre", nuevoNombre, id_hotel);
-					}
-					break;
-
-				case 1: // Descripción
-					String nuevaDescripcion = JOptionPane.showInputDialog(null,
-							"Descripción actual: "
-									+ (promoSeleccionada.getDescripcion() != null ? promoSeleccionada.getDescripcion()
-											: "Sin descripción")
-									+ "\n\nIngrese la nueva descripción:");
-					if (nuevaDescripcion != null) {
-						DtoEncargado.editarPromocion(idPromocion, "descripcion", nuevaDescripcion, id_hotel);
-					}
-					break;
-
-				case 2: // Porcentaje_de_descuento
-					int nuevoPorcentaje = 0;
-					boolean porcentajeValido = false;
-
-					while (!porcentajeValido) {
-						nuevoPorcentaje = Validaciones
-								.ValidarNum("Porcentaje actual: " + promoSeleccionada.getPorcentajeDescuento()
-										+ "%\n\nIngrese el nuevo porcentaje (1-100):");
-
-						if (nuevoPorcentaje > 0 && nuevoPorcentaje <= 100) {
-							porcentajeValido = true;
-							DtoEncargado.editarPromocion(idPromocion, "porcentaje", String.valueOf(nuevoPorcentaje),
-									id_hotel);
-						} else {
-							JOptionPane.showMessageDialog(null, "El porcentaje debe estar entre 1 y 100", "ERROR", 0);
-						}
-					}
-					break;
-
-				case 3: // Inicio
-					LocalDate nuevaFechaInicio = Validaciones.ValidarFecha(
-							"Fecha actual: " + promoSeleccionada.getFechaInicio() + "\n\nNueva fecha de INICIO");
-					if (nuevaFechaInicio != null) {
-						if (nuevaFechaInicio.isAfter(promoSeleccionada.getFechaFin())
-								|| nuevaFechaInicio.isEqual(promoSeleccionada.getFechaFin())) {
-							JOptionPane.showMessageDialog(null,
-									"La fecha de inicio debe ser anterior a la fecha de fin ("
-											+ promoSeleccionada.getFechaFin() + ")",
-									"ERROR", 0);
-						} else {
-							DtoEncargado.editarPromocion(idPromocion, "fecha_inicio", nuevaFechaInicio.toString(),
-									id_hotel);
-						}
-					}
-					break;
-
-				case 4: // Fin
-					LocalDate nuevaFechaFin = Validaciones.ValidarFecha(
-							"Fecha actual: " + promoSeleccionada.getFechaFin() + "\n\nNueva fecha de FIN");
-					if (nuevaFechaFin != null) {
-						if (nuevaFechaFin.isBefore(promoSeleccionada.getFechaInicio())
-								|| nuevaFechaFin.isEqual(promoSeleccionada.getFechaInicio())) {
-							JOptionPane.showMessageDialog(null,
-									"La fecha de fin debe ser posterior a la fecha de inicio ("
-											+ promoSeleccionada.getFechaInicio() + ")",
-									"ERROR", 0);
-						} else {
-							DtoEncargado.editarPromocion(idPromocion, "fecha_fin", nuevaFechaFin.toString(), id_hotel);
-						}
-					}
-					break;
-
-				case 5: // Estado
-					String[] estados = { "activa", "inactiva" };
-					String nuevoEstado = (String) JOptionPane.showInputDialog(null,
-							"Estado actual: " + promoSeleccionada.getEstado() + "\n\nSeleccione el nuevo estado:",
-							"CAMBIAR ESTADO", JOptionPane.QUESTION_MESSAGE, null, estados, estados[0]);
-
-					if (nuevoEstado != null) {
-						DtoEncargado.editarPromocion(idPromocion, "estado", nuevoEstado, id_hotel);
-					}
-					break;
-				}
-
-			} while (atributoSeleccionado != 6);
-
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error al editar promoción: " + e.getMessage(), "ERROR", 0);
-		}
-
+	        List<Promocion> promociones = DtoEncargado.verPromocionesDelHotel(idHotel);
+	        Promocion promoActual = null;
+	        
+	        for (Promocion p : promociones) {
+	            if (p.getId() == idPromocion) {
+	                promoActual = p;
+	                break;
+	            }
+	        }
+	        
+	        if (promoActual == null) {
+	            return false;
+	        }
+	        
+	        boolean exito = true;
+	        
+	        if (!nombre.equals(promoActual.getNombre())) {
+	            DtoEncargado.editarPromocion(idPromocion, "nombre", nombre, idHotel);
+	        }
+	        
+	        if (!descripcion.equals(promoActual.getDescripcion())) {
+	            DtoEncargado.editarPromocion(idPromocion, "descripcion", descripcion, idHotel);
+	        }
+	        
+	        if (porcentaje != promoActual.getPorcentajeDescuento()) {
+	            DtoEncargado.editarPromocion(idPromocion, "porcentaje", String.valueOf(porcentaje), idHotel);
+	        }
+	        
+	        return exito;
+	        
+	    } catch (Exception e) {
+	        System.err.println("Error al editar promoción: " + e.getMessage());
+	        return false;
+	    }
 	}// fin
 
 }// final clase

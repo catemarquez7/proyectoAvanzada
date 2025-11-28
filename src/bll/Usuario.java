@@ -154,8 +154,6 @@ public class Usuario extends Persona {
 	        }
 	        
 	    } else {
-	        JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "ERROR",
-	                JOptionPane.ERROR_MESSAGE);
 	        return null;
 	    }
 	}
@@ -241,17 +239,18 @@ public class Usuario extends Persona {
 	            }
 	            break;
 	        case "2": // Encargado
-	            if (DtoUsuario.chequeoSuspension()) {
-	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento, intentelo de nuevo en unas horas");
+	        	if (DtoUsuario.chequeoSuspension()) {
+	                JOptionPane.showMessageDialog(null, "Sistema en mantenimiento...");
 	            } else {
-	                // REEMPLAZADO: menuEncargado(usuario);
 	                try {
-	                    // Abrir la ventana de Encargado (Requiere castear a bll.Encargado)
-	                    ui.Encargado frameEncargado = new ui.Encargado();
+	                    // IMPORTANTE: Cargar el encargado completo desde la BD
+	                    bll.Encargado encargado = dll.DtoEncargado.cargarEncargado(usuario.getId());
+	                    
+	                    // Pasar el encargado a la ventana
+	                    ui.Encargado frameEncargado = new ui.Encargado(encargado);
 	                    frameEncargado.setVisible(true);
 	                } catch (Exception e) {
 	                    e.printStackTrace();
-	                    JOptionPane.showMessageDialog(null, "Error al cargar la vista de Encargado.", "ERROR", JOptionPane.ERROR_MESSAGE);
 	                }
 	            }
 	            break;
@@ -325,11 +324,11 @@ public class Usuario extends Persona {
 				break;
 			case 2:
 				// Check_in
-				Encargado.realizarCheckin(encargado.getId_hotel());
+				//Encargado.realizarCheckin(encargado.getId_hotel());
 				break;
 			case 3:
 				// Check_out
-				Encargado.realizarCheckout(encargado.getId_hotel());
+				//Encargado.realizarCheckout(encargado.getId_hotel());
 				break;
 			case 4:
 				// Datos_cliente

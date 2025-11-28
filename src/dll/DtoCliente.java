@@ -27,97 +27,148 @@ public class DtoCliente {
 	private static Connection conx = Conexion.getInstance().getConnection();
 
 	
+	//Ver paquetes recomendados con prioridades
+	public static List<Paquete> verPaquetesReco(Usuario usuario, Cliente cliente) {
+	    
+	    List<Paquete> paquetes = new ArrayList<>();
+	    
+	    try {
+	        PreparedStatement stmtPref = (PreparedStatement) conx.prepareStatement(
+	            "SELECT categoria, riesgo FROM preferencias WHERE id_usuario = ?"
+	        );
+	        stmtPref.setInt(1, usuario.getId());
+	        ResultSet rsPref = stmtPref.executeQuery();
+
+	        String categoria = null;
+	        String riesgo = null;
+
+	        if (rsPref.next()) {
+	            categoria = rsPref.getString("categoria");
+	            riesgo = rsPref.getString("riesgo");
+	        } else {
+	            return null;
+	        }
+
+	        //  Coincide categoría Y riesgo 
+	        paquetes = buscarPaquetesPorCriterio(categoria, riesgo, true, true);
+	        
+	        // Solo por categoría
+	        if (paquetes.isEmpty()) {
+	            paquetes = buscarPaquetesPorCriterio(categoria, null, true, false);
+	        }
+	        
+	        // Solo por riesgo
+	        if (paquetes.isEmpty()) {
+	            paquetes = buscarPaquetesPorCriterio(null, riesgo, false, true);
+	        }
+	 
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return paquetes;
+	}
+
+	// Método auxiliar para buscar paquetes segun preferencias
+	private static List<Paquete> buscarPaquetesPorCriterio(String categoria, String riesgo, 
+	                                                        boolean usarCategoria, boolean usarRiesgo) {
+	    List<Paquete> paquetes = new ArrayList<>();
+	    
+	    try {
+	        StringBuilder query = new StringBuilder(
+	            "SELECT id, nombre, categoria, riesgo FROM actividad WHERE 1=1"
+	        );
+	        
+	        if (usarCategoria) {
+	            query.append(" AND categoria = ?");
+	        }
+	        if (usarRiesgo) {
+	            query.append(" AND riesgo = ?");
+	        }
+	        
+	        PreparedStatement stmtAct = (PreparedStatement) conx.prepareStatement(query.toString());
+	        
+	        int paramIndex = 1;
+	        if (usarCategoria) {
+	            stmtAct.setString(paramIndex++, categoria);
+	        }
+	        if (usarRiesgo) {
+	            stmtAct.setString(paramIndex++, riesgo);
+	        }
+	        
+	        ResultSet rsAct = stmtAct.executeQuery();
+	        
+	        List<Actividad> actividades = new ArrayList<>();
+	        while (rsAct.next()) {
+	            Actividad act = new Actividad();
+	            act.setId(rsAct.getInt("id"));
+	            act.setNombre(rsAct.getString("nombre"));
+	            act.setCategoria(rsAct.getString("categoria"));
+	            act.setRiesgo(rsAct.getString("riesgo"));
+	            actividades.add(act);
+	        }
+	        
+	        for (Actividad actividad : actividades) {
+	            paquetes.addAll(buscarPaquetesParaActividad(actividad));
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return paquetes;
+	}
+
+	// Método auxiliar para buscar paquetes segun actividad
+	private static List<Paquete> buscarPaquetesParaActividad(Actividad actividad) {
+	    List<Paquete> paquetes = new ArrayList<>();
+	    
+	    try {
+	        PreparedStatement stmtPaq = (PreparedStatement) conx.prepareStatement(
+	            "SELECT * FROM paquete WHERE id_actividad = ? AND cupo_actual < cupo_maximo"
+	        );
+	        stmtPaq.setInt(1, actividad.getId());
+	        ResultSet rsPaq = stmtPaq.executeQuery();
+	        
+	        while (rsPaq.next()) {
+	            Paquete paquete = new Paquete();
+	            paquete.setId(rsPaq.getInt("id"));
+	            paquete.setPrecio(rsPaq.getDouble("precio"));
+	            paquete.setInicioDate(rsPaq.getDate("fecha_inicio").toLocalDate());
+	            paquete.setFinDate(rsPaq.getDate("fecha_fin").toLocalDate());
+	            paquete.setActividad(actividad);
+	            paquete.setCupo_actual(rsPaq.getInt("cupo_actual"));
+	            paquete.setCupo_maximo(rsPaq.getInt("cupo_maximo"));
+	            
+	            // Cargar hotel
+	            int idHotel = rsPaq.getInt("id_hotel");
+	            PreparedStatement stmtHotel = (PreparedStatement) conx.prepareStatement(
+	                "SELECT * FROM hotel WHERE id = ?"
+	            );
+	            stmtHotel.setInt(1, idHotel);
+	            ResultSet rsHotel = stmtHotel.executeQuery();
+	            
+	            if (rsHotel.next()) {
+	                Hotel hotel = new Hotel();
+	                hotel.setId(rsHotel.getInt("id"));
+	                hotel.setNombre(rsHotel.getString("nombre"));
+	                hotel.setDireccion(rsHotel.getString("direccion"));
+	                hotel.setProvincia(rsHotel.getString("provincia"));
+	                paquete.setHotel(hotel);
+	            }
+	            
+	            paquetes.add(paquete);
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    
+	    return paquetes;
+	}
+
 	
-		//Ver paquetes recomendados
-		public static List<Paquete> verPaquetesReco(Usuario usuario, Cliente cliente) {
-			
-		    List<Paquete> paquetes = new ArrayList<>();
-			
-			try {
-		        PreparedStatement stmtPref = (PreparedStatement) conx.prepareStatement(
-		            "SELECT categoria, riesgo FROM preferencias WHERE id_usuario = ?"
-		        );
-		        stmtPref.setInt(1, usuario.getId());
-
-		        ResultSet rsPref = stmtPref.executeQuery();
-
-		        String categoria = null;
-		        String riesgo = null;
-
-		        if (rsPref.next()) {
-		            categoria = rsPref.getString("categoria");
-		            riesgo = rsPref.getString("riesgo");
-		        }
-
-		        PreparedStatement stmtAct = (PreparedStatement) conx.prepareStatement(
-		            "SELECT id, nombre, categoria, riesgo FROM actividad " +
-		            "WHERE categoria = ? AND riesgo = ?"
-		        );
-		        stmtAct.setString(1, categoria);
-		        stmtAct.setString(2, riesgo);
-
-		        ResultSet rsAct = stmtAct.executeQuery();
-
-		        List<Actividad> actividades = new ArrayList<>();
-
-		        while (rsAct.next()) {
-		            Actividad act = new Actividad();
-		            act.setId(rsAct.getInt("id"));
-		            act.setNombre(rsAct.getString("nombre"));
-		            act.setCategoria(rsAct.getString("categoria"));
-		            act.setRiesgo(rsAct.getString("riesgo"));
-		            actividades.add(act);
-		        }
-
-		        for (Actividad actividad : actividades) {
-		            PreparedStatement stmtPaq = (PreparedStatement) conx.prepareStatement(
-		                "SELECT * FROM paquete WHERE id_actividad = ? AND cupo_actual < cupo_maximo"
-		            );
-		            stmtPaq.setInt(1, actividad.getId());
-
-		            ResultSet rsPaq = stmtPaq.executeQuery();
-
-		            while (rsPaq.next()) {
-		                Paquete paquete = new Paquete();
-		                paquete.setId(rsPaq.getInt("id"));
-		                paquete.setPrecio(rsPaq.getDouble("precio"));
-		                paquete.setInicioDate(rsPaq.getDate("fecha_inicio").toLocalDate());
-		                paquete.setFinDate(rsPaq.getDate("fecha_fin").toLocalDate());
-		                paquete.setActividad(actividad);
-		                paquete.setCupo_actual(rsPaq.getInt("cupo_actual"));
-		                paquete.setCupo_maximo(rsPaq.getInt("cupo_maximo"));
-
-
-		                int idHotel = rsPaq.getInt("id_hotel");
-
-		                PreparedStatement stmtHotel = (PreparedStatement) conx.prepareStatement(
-		                    "SELECT * FROM hotel WHERE id = ?"
-		                );
-		                stmtHotel.setInt(1, idHotel);
-
-		                ResultSet rsHotel = stmtHotel.executeQuery();
-
-		                if (rsHotel.next()) {
-		                    Hotel hotel = new Hotel();
-		                    hotel.setId(rsHotel.getInt("id"));
-		                    hotel.setNombre(rsHotel.getString("nombre"));
-		                    hotel.setDireccion(rsHotel.getString("direccion"));
-		                    hotel.setProvincia(rsHotel.getString("provincia"));
-		                    paquete.setHotel(hotel);
-		                }
-
-		                paquetes.add(paquete);
-		            }
-		        }
-
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    }
-
-			return paquetes;
-			
-		}
-		
 		
 		// Ver paquetes
 		public static List<Paquete> verPaquetes(int idHotel) {
@@ -166,7 +217,7 @@ public class DtoCliente {
 						habitacion = new Habitacion(hotel, idHab, numeroHab, estadoHab, tipoHab, precioHab, cantCamas);
 					}
 
-					// Datos de la activida
+					// Datos de la actividad
 					Actividad actividad = null;
 					if (rs.getObject("act.id") != null) {
 						int idAct = rs.getInt("act.id");
@@ -234,16 +285,9 @@ public class DtoCliente {
 	                reserva.setEstado("pendiente");
 	                
 	                cliente.getReservas().add(reserva);
-
-	                JOptionPane.showMessageDialog(null, 
-	                        "Reserva creada con éxito:\n"
-	                        + "Paquete: " + paquete.getHotel().getNombre()
-	                        + " | " + paquete.getActividad().getNombre()
-	                        + "\nPrecio: $" + String.format("%.2f", paquete.getPrecio())
-	                    );	                
+       
 	                return true;
 	            } else {
-	                JOptionPane.showMessageDialog(null, "Error al crear la reserva.");
 	                return false;
 	            }
 
@@ -495,6 +539,34 @@ public class DtoCliente {
 		        return false;
 		    }
 		}
+		
+		
+		// Obtener preferencias del usuario
+		public static Preferencias obtenerPreferencias(int idUsuario) {
+		    try {
+		        PreparedStatement ps = (PreparedStatement) conx.prepareStatement(
+		            "SELECT riesgo, duracion, categoria, id_usuario FROM preferencias WHERE id_usuario = ?"
+		        );
+		        ps.setInt(1, idUsuario);
+		        ResultSet rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            Preferencias prefs = new Preferencias();
+		            prefs.setRiesgo(rs.getString("riesgo"));
+		            prefs.setDuracion(rs.getDouble("duracion"));
+		            prefs.setCategoria(rs.getString("categoria"));
+		            prefs.setCliente(rs.getInt("id_usuario"));
+		            return prefs;
+		        }
+		        return null;
+
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return null;
+		    }
+		}
+		
+		
 
 		
 		//Chequeo de preferencias existentes, para que haya una sola por usuario
@@ -533,7 +605,7 @@ public class DtoCliente {
 				    String categoria = rs.getString("categoria");
 				    String riesgo = rs.getString("riesgo");
 
-				    String texto = "=== MIS PREFERENCIAS ===\n\nDuracion: " + duracion
+				    String texto = "Duracion: " + duracion
 				                 + "\nCategoria: " + categoria
 				                 + "\nRiesgo: " + riesgo;
 
@@ -550,33 +622,33 @@ public class DtoCliente {
 		}
 		
 		
-		//Cancelar paquete
+		//Cancelar reserva
 		public static boolean cancelarReserva(Usuario usuario, Cliente cliente, Reserva reserva) {
-			
-			try {
-				  PreparedStatement stmt = (PreparedStatement) conx.prepareStatement("DELETE FROM reserva WHERE id = ?");
-			        stmt.setInt(1, reserva.getId());
-			        int filas = stmt.executeUpdate();
-			        boolean eliminado = (filas > 0);
-			        
-			        PreparedStatement stmtUpdate = (PreparedStatement) conx.prepareStatement(
-	                	    "UPDATE paquete SET cupo_actual = cupo_actual + 1 WHERE id = ?"
-	                	);
-	                	stmtUpdate.setInt(1, reserva.getPaquete().getId());
-	                	stmtUpdate.executeUpdate();
-			        
-			        
-			        cliente.getReservas().clear();
-			        DtoCliente.cargarReservasExistentes(usuario, cliente);
-			        
-			        return eliminado;
-				
-			} catch (Exception e) {
-	            e.printStackTrace();
-			}
-			
-			
-			return false;
+		    try {
+		        PreparedStatement stmt = (PreparedStatement) conx.prepareStatement("DELETE FROM reserva WHERE id = ?");
+		        stmt.setInt(1, reserva.getId());
+		        int filas = stmt.executeUpdate();
+		        boolean eliminado = (filas > 0);
+		        
+		        if (eliminado) {
+		            PreparedStatement stmtUpdate = (PreparedStatement) conx.prepareStatement(
+		                "UPDATE paquete SET cupo_actual = cupo_actual + 1 WHERE id = ?"
+		            );
+		            stmtUpdate.setInt(1, reserva.getPaquete().getId());
+		            stmtUpdate.executeUpdate();
+		            
+		            cliente.getReservas().clear();
+		            cliente.getReservasPasadas().clear();
+		            DtoCliente.cargarReservasExistentes(usuario, cliente);
+		        }
+		        
+		        return eliminado;
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		    
+		    return false;
 		}
 		
 		//Escribir reseña

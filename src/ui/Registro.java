@@ -74,7 +74,7 @@ public class Registro extends JFrame {
 		JLabel lblRegistrarse = new JLabel("Registrarse");
 		lblRegistrarse.setBackground(new Color(240, 240, 240));
 		lblRegistrarse.setFont(new Font("Mongolian Baiti", Font.PLAIN, 30));
-		lblRegistrarse.setBounds(311, 85, 134, 37);
+		lblRegistrarse.setBounds(311, 85, 200, 37);
 		contentPane.add(lblRegistrarse);
 
 		inpNombre = new JTextField();
